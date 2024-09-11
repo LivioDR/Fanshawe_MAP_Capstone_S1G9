@@ -2,7 +2,7 @@
 ## Group S1G9
 - 
 - 
-- 
+- Aggrey Nhiwatiwa
 - Livio Reinoso
 ---
 # Project details
