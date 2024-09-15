@@ -6,3 +6,20 @@
 - Livio Reinoso
 ---
 # Project details
+## \<yourappname here\>
+### Description
+\<yourappdescription here\>
+### Data Source
+\<yourappdatasource here\>
+### App Features
+#### Kaleb
+- 
+  
+#### Kristian
+-
+  
+#### Aggrey
+- 
+  
+#### Livio
+- 
