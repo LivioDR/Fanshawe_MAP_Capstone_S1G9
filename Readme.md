@@ -27,4 +27,7 @@ Upon signing up to use the app, client companies will be provided one or more ad
 - 
   
 #### Livio
-- 
+- Users can see and update their profile. Admins can see all profiles under their company
+- Admin users can add members to their organization and enable/disable/delete them
+- Users can request PTO and sick days, and check remaining days as well
+- Users can select between light and dark mode, with a system default value
