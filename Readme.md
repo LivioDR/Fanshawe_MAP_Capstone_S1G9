@@ -6,9 +6,9 @@
 - Livio Reinoso
 ---
 # Project Details
-## \<yourappname here\>
+## IndusTree 🌳
 ### Description
-\<yourappname here\> is an all-in-one employee portal and HR tool for companies of all sizes. Your HR team can set up internal accounts for all employees that allow them to clock in and out, view their PTO and sick leave status, request time off, check the company's management hierarchy, see benefits information, and much more! HR personnel and administrators can manage employee account status and available employee benefits, and in future updates will be able to customize things like PTO accrual and overtime more granularly.
+IndusTree is an all-in-one employee portal and HR tool for companies of all sizes. Your HR team can set up internal accounts for all employees that allow them to clock in and out, view their PTO and sick leave status, request time off, check the company's management hierarchy, see benefits information, and much more! HR personnel and administrators can manage employee account status and available employee benefits, and in future updates will be able to customize things like PTO accrual and overtime more granularly.
 ### Data Source
 This app uses Firebase Firestore for storing all app-related information, such as employee details and company-wide information (e.g. benefits). To control and secure access to employee and company data, the app will integrate with Firebase Authentication for account and role management, ensuring only appropriate users have access to sensitive information.
 
