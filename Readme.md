@@ -8,7 +8,7 @@
 # Project Details
 ## \<yourappname here\>
 ### Description
-\<yourappdescription here\>
+\<yourappname here\> is an all-in-one employee portal and HR tool for companies of all sizes. Your HR team can set up internal accounts for all employees that allow them to clock in and out, view their PTO and sick leave status, request time off, check the company's management hierarchy, see benefits information, and much more! HR personnel and administrators can manage employee account status and available employee benefits, and in future updates will be able to customize things like PTO accrual and overtime more granularly.
 ### Data Source
 \<yourappdatasource here\>
 ### App Features
