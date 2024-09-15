@@ -21,7 +21,10 @@ Upon signing up to use the app, client companies will be provided one or more ad
 - Users will see an animated splash screen while the app content is loading
   
 #### Kristian
--
+- Users can add to and view a list of emergency contacts
+- Users can see a list of their current insurance and benefits
+- Users can choose a subscription payment model for the app 
+- Users can pay their subscription via Stripe integration
   
 #### Aggrey
 - Authenticated users can login to the app and registered users can request a password reset email link
