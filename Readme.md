@@ -24,7 +24,10 @@ Upon signing up to use the app, client companies will be provided one or more ad
 -
   
 #### Aggrey
-- 
+- Authenticated users can login to the app and registered users can request a password reset email link
+- The database supports granular permission levels to read and write data at different levels dependent on the users role
+- Admin and Manager users can set the PTO for each user in their company
+- A trial mode will be available, with the purpose of demonstrating the app to potential new companies. Employees of a company in trial mode will have limited time access to the app, with the option of converting the existing trial membership into a full membership, carrying over data from the trial.
   
 #### Livio
 - Users can see and update their profile. Admins can see all profiles under their company
