@@ -10,7 +10,12 @@ const ProfileImage = ({url}) => {
         return(
             <View style={ProfileImageStyles.container}>
                 <Image
-                src={url}
+                source={{uri: url}}
+                width={96}
+                height={96}
+                style={{
+                    borderRadius: 3,
+                }}
                 />
             </View>
         )
