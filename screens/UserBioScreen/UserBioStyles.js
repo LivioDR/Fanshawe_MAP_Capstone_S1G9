@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default userBioStyles = StyleSheet.create({
+export default UserBioStyles = StyleSheet.create({
     header: {
         display: 'flex',
         flexDirection: 'row',
