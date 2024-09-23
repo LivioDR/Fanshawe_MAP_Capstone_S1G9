@@ -4,19 +4,21 @@ export default PtoCounterStyles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'blue',
         width: '30%',
-        marginVertical: '2%',
-    },
+        borderWidth: 3,
+        borderRadius: 5,
+        },
     title: {
         fontSize: 18,
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#D01010',
+        color: 'white',
         textAlign: 'center',
         flexWrap: 'wrap',
+        padding: 2,
     },
     value: {
         textAlign: 'center',
         fontSize: 52,
-        color: 'white',
+        backgroundColor: '#F0F0F0',
     }
 })

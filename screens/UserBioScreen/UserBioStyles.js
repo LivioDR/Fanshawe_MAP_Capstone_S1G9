@@ -8,6 +8,10 @@ export default UserBioStyles = StyleSheet.create({
         width: '100%',
         paddingVertical: 25,
         paddingHorizontal: '5%',
-        backgroundColor: 'lightgreen'
+        backgroundColor: 'lightblue'
+    },
+    body: {
+        backgroundColor: '#F0F0F0',
+        width: '100%',
     }
 })

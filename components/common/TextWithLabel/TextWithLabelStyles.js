@@ -6,13 +6,13 @@ export default TextWithLabelStyles = StyleSheet.create({
         textAlign: 'left',
         paddingHorizontal: '5%',
         paddingVertical: '3%',
-        backgroundColor: 'purple',
     },
     label: {
-        backgroundColor: 'yellow',
+        backgroundColor: 'lightgray',
+        padding: 2,
     },
     textValue: {
-        backgroundColor: 'lightblue',
         fontSize: 18,
+        padding: 2,
     }
 })

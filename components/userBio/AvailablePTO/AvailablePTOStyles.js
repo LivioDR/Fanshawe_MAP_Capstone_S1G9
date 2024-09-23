@@ -6,5 +6,6 @@ export default AvailablePTOStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
+        paddingVertical: '5%',
     }
 })
