@@ -1,5 +1,5 @@
 // RN components
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableHighlight, View } from "react-native";
 
 // styles
 import styles from "./styles";
@@ -32,6 +32,39 @@ export default function HomeScreen() {
                     <View style={styles.container.birthday}>
                         <Text>🎉 Happy birthday! 🎉</Text>
                     </View>
+                </View>
+
+                {/* TODO: factor buttons out into a component */}
+                <View style={styles.container.clockBtns}>
+                    {/* TODO: replace with a custom shadowed button component */}
+                    <TouchableHighlight
+                        style={styles.clockBtn}
+                        underlayColor="#DDD"
+                        onPress={() => {}}
+                    >
+                        <Text style={styles.clockBtn.text}>Clock In</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.clockBtn}
+                        underlayColor="#DDD"
+                        onPress={() => {}}
+                    >
+                        <Text style={styles.clockBtn.text}>Clock Out</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.clockBtn}
+                        underlayColor="#DDD"
+                        onPress={() => {}}
+                    >
+                        <Text style={styles.clockBtn.text}>Start Lunch</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.clockBtn}
+                        underlayColor="#DDD"
+                        onPress={() => {}}
+                    >
+                        <Text style={styles.clockBtn.text}>End Lunch</Text>
+                    </TouchableHighlight>
                 </View>
             </View>
         </View>
