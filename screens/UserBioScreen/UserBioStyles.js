@@ -5,13 +5,23 @@ export default UserBioStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-around',
         width: '100%',
         paddingVertical: 25,
         paddingHorizontal: '5%',
-        backgroundColor: 'lightblue'
+    },
+    editIcon: {
+        paddingVertical: 24,
+        paddingLeft: 24,
     },
     body: {
-        backgroundColor: '#F0F0F0',
         width: '100%',
-    }
+        paddingVertical: 32,
+    },
+    buttonsWrapper: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
 })

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import bioStyles from "./UserBioStyles";
 // Placeholder data
 import { userBioData, supervisorBioData, teamBioData } from "../../utilities/userBioPlaceholderData";
@@ -9,6 +10,7 @@ import NameRoleContainer from "../../components/userBio/NameRoleContainer/NameRo
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import { getImageForUserId } from "../../services/database/profileImage";
+import UiButton from "../../components/common/UiButton/UiButton";
 
 
 const UserBio = () => {
@@ -22,8 +24,9 @@ const UserBio = () => {
         // get user data
         const userRetrievedData = userBioData
         setUserData(userRetrievedData)
-        // get supervisor data
+        
         if(userRetrievedData.supervisorId != null){
+            // get supervisor data
             setSuperData(supervisorBioData)
         }
         else{
@@ -35,7 +38,7 @@ const UserBio = () => {
         }
         // get team data
         setTeamData(teamBioData)
-        // get image
+
         // getImageForUserId(userRetrievedData.uid).then(img => setImgUrl(img))
     },[])
 
@@ -45,6 +48,11 @@ const UserBio = () => {
         <View style={bioStyles.header}>
             <ProfileImage url={imgUrl} />
             <NameRoleContainer name={`${userData.firstName} ${userData.lastName}`} role={userData.role} />
+            <Pressable
+                onPress={()=>{console.log('Pressed')}}
+            >
+                <Ionicons name="create-outline" size={24} style={bioStyles.editIcon}/>
+            </Pressable>
         </View>
         <View style={bioStyles.body}>
             <TextWithLabel label={'Corporate email'} textValue={userData.email} />
@@ -56,8 +64,11 @@ const UserBio = () => {
             <TextWithLabel label={'Supervisor'} textValue={`${superData.firstName} ${superData.lastName}`} />
             <TextWithLabel label={'Supervisor email'} textValue={superData.email} />
         </View>
-        
-        <AvailablePTO numPto={12} numSick={4}/>
+        <View style={bioStyles.buttonsWrapper}>
+            <UiButton label={"PTO"}/>
+            <UiButton label={"Emergency contacts"}/>
+        </View>
+        {/* <AvailablePTO numPto={12} numSick={4}/> */}
         </>
     )
 }
