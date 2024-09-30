@@ -14,7 +14,7 @@ const ProfileImage = ({url}) => {
                 width={96}
                 height={96}
                 style={{
-                    borderRadius: 3,
+                    borderRadius: 50,
                 }}
                 />
             </View>
