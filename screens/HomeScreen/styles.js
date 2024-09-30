@@ -1,6 +1,6 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { safeAreaPadding } from "../../utilities/variables";
+import { safeAreaPadding, dropShadowStyle } from "../../utilities/variables";
 
 export default StyleSheet.create({
     container: {
@@ -30,26 +30,22 @@ export default StyleSheet.create({
             width: 125,
             alignItems: "center",
 
-            // make shadow darker on Android
-            shadowColor: Platform.OS === "ios" ? "#666" : "#000",
-            shadowOffset: {
-                width: 0,
-                height: 3,
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 2,
-            elevation: 4,
+            ...dropShadowStyle,
 
-            // need background color to show on Android
-            backgroundColor: "#0001",
             // need border radius to round shadow on Android
             borderRadius: 60,
         },
 
         birthday: {
-            backgroundColor: "#DDD",
+            backgroundColor: "#EFEFEF",
             padding: 10,
             borderRadius: 30,
+        },
+
+        clockBtns: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 15,
         },
     },
 
@@ -76,5 +72,20 @@ export default StyleSheet.create({
         fontWeight: "500",
         fontSize: 24,
         textAlign: "center",
+    },
+
+    clockBtn: {
+        width: "47%",
+        padding: 10,
+
+        backgroundColor: "#EFEFEF",
+        borderRadius: 5,
+
+        ...dropShadowStyle,
+
+        text: {
+            textAlign: "center",
+            fontWeight: "600",
+        },
     },
 });
