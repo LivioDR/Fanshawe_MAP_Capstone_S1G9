@@ -1,9 +1,16 @@
+// Expo status bar
 import { StatusBar } from 'expo-status-bar';
 
+// RN elements
 import { StyleSheet, Text, View } from 'react-native';
 
+// navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// icons
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
@@ -39,12 +46,53 @@ export default function App() {
         <NavigationContainer>
             <StatusBar style="auto" />
 
-            <Tab.Navigator initialRouteName="Home">
-                <Tab.Screen name="Company" component={CompanyScreenPlaceholder} />
+            <Tab.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                    headerShown: false,
+                }}
+            >
+                <Tab.Screen
+                    name="Company"
+                    component={CompanyScreenPlaceholder}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialIcons
+                                name="apartment"
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
 
-                <Tab.Screen name="Home" component={HomeScreenPlaceholder} />
+                <Tab.Screen
+                    name="Home"
+                    component={HomeScreenPlaceholder}
+                    options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                            <MaterialCommunityIcons
+                                name={focused ? "home-variant" : "home-variant-outline"}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
 
-                <Tab.Screen name="Profile" component={ProfileScreenPlaceholder} />
+                <Tab.Screen
+                    name="Profile"
+                    component={ProfileScreenPlaceholder}
+                    options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                            <MaterialIcons
+                                name={focused ? "person" : "person-outline"}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
             </Tab.Navigator>
         </NavigationContainer>
     );
