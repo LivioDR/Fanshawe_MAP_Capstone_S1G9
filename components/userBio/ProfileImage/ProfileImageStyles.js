@@ -8,7 +8,7 @@ export default ProfileStyles = StyleSheet.create({
         width: 100,
         height: 100,
         objectFit: 'contain',
-        borderRadius: 5,
+        borderRadius: 50,
         borderWidth: 2,
         backgroundColor: 'white',
     }

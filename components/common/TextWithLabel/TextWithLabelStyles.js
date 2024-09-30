@@ -8,10 +8,10 @@ export default TextWithLabelStyles = StyleSheet.create({
         paddingVertical: '3%',
     },
     label: {
-        backgroundColor: 'lightgray',
         padding: 2,
     },
     textValue: {
+        backgroundColor: '#F0F0F0',
         fontSize: 18,
         padding: 2,
     }
