@@ -10,6 +10,7 @@ import styles from "./styles";
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
     const [onLunch, setOnLunch] = useState(false);
+    const [takenLunch, setTakenLunch] = useState(false);
 
     return (
         <View style={styles.container.outer}>
@@ -61,15 +62,19 @@ export default function HomeScreen() {
                         onPress={() => {
                             setClockedIn(false);
                             setOnLunch(false);
+                            setTakenLunch(false);
                         }}
                     >
                         <Text style={styles.clockBtn.text}>Clock Out</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
-                        style={[styles.clockBtn, !clockedIn || onLunch ? undefined : styles.clockBtn.blue]}
+                        style={[styles.clockBtn, takenLunch || (!clockedIn || onLunch) ? undefined : styles.clockBtn.blue]}
                         underlayColor="#DDD"
-                        disabled={!clockedIn || onLunch}
-                        onPress={() => { setOnLunch(true); }}
+                        disabled={takenLunch || (!clockedIn || onLunch)}
+                        onPress={() => {
+                            setOnLunch(true);
+                            setTakenLunch(true);
+                        }}
                     >
                         <Text style={styles.clockBtn.text}>Start Lunch</Text>
                     </TouchableHighlight>
