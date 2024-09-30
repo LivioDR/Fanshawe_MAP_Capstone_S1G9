@@ -10,6 +10,7 @@ import UiButton from "../../components/common/UiButton/UiButton";
 // Functions import
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
+import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 
 
 const UserBio = ({userId = 'user1234'}) => {
@@ -55,15 +56,12 @@ const UserBio = ({userId = 'user1234'}) => {
 
     return(
         <>
-        <View style={bioStyles.header}>
-            <ProfileImage url={imgUrl} />
-            <NameRoleContainer name={`${userData.firstName} ${userData.lastName}`} role={userData.role} />
-            <Pressable
-                onPress={()=>{console.log('Pressed')}}
-            >
-                <Ionicons name="create-outline" size={24} style={bioStyles.editIcon}/>
-            </Pressable>
-        </View>
+        <BioHeader 
+            name={`${userData.firstName} ${userData.lastName}`} 
+            role={userData.role} 
+            imgUrl={imgUrl}
+            onPressFunc={()=>{console.log("Pressed")}}    
+        />
         <View style={bioStyles.body}>
             <TextWithLabel label={'Corporate email'} textValue={userData.email} />
             <TextWithLabel label={'Address'} textValue={userData.address} />
