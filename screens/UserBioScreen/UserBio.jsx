@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Pressable, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import bioStyles from "./UserBioStyles";
-// Placeholder data
-import { userBioData, supervisorBioData, teamBioData } from "../../utilities/userBioPlaceholderData";
-// End of placeholder data
+// Components import
 import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 import NameRoleContainer from "../../components/userBio/NameRoleContainer/NameRoleContainer";
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
-import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
-import { getImageForUserId } from "../../services/database/profileImage";
 import UiButton from "../../components/common/UiButton/UiButton";
+// Functions import
+import { getImageForUserId } from "../../services/database/profileImage";
+import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 
 
-const UserBio = () => {
+const UserBio = ({userId = 'user1234'}) => {
 
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
@@ -21,25 +20,36 @@ const UserBio = () => {
     const [teamData, setTeamData] = useState({})
 
     useEffect(()=>{
-        // get user data
-        const userRetrievedData = userBioData
-        setUserData(userRetrievedData)
-        
-        if(userRetrievedData.supervisorId != null){
-            // get supervisor data
-            setSuperData(supervisorBioData)
-        }
-        else{
-            setSuperData({
-                firstName: 'N/A',
-                lastName: '',
-                email: 'N/A',
-            })
-        }
-        // get team data
-        setTeamData(teamBioData)
+        const getData = async(id) => {
+            // get user data
+            let data = await getUserBioInfoById(id)
+            setUserData(data)
 
-        // getImageForUserId(userRetrievedData.uid).then(img => setImgUrl(img))
+            // supervisor data
+            const superId = data.supervisorId
+            if(superId){ // the id can be null in the database if the user has no manager/supervisor
+                let supervisorData = await getUserBioInfoById(superId)
+                // get supervisor data
+                setSuperData(supervisorData)
+            }
+            else{
+                setSuperData({
+                    firstName: 'N/A',
+                    lastName: '',
+                    email: 'N/A',
+                })
+            }
+
+            // team data
+            const teamId = data.teamId
+            let teamInfo = await getTeamInfoById(teamId)
+            setTeamData(teamInfo)
+
+            // set profle picture
+            getImageForUserId(userId).then(img => setImgUrl(img))
+        }
+        getData(userId)
+        
     },[])
 
 
@@ -68,7 +78,6 @@ const UserBio = () => {
             <UiButton label={"PTO"}/>
             <UiButton label={"Emergency contacts"}/>
         </View>
-        {/* <AvailablePTO numPto={12} numSick={4}/> */}
         </>
     )
 }
