@@ -87,5 +87,17 @@ export default StyleSheet.create({
             textAlign: "center",
             fontWeight: "600",
         },
+
+        green: {
+            backgroundColor: "#45CA44",
+        },
+
+        red: {
+            backgroundColor: "#C90000",
+        },
+
+        blue: {
+            backgroundColor: "#316CB1",
+        },
     },
 });
