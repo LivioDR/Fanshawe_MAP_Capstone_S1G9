@@ -40,11 +40,12 @@ export default function HomeScreen() {
                         <Text>🎉 Happy birthday! 🎉</Text>
                     </View>
 
+                    {/* TODO: remove debug Texts */}
                     <Text>Clocked in? {clockedIn ? "Yes" : "No"}</Text>
                     <Text>On lunch? {onLunch ? "Yes" : "No"}</Text>
                 </View>
 
-                {/* TODO: factor buttons out into a component */}
+                {/* TODO: factor time clock buttons out into a component */}
                 <View style={styles.container.clockBtns}>
                     {/* TODO: replace with a custom shadowed button component */}
                     <TouchableHighlight
