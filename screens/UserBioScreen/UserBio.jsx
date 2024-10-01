@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, View } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View } from "react-native";
 import bioStyles from "./UserBioStyles";
 // Components import
-import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
-import NameRoleContainer from "../../components/userBio/NameRoleContainer/NameRoleContainer";
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
 import UiButton from "../../components/common/UiButton/UiButton";
 // Functions import
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
+import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 
 
 const UserBio = ({userId = 'user1234'}) => {
@@ -19,6 +17,11 @@ const UserBio = ({userId = 'user1234'}) => {
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
     const [teamData, setTeamData] = useState({})
+    const [showEditModal, setShowEditModal] = useState(false)
+
+    const showModal = () => {setShowEditModal(true)}
+    const hideModal = () => {setShowEditModal(false)}
+
 
     useEffect(()=>{
         const getData = async(id) => {
@@ -56,11 +59,19 @@ const UserBio = ({userId = 'user1234'}) => {
 
     return(
         <>
+        <UserBioEditScreen 
+            uid={userId} 
+            imgUrl={imgUrl} 
+            userData={userData} 
+            setUserData={setUserData}
+            dismiss={hideModal} 
+            isShown={showEditModal} 
+        />
         <BioHeader 
             name={`${userData.firstName} ${userData.lastName}`} 
             role={userData.role} 
             imgUrl={imgUrl}
-            onPressFunc={()=>{console.log("Pressed")}}    
+            onPressFunc={()=>{showModal()}}    
         />
         <View style={bioStyles.body}>
             <TextWithLabel label={'Corporate email'} textValue={userData.email} />
