@@ -84,8 +84,8 @@ const UserBio = ({userId = 'user1234'}) => {
             <TextWithLabel label={'Supervisor email'} textValue={superData.email} />
         </View>
         <View style={bioStyles.buttonsWrapper}>
-            <UiButton label={"PTO"}/>
-            <UiButton label={"Emergency contacts"}/>
+            <UiButton label={"PTO"} type="default"/>
+            <UiButton label={"Emergency contacts"} type="warning"/>
         </View>
         </>
     )

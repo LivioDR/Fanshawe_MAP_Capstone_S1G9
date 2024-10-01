@@ -54,14 +54,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, dismiss, isShown
                     />
                     <UiButton
                         label={"Save"}
-                        customStyles={{
-                            wrapper: {
-                                backgroundColor: '#DD0000',
-                            },
-                            textElem: {
-                                color: 'white',
-                            }
-                        }}
+                        type="warning"
                         funcToCall={()=>{
                             // save data
                             updateUserInfo()
