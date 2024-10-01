@@ -5,7 +5,7 @@ import ProfileImage from "../ProfileImage/ProfileImage";
 import NameRoleContainer from "../NameRoleContainer/NameRoleContainer";
 import styles from "./BioHeaderStyles";
 
-const BioHeader = ({name, imgUrl, role, onPressFunc = ()=>{}, canEdit = true}) => {
+const BioHeader = ({name, imgUrl, role, onPressFunc = ()=>{}, canEdit}) => {
     return(
         <View style={styles.header}>
             <ProfileImage url={imgUrl} />

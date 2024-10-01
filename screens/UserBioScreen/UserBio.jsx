@@ -11,7 +11,7 @@ import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 
 
-const UserBio = ({userId = 'user1234'}) => {
+const UserBio = ({userId = 'user1234', canEdit = true}) => {
 
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
@@ -73,7 +73,7 @@ const UserBio = ({userId = 'user1234'}) => {
             role={userData.role} 
             imgUrl={imgUrl}
             onPressFunc={()=>{showModal()}}  
-            canEdit={true}  
+            canEdit={canEdit}  
         />
         <View style={bioStyles.body}>
             <TextWithLabel label={'Corporate email'} textValue={userData.email} />
