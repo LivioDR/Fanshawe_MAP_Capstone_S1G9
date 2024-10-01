@@ -14,4 +14,19 @@ const getImageForUserId = async(id) => {
     return urlPath
 }
 
-export { getImageForUserId }
+const setImageForUserId = async(id, file, setLoading) => {
+    try{
+        setLoading(true)
+        const pathRef = ref(storage, `users/${id}/profile.jpg`)
+        uploadBytes(pathRef``, file).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+            console.log(snapshot)
+        });
+    }
+    catch(e){
+        console.error(e)
+    }
+    setLoading(false)
+}
+
+export { getImageForUserId, setImageForUserId }
