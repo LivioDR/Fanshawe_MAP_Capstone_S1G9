@@ -62,6 +62,7 @@ const UserBio = ({userId = 'user1234'}) => {
         <UserBioEditScreen 
             uid={userId} 
             imgUrl={imgUrl} 
+            setImgUrl={setImgUrl}
             userData={userData} 
             setUserData={setUserData}
             dismiss={hideModal} 

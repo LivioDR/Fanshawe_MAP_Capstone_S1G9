@@ -6,7 +6,7 @@ import ImageUploadField from "../../components/userBioEdit/ImageUploadField/Imag
 import { updateUserBioInfoById } from "../../services/database/userBioInfo";
 import InputField from "../../components/common/InputField/InputField";
 
-const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, dismiss, isShown}) => {
+const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismiss, isShown}) => {
 
     const [address, setAddress] = useState('')
 
@@ -37,16 +37,20 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, dismiss, isShown
             visible={isShown}
         >
             <View style={styles.container}>
+
                 <Text style={styles.nameLabel}>
                 {`${userData.firstName} ${userData.lastName}`}
                 </Text>
-                <ImageUploadField imgUrl={imgUrl} />
+
+                <ImageUploadField uid={uid} imgUrl={imgUrl} setImgUrl={setImgUrl} />
+
                 <InputField
                     label={"Address"}
                     value={address}
                     setValue={setAddress}
                     autoComplete="address-line1"
                 />
+
                 <View style={styles.btnContainer}>
                     <UiButton
                         label={"Cancel"}
