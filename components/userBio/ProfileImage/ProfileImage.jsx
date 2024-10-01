@@ -4,15 +4,15 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileImageStyles from "./ProfileImageStyles";
 
 
-const ProfileImage = ({url}) => {
+const ProfileImage = ({url, imgSize = 96, placeholderSize = 48}) => {
 
     if(url){
         return(
-            <View style={ProfileImageStyles.container}>
+            <View style={{...ProfileImageStyles.container, width: imgSize+4, height: imgSize+4}}>
                 <Image
                 source={{uri: url}}
-                width={96}
-                height={96}
+                width={imgSize}
+                height={imgSize}
                 style={{
                     borderRadius: 50,
                 }}
@@ -23,7 +23,7 @@ const ProfileImage = ({url}) => {
     else{
         return(
             <View style={ProfileImageStyles.container}>
-                <Ionicons name="person" size={48} color="blue" />
+                <Ionicons name="person" size={placeholderSize} color="blue" />
             </View>
         )
     }
