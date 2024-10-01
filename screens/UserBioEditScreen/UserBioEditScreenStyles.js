@@ -16,17 +16,4 @@ export default UserBioEditScreenStyles = StyleSheet.create({
         padding: '10%',
         justifyContent: 'space-between'
     },
-    inputContainer: {
-        width: '100%',
-        padding: '5%',
-    },
-    inputLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    inputField: {
-        backgroundColor: '#F0F0F0',
-        padding: 3,
-        fontSize: 14,
-    },
 })

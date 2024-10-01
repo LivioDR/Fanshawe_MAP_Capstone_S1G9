@@ -4,6 +4,7 @@ import styles from "./UserBioEditScreenStyles";
 import UiButton from "../../components/common/UiButton/UiButton";
 import ImageUploadField from "../../components/userBioEdit/ImageUploadField/ImageUploadField";
 import { updateUserBioInfoById } from "../../services/database/userBioInfo";
+import InputField from "../../components/common/InputField/InputField";
 
 const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, dismiss, isShown}) => {
 
@@ -40,19 +41,12 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, dismiss, isShown
                 {`${userData.firstName} ${userData.lastName}`}
                 </Text>
                 <ImageUploadField imgUrl={imgUrl} />
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>
-                        Address
-                    </Text>
-                    <TextInput
-                        style={styles.inputField}
-                        autoCapitalize="words"
-                        autoComplete="address-line1"
-                        autoCorrect={false}
-                        value={address}
-                        onChange={newAddress => {setAddress(newAddress.nativeEvent.text)}}
-                    />
-                </View>
+                <InputField
+                    label={"Address"}
+                    value={address}
+                    setValue={setAddress}
+                    autoComplete="address-line1"
+                />
                 <View style={styles.btnContainer}>
                     <UiButton
                         label={"Cancel"}
