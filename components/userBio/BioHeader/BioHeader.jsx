@@ -5,16 +5,19 @@ import ProfileImage from "../ProfileImage/ProfileImage";
 import NameRoleContainer from "../NameRoleContainer/NameRoleContainer";
 import styles from "./BioHeaderStyles";
 
-const BioHeader = ({name, imgUrl, role, onPressFunc = ()=>{}}) => {
+const BioHeader = ({name, imgUrl, role, onPressFunc = ()=>{}, canEdit = true}) => {
     return(
         <View style={styles.header}>
             <ProfileImage url={imgUrl} />
             <NameRoleContainer name={name} role={role} />
-            <Pressable
-                onPress={onPressFunc}
-            >
-                <Ionicons name="create-outline" size={24} style={styles.editIcon}/>
-            </Pressable>
+            {
+                canEdit &&
+                <Pressable
+                    onPress={onPressFunc}
+                >
+                    <Ionicons name="create-outline" size={24} style={styles.editIcon}/>
+                </Pressable>
+            }
         </View>
     )
 }

@@ -72,7 +72,8 @@ const UserBio = ({userId = 'user1234'}) => {
             name={`${userData.firstName} ${userData.lastName}`} 
             role={userData.role} 
             imgUrl={imgUrl}
-            onPressFunc={()=>{showModal()}}    
+            onPressFunc={()=>{showModal()}}  
+            canEdit={true}  
         />
         <View style={bioStyles.body}>
             <TextWithLabel label={'Corporate email'} textValue={userData.email} />
