@@ -18,7 +18,7 @@ export default function HomeScreen() {
     useEffect(() => {
         (async () => {
             // TODO: update hardcoded user id
-            const timeLog = await getOpenTimeLog("user1234").catch((error) => console.log(error));
+            const timeLog = await getOpenTimeLog("user1234").catch((err) => console.error(err));
             dispatch({ type: "loadState", payload: timeLog });
         })();
     }, []);
