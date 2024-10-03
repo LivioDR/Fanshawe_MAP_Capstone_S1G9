@@ -12,20 +12,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+// custom components
+import HomeScreen from './screens/HomeScreen';
+
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
 
 // TODO: replace this with an auth variable of some sort
 const loggedIn = true;
 
-// TODO: replace these placeholder components with screen components from screens/
-function HomeScreenPlaceholder() {
-    return (
-        <View style={styles.container}>
-            <Text>Home Screen</Text>
-        </View>
-    );
-}
+// TODO: replace these placeholder components with screen components from screens
 function CompanyScreenPlaceholder() {
     return (
         <View style={styles.container}>
@@ -68,7 +64,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Home"
-                    component={HomeScreenPlaceholder}
+                    component={HomeScreen}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialCommunityIcons
