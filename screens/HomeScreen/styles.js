@@ -11,6 +11,15 @@ export default StyleSheet.create({
             paddingTop: safeAreaPadding,
 
             backgroundColor: "#FFF",
+
+            loading: {
+                justifyContent: "center",
+                gap: 15,
+
+                indicatorText: {
+                    fontSize: 18,
+                },
+            },
         },
 
         inner: {

@@ -1,8 +1,8 @@
 // React hooks
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 // RN components
-import { Image, Text, View } from "react-native";
+import { ActivityIndicator, Image, Text, View } from "react-native";
 
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
@@ -20,6 +20,7 @@ export default function HomeScreen() {
             // TODO: update hardcoded user id
             const timeLog = await getOpenTimeLog("user1234").catch((err) => console.error(err));
             dispatch({ type: "loadState", payload: timeLog });
+            setLoading(false);
         })();
     }, []);
 
@@ -55,7 +56,6 @@ export default function HomeScreen() {
                         newState.takenLunch = true;
                     }
                 }
-                console.log(newState);
                 return newState;
 
             case "clockIn":
@@ -88,8 +88,14 @@ export default function HomeScreen() {
     };
     const [clockStatus, dispatch] = useReducer(reducer, initState);
 
-    return (
-        <View style={styles.container.outer}>
+    const [loading, setLoading] = useState(true);
+
+    const content = loading ?
+        <>
+            <ActivityIndicator size="large" />
+            <Text style={styles.container.outer.loading.indicatorText}>Loading...</Text>
+        </> :
+        <>
             <ClockStatusBanner clockStatus={clockStatus} />
 
             <View style={styles.container.inner}>
@@ -114,6 +120,14 @@ export default function HomeScreen() {
 
                 <ClockButtons clockStatus={clockStatus} dispatch={dispatch} />
             </View>
+        </>;
+
+    return (
+        <View style={[
+            styles.container.outer,
+            loading ? styles.container.outer.loading : undefined,
+        ]}>
+            {content}
         </View>
     );
 }
