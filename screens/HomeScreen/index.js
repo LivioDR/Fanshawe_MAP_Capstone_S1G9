@@ -97,20 +97,21 @@ export default function HomeScreen() {
 
     const [loading, setLoading] = useState(true);
 
+    // action functions for the clock buttons
     const buttonActions = {
-        clockIn: () => {
+        clockIn: async () => {
             dispatch({ type: "clockIn" });
         },
 
-        clockOut: () => {
+        clockOut: async () => {
             dispatch({ type: "clockOut" });
         },
 
-        startLunch: () => {
+        startLunch: async () => {
             dispatch({ type: "startLunch" });
         },
 
-        endLunch: () => {
+        endLunch: async () => {
             dispatch({ type: "endLunch" });
         },
     };
