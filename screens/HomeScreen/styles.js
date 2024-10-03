@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { safeAreaPadding, dropShadowStyle, highlight, positive, negative, accent } from "../../utilities/variables";
+import { safeAreaPadding, dropShadowStyle, highlight } from "../../utilities/variables";
 
 export default StyleSheet.create({
     container: {
@@ -41,12 +41,6 @@ export default StyleSheet.create({
             padding: 10,
             borderRadius: 30,
         },
-
-        clockBtns: {
-            flexDirection: "row",
-            flexWrap: "wrap",
-            gap: 15,
-        },
     },
 
     profileImage: {
@@ -58,32 +52,5 @@ export default StyleSheet.create({
         fontWeight: "500",
         fontSize: 24,
         textAlign: "center",
-    },
-
-    clockBtn: {
-        width: "47%",
-        padding: 10,
-
-        backgroundColor: highlight,
-        borderRadius: 5,
-
-        ...dropShadowStyle,
-
-        text: {
-            textAlign: "center",
-            fontWeight: "600",
-        },
-
-        green: {
-            backgroundColor: positive,
-        },
-
-        red: {
-            backgroundColor: negative,
-        },
-
-        blue: {
-            backgroundColor: accent,
-        },
     },
 });
