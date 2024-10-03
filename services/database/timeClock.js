@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, limit, orderBy, setDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, limit, orderBy, doc, updateDoc } from "firebase/firestore";
 import { firestore as db } from "../../config/firebase";
 
 const timeClockCollection = "timeClockData";
@@ -50,7 +50,7 @@ export async function updateTimeLog(timeLog) {
         }
 
         // update doc
-        await (setDoc(doc(db, timeClockCollection, id), toUpdate, { merge: true }));
+        await updateDoc(doc(db, timeClockCollection, id), toUpdate);
 
         return true;
     } catch (error) {
