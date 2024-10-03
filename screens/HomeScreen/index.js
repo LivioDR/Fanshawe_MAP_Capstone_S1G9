@@ -40,7 +40,7 @@ export default function HomeScreen() {
         switch (action.type) {
             case "loadState":
                 const timeLog = action.payload;
-                const newState = {...timeLog, ...initState};
+                const newState = {...initState, ...timeLog};
                 // timeLog stores id in "id" but we want it in "timeLogId", so move it
                 newState.timeLogId = newState.id;
                 delete newState.id;
