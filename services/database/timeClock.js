@@ -50,7 +50,7 @@ export async function updateTimeLog(timeLog) {
         }
 
         // update doc
-        await (setDoc(doc(db, timeClockCollection, id), toUpdate));
+        await (setDoc(doc(db, timeClockCollection, id), toUpdate, { merge: true }));
 
         return true;
     } catch (error) {
