@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, SafeAreaView } from "react-native";
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import styles from "./AdminViewStyles";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
@@ -37,8 +37,8 @@ const AdminView = ({uid = 'super1234'}) => {
 
     if(loading){
         return(
-            <View>
-                <Text>
+            <View style={styles.loading.container}>
+                <Text style={styles.loading.text}>
                     Loading...
                 </Text>
             </View>
@@ -46,27 +46,29 @@ const AdminView = ({uid = 'super1234'}) => {
     }
 
     return(
-        <View style={styles.header}>
-            <BioHeader 
-                name={`${adminInfo.firstName} ${adminInfo.lastName}`}
-                role={adminInfo.role}
-                imgUrl={imgUrl}
-                canEdit={false}
-            />
-            <Text style={styles.title}>
-                Team members
-            </Text>
-            <FlatList
-                data={teamMembers}
-                renderItem={member => <UserCard 
-                    name={member.item.firstName}
-                    role={member.item.role}
-                    email={member.item.email}
-                    imgUrl={member.item.uri}
-                />}
-                keyExtractor={member => member.uri}
-            />
-        </View>
+        <SafeAreaView>
+            <View style={styles.header}>
+                <BioHeader 
+                    name={`${adminInfo.firstName} ${adminInfo.lastName}`}
+                    role={adminInfo.role}
+                    imgUrl={imgUrl}
+                    canEdit={false}
+                    />
+                <Text style={styles.title}>
+                    Team members
+                </Text>
+                <FlatList
+                    data={teamMembers}
+                    renderItem={member => <UserCard 
+                        name={`${member.item.firstName} ${member.item.lastName}`}
+                        role={member.item.role}
+                        email={member.item.email}
+                        imgUrl={member.item.uri}
+                        />}
+                        keyExtractor={member => member.uri}
+                        />
+            </View>
+        </SafeAreaView>
     )
 }
 export default AdminView
