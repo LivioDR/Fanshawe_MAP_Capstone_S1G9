@@ -187,10 +187,10 @@ export default function HomeScreen() {
                         Welcome, Jonathan Handfeld Miller-Smith III.
                     </Text>
 
-                    {/* TODO: make birthday banner display reactive */}
-                    <View style={styles.container.birthday}>
+                    {/* TODO: readd later, make birthday banner display reactive */}
+                    {/* <View style={styles.container.birthday}>
                         <Text>🎉 Happy birthday! 🎉</Text>
-                    </View>
+                    </View> */}
                 </View>
 
                 <ClockButtons clockStatus={clockStatus} actions={buttonActions} />
