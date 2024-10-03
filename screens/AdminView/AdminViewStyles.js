@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export default AdminViewStyles = StyleSheet.create({
     header: {
-        
+        paddingVertical: 20,
     },
     title: {
         textAlign: 'center',
