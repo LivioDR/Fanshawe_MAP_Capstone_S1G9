@@ -13,3 +13,9 @@ export const dropShadowStyle = {
     shadowRadius: 2,
     elevation: 3,
 };
+
+// colors
+export const highlight = "#EFEFEF";
+export const positive = "#45CA44";
+export const negative = "#C90000";
+export const accent = "#316CB1";

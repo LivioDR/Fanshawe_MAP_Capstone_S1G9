@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { safeAreaPadding, dropShadowStyle } from "../../utilities/variables";
+import { safeAreaPadding, dropShadowStyle, highlight, positive, negative, accent } from "../../utilities/variables";
 
 export default StyleSheet.create({
     container: {
@@ -37,7 +37,7 @@ export default StyleSheet.create({
         },
 
         birthday: {
-            backgroundColor: "#EFEFEF",
+            backgroundColor: highlight,
             padding: 10,
             borderRadius: 30,
         },
@@ -64,7 +64,7 @@ export default StyleSheet.create({
         width: "47%",
         padding: 10,
 
-        backgroundColor: "#EFEFEF",
+        backgroundColor: highlight,
         borderRadius: 5,
 
         ...dropShadowStyle,
@@ -75,15 +75,15 @@ export default StyleSheet.create({
         },
 
         green: {
-            backgroundColor: "#45CA44",
+            backgroundColor: positive,
         },
 
         red: {
-            backgroundColor: "#C90000",
+            backgroundColor: negative,
         },
 
         blue: {
-            backgroundColor: "#316CB1",
+            backgroundColor: accent,
         },
     },
 });
