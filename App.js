@@ -14,6 +14,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // custom components
 import HomeScreen from './screens/HomeScreen';
+import UserBio from "./screens/UserBioScreen/UserBio";
 
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
@@ -26,13 +27,6 @@ function CompanyScreenPlaceholder() {
     return (
         <View style={styles.container}>
             <Text>Company Screen</Text>
-        </View>
-    );
-}
-function ProfileScreenPlaceholder() {
-    return (
-        <View style={styles.container}>
-            <Text>Profile Screen</Text>
         </View>
     );
 }
@@ -78,7 +72,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Profile"
-                    component={ProfileScreenPlaceholder}
+                    component={UserBio}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialIcons
