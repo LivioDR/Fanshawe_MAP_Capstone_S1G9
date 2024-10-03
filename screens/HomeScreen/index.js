@@ -62,7 +62,7 @@ export default function HomeScreen() {
                         newState.takenLunch = true;
                     }
                 }
-                
+
                 return newState;
 
             case "clockIn":
@@ -97,6 +97,24 @@ export default function HomeScreen() {
 
     const [loading, setLoading] = useState(true);
 
+    const buttonActions = {
+        clockIn: () => {
+            dispatch({ type: "clockIn" });
+        },
+
+        clockOut: () => {
+            dispatch({ type: "clockOut" });
+        },
+
+        startLunch: () => {
+            dispatch({ type: "startLunch" });
+        },
+
+        endLunch: () => {
+            dispatch({ type: "endLunch" });
+        },
+    };
+
     const content = loading ?
         <>
             <ActivityIndicator size="large" />
@@ -125,7 +143,7 @@ export default function HomeScreen() {
                     </View>
                 </View>
 
-                <ClockButtons clockStatus={clockStatus} dispatch={dispatch} />
+                <ClockButtons clockStatus={clockStatus} actions={buttonActions} />
             </View>
         </>;
 

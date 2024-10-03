@@ -4,31 +4,31 @@ import UiButton from "../../common/UiButton/UiButton";
 
 import styles from "./styles";
 
-export default function ClockButtons({ clockStatus, dispatch }) {
+export default function ClockButtons({ clockStatus, actions = {} }) {
     return (
         <View style={styles.container}>
             <UiButton
                 label="Clock In"
                 disabled={clockStatus.clockedIn}
-                funcToCall={() => dispatch({ type: "clockIn" })}
+                funcToCall={"clockIn" in actions ? actions.clockIn : undefined}
                 type="confirm"
             />
             <UiButton
                 label="Clock Out"
                 disabled={!clockStatus.clockedIn}
-                funcToCall={() => dispatch({ type: "clockOut" })}
+                funcToCall={"clockOut" in actions ? actions.clockOut : undefined}
                 type="warning"
             />
             <UiButton
                 label="Start Lunch"
                 disabled={clockStatus.takenLunch || (!clockStatus.clockedIn || clockStatus.onLunch)}
-                funcToCall={() => dispatch({ type: "startLunch" })}
+                funcToCall={"startLunch" in actions ? actions.startLunch : undefined}
                 type="primary"
             />
             <UiButton
                 label="End Lunch"
                 disabled={!(clockStatus.clockedIn && clockStatus.onLunch)}
-                funcToCall={() => dispatch({ type: "endLunch" })}
+                funcToCall={"endLunch" in actions ? actions.endLunch : undefined}
                 type="warning"
             />
         </View>
