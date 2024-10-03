@@ -1,10 +1,10 @@
-import { collection, query, where, getDocs, limit, orderBy, doc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, limit, orderBy, doc, updateDoc, addDoc } from "firebase/firestore";
 import { firestore as db } from "../../config/firebase";
 
 const timeClockCollection = "timeClockData";
 
 export class TimeLog {
-    id = ""; userId = "";
+    userId = "";
     clockInTime = null; clockOutTime = null;
     onLunchTime = null; offLunchTime = null;
 }
@@ -57,5 +57,30 @@ export async function updateTimeLog(timeLog) {
         // catch and log any errors and return false
         console.error(`Error updating time log ${id}:`, error);
         return false;
+    }
+}
+
+/**
+ * Create a new time log for the specified user, clocking in at the specified time.
+ * @param {string} userId user ID to clock in
+ * @param {Timestamp} clockInTime time the user clocked in
+ * @returns created TimeLog, or null if failed for some reason
+ */
+export async function createTimeLog(userId, clockInTime) {
+    try {
+        // create new time log
+        const timeLog = new TimeLog();
+        timeLog.userId = userId;
+        timeLog.clockInTime = clockInTime;
+
+        // add to DB and get ID back
+        const logId = await addDoc(collection(db, timeClockCollection), timeLog).id;
+
+        timeLog.id = logId;
+        return timeLog;
+    } catch (error) {
+        // catch and log any errors and return false
+        console.error(`Error creating time log:`, error);
+        return null;
     }
 }
