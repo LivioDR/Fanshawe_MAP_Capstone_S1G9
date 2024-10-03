@@ -74,7 +74,8 @@ export async function createTimeLog(userId, clockInTime) {
         timeLog.clockInTime = clockInTime;
 
         // add to DB and get ID back
-        const logId = await addDoc(collection(db, timeClockCollection), timeLog).id;
+        const logDoc = await addDoc(collection(db, timeClockCollection), {...timeLog});
+        const logId = logDoc.id;
 
         timeLog.id = logId;
         return timeLog;
