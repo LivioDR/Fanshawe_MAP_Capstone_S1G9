@@ -1,5 +1,5 @@
 // React hooks
-import { useState } from "react";
+import { useReducer } from "react";
 
 // RN components
 import { Image, Text, TouchableHighlight, View } from "react-native";
@@ -11,13 +11,51 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import styles from "./styles";
 
 export default function HomeScreen() {
-    const [clockedIn, setClockedIn] = useState(false);
-    const [onLunch, setOnLunch] = useState(false);
-    const [takenLunch, setTakenLunch] = useState(false);
+    // manage state with a reducer to easily handle sub-values
+    const initState = {
+        clockedIn: false,
+        onLunch: false,
+        takenLunch: false,
+    };
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "clockIn":
+                return {
+                    clockedIn: true,
+                    onLunch: state.onLunch,
+                    takenLunch: state.takenLunch,
+                };
+            
+            case "clockOut":
+                return {
+                    clockedIn: false,
+                    onLunch: false,
+                    takenLunch: false,
+                };
+            
+            case "startLunch":
+                return {
+                    clockedIn: state.clockedIn,
+                    onLunch: true,
+                    takenLunch: true,
+                };
+            
+            case "endLunch":
+                return {
+                    clockedIn: state.clockedIn,
+                    onLunch: false,
+                    takenLunch: state.takenLunch,
+                };
+        }
+    };
+    const [clockStatus, dispatch] = useReducer(reducer, initState);
 
     return (
         <View style={styles.container.outer}>
-            <ClockStatusBanner clockedIn={clockedIn} onLunch={onLunch} />
+            <ClockStatusBanner
+                clockedIn={clockStatus.clockedIn}
+                onLunch={clockStatus.onLunch}
+            />
 
             <View style={styles.container.inner}>
                 <View style={styles.container.intro}>
@@ -43,41 +81,48 @@ export default function HomeScreen() {
                 <View style={styles.container.clockBtns}>
                     {/* TODO: replace with a custom shadowed button component */}
                     <TouchableHighlight
-                        style={[styles.clockBtn, clockedIn ? undefined : styles.clockBtn.green]}
+                        style={[
+                            styles.clockBtn,
+                            clockStatus.clockedIn ? undefined : styles.clockBtn.green
+                        ]}
                         underlayColor="#DDD"
-                        disabled={clockedIn}
-                        onPress={() => { setClockedIn(true); }}
+                        disabled={clockStatus.clockedIn}
+                        onPress={() => dispatch({ type: "clockIn" })}
                     >
                         <Text style={styles.clockBtn.text}>Clock In</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
-                        style={[styles.clockBtn, !clockedIn ? undefined : styles.clockBtn.red]}
+                        style={[
+                            styles.clockBtn,
+                            !clockStatus.clockedIn ? undefined : styles.clockBtn.red
+                        ]}
                         underlayColor="#DDD"
-                        disabled={!clockedIn}
-                        onPress={() => {
-                            setClockedIn(false);
-                            setOnLunch(false);
-                            setTakenLunch(false);
-                        }}
+                        disabled={!clockStatus.clockedIn}
+                        onPress={() => dispatch({ type: "clockOut" })}
                     >
                         <Text style={styles.clockBtn.text}>Clock Out</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
-                        style={[styles.clockBtn, takenLunch || (!clockedIn || onLunch) ? undefined : styles.clockBtn.blue]}
+                        style={[
+                            styles.clockBtn,
+                            clockStatus.takenLunch || (!clockStatus.clockedIn || clockStatus.onLunch) ?
+                                undefined :
+                                styles.clockBtn.blue
+                        ]}
                         underlayColor="#DDD"
-                        disabled={takenLunch || (!clockedIn || onLunch)}
-                        onPress={() => {
-                            setOnLunch(true);
-                            setTakenLunch(true);
-                        }}
+                        disabled={clockStatus.takenLunch || (!clockStatus.clockedIn || clockStatus.onLunch)}
+                        onPress={() => dispatch({ type: "startLunch" })}
                     >
                         <Text style={styles.clockBtn.text}>Start Lunch</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
-                        style={[styles.clockBtn, !(clockedIn && onLunch) ? undefined : styles.clockBtn.red]}
+                        style={[
+                            styles.clockBtn,
+                            !(clockStatus.clockedIn && clockStatus.onLunch) ? undefined : styles.clockBtn.red
+                        ]}
                         underlayColor="#DDD"
-                        disabled={!(clockedIn && onLunch)}
-                        onPress={() => { setOnLunch(false); }}
+                        disabled={!(clockStatus.clockedIn && clockStatus.onLunch)}
+                        onPress={() => dispatch({ type: "endLunch" })}
                     >
                         <Text style={styles.clockBtn.text}>End Lunch</Text>
                     </TouchableHighlight>
