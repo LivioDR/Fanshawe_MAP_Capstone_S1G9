@@ -17,7 +17,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container.outer}>
-            <ClockStatusBanner />
+            <ClockStatusBanner clockedIn={clockedIn} onLunch={onLunch} />
 
             <View style={styles.container.inner}>
                 <View style={styles.container.intro}>
@@ -37,10 +37,6 @@ export default function HomeScreen() {
                     <View style={styles.container.birthday}>
                         <Text>🎉 Happy birthday! 🎉</Text>
                     </View>
-
-                    {/* TODO: remove debug Texts */}
-                    <Text>Clocked in? {clockedIn ? "Yes" : "No"}</Text>
-                    <Text>On lunch? {onLunch ? "Yes" : "No"}</Text>
                 </View>
 
                 {/* TODO: factor time clock buttons out into a component */}
