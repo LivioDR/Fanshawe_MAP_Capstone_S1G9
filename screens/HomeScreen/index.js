@@ -94,12 +94,39 @@ export default function HomeScreen() {
         },
 
         clockOut: async () => {
+            // record if we're clocking out while on lunch
+            const wasOnLunch = onLunch;
+            const hadTakenLunch = takenLunch;
+
             // assume we will succeed and update state
             setClockedIn(false);
             setOnLunch(false);
             setTakenLunch(false);
 
-            // TODO: set end time and clear current time log
+            // save current time log in case we need to revert
+            const oldTimeLog = timeLog;
+
+            // get current time as a Timestamp
+            const curTime = Timestamp.now();
+
+            // create new time log and null existing one (since the user is clocking out)
+            const newTimeLog = {...timeLog};
+            newTimeLog.clockOutTime = curTime;
+            if (wasOnLunch) {
+                newTimeLog.offLunchTime = curTime;
+            }
+            setTimeLog(null);
+
+            // make update in Firebase
+            const success = await updateTimeLog(newTimeLog);
+
+            // if we fail, revert state
+            if (!success) {
+                setTimeLog(oldTimeLog);
+                setClockedIn(true);
+                setOnLunch(wasOnLunch);
+                setTakenLunch(hadTakenLunch);
+            }
         },
 
         startLunch: async () => {
