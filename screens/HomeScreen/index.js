@@ -41,6 +41,12 @@ export default function HomeScreen() {
             case "loadState":
                 const timeLog = action.payload;
                 const newState = {...initState, ...timeLog};
+
+                // nothing else to do if we received no time log
+                if (!timeLog) {
+                    return newState;
+                }
+
                 // timeLog stores id in "id" but we want it in "timeLogId", so move it
                 newState.timeLogId = newState.id;
                 delete newState.id;
@@ -56,6 +62,7 @@ export default function HomeScreen() {
                         newState.takenLunch = true;
                     }
                 }
+                
                 return newState;
 
             case "clockIn":

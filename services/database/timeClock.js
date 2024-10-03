@@ -9,6 +9,12 @@ export class TimeLog {
     onLunchTime = null; offLunchTime = null;
 }
 
+/**
+ * Get the currently open (clocked in but not out) time log for a user.
+ * Returns null if none is found.
+ * @param {string} userId user ID to fetch for
+ * @returns a TimeLog object, or null
+ */
 export async function getOpenTimeLog(userId) {
     // get list of time logs for this user with no clock out time
     // theoretically should be at most one
@@ -22,10 +28,9 @@ export async function getOpenTimeLog(userId) {
         )
     );
 
-    let timeLog = new TimeLog();
-    timeLog.userId = userId;
+    let timeLog = null;
     snapshot.forEach((doc) => (
-        Object.assign(timeLog, { ...doc.data(), id: doc.id })
+        timeLog = Object.assign(new TimeLog(), { ...doc.data(), id: doc.id, userId })
     ));
 
     return timeLog;
