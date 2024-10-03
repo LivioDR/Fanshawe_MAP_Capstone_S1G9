@@ -32,7 +32,7 @@ const typeStyles = StyleSheet.create({
 })
 
 
-const UiButton = ({label, funcToCall, customStyles = {}, type = 'default'}) => {
+const UiButton = ({label, funcToCall, disabled = false, customStyles = {}, type = 'default'}) => {
     return (
         <Pressable
             onPress={funcToCall}
@@ -40,14 +40,17 @@ const UiButton = ({label, funcToCall, customStyles = {}, type = 'default'}) => {
                 [
                     styles.wrapper,
                     type !== "default" ? typeStyles[type].wrapper : undefined,
+                    disabled ? styles.disabled : undefined,
                     pressed ? styles.pressed : styles.notPressed,
                     customStyles.wrapper
                 ]
             )}
+            disabled={disabled}
         >
             <Text style={[
                 styles.textElem,
                 type !== "default" ? typeStyles[type].textElem : undefined,
+                disabled ? styles.textElemDisabled : undefined,
                 customStyles.textElem
             ]}>
                 {label}
