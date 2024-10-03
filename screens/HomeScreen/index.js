@@ -1,5 +1,5 @@
 // React hooks
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 // RN components
 import { Image, Text, View } from "react-native";
@@ -8,27 +8,65 @@ import { Image, Text, View } from "react-native";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
 
+// database
+import { getOpenTimeLog } from "../../services/database/timeClock";
+
 // styles
 import styles from "./styles";
 
 export default function HomeScreen() {
+    useEffect(() => {
+        (async () => {
+            // TODO: update hardcoded user id
+            const timeLog = await getOpenTimeLog("user1234").catch((error) => console.log(error));
+            dispatch({ type: "loadState", payload: timeLog });
+        })();
+    }, []);
+
     // manage state with a reducer to easily handle sub-values
     const initState = {
+        timeLogId: "",
+        userId: "",
+        clockInTime: null,
+        clockOutTime: null,
+        onLunchTime: null,
+        offLunchTime: null,
         clockedIn: false,
         onLunch: false,
         takenLunch: false,
     };
     const reducer = (state, action) => {
         switch (action.type) {
+            case "loadState":
+                const timeLog = action.payload;
+                const newState = {...timeLog, ...initState};
+                // timeLog stores id in "id" but we want it in "timeLogId", so move it
+                newState.timeLogId = newState.id;
+                delete newState.id;
+                // only set up state if we have a clock in time and have not clocked out
+                if (timeLog.clockInTime && !timeLog.clockOutTime) {
+                    newState.clockedIn = true;
+
+                    // set up lunch state
+                    if (timeLog.offLunchTime) {
+                        newState.takenLunch = true;
+                    } else if (timeLog.onLunchTime && !timeLog.offLunchTime) {
+                        newState.onLunch = true;
+                        newState.takenLunch = true;
+                    }
+                }
+                console.log(newState);
+                return newState;
+
             case "clockIn":
                 return {
+                    ...state,
                     clockedIn: true,
-                    onLunch: state.onLunch,
-                    takenLunch: state.takenLunch,
                 };
             
             case "clockOut":
                 return {
+                    ...state,
                     clockedIn: false,
                     onLunch: false,
                     takenLunch: false,
@@ -36,16 +74,15 @@ export default function HomeScreen() {
             
             case "startLunch":
                 return {
-                    clockedIn: state.clockedIn,
+                    ...state,
                     onLunch: true,
                     takenLunch: true,
                 };
             
             case "endLunch":
                 return {
-                    clockedIn: state.clockedIn,
+                    ...state,
                     onLunch: false,
-                    takenLunch: state.takenLunch,
                 };
         }
     };
