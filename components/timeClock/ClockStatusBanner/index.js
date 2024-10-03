@@ -5,8 +5,8 @@ import { Timestamp } from "firebase/firestore";
 import styles from "./styles";
 
 export default function ClockStatusBanner({ clockStatus }) {
-    const clockInTime = clockStatus.clockInTime ? timestampToTimeString(clockStatus.clockInTime) : "";
-    const lunchTime = clockStatus.onLunchTime ? timestampToTimeString(clockStatus.onLunchTime) : "";
+    const clockInTime = clockStatus.timeLog?.clockInTime ? timestampToTimeString(clockStatus.timeLog.clockInTime) : "";
+    const lunchTime = clockStatus.timeLog?.onLunchTime ? timestampToTimeString(clockStatus.timeLog.onLunchTime) : "";
 
     let bannerStyle = styles.banner.clockedOut;
     let bannerText = "You are not clocked in.";

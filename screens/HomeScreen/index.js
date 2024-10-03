@@ -15,104 +15,65 @@ import { getOpenTimeLog } from "../../services/database/timeClock";
 import styles from "./styles";
 
 export default function HomeScreen() {
+    const [clockedIn, setClockedIn] = useState(false);
+    const [onLunch, setOnLunch] = useState(false);
+    const [takenLunch, setTakenLunch] = useState(false);
+    const [timeLog, setTimeLog] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         (async () => {
             // TODO: update hardcoded user id
-            const timeLog = await getOpenTimeLog("user1234").catch((err) => console.error(err));
-            dispatch({ type: "loadState", payload: timeLog });
+            const curTimeLog = await getOpenTimeLog("user1234").catch((err) => console.error(err));
+
+            if (curTimeLog) {
+                setTimeLog(curTimeLog);
+
+                // only set up state if we have a clock in time and have not clocked out
+                if (curTimeLog.clockInTime && !curTimeLog.clockOutTime) {
+                    setClockedIn(true);
+    
+                    // set up lunch state
+                    if (curTimeLog.offLunchTime) {
+                        setTakenLunch(true);
+                    } else if (curTimeLog.onLunchTime && !curTimeLog.offLunchTime) {
+                        setOnLunch(true);
+                        setTakenLunch(true);
+                    }
+                }
+            }
+
             setLoading(false);
         })();
     }, []);
 
-    // manage state with a reducer to easily handle sub-values
-    const initState = {
-        timeLogId: "",
-        userId: "",
-        clockInTime: null,
-        clockOutTime: null,
-        onLunchTime: null,
-        offLunchTime: null,
-        clockedIn: false,
-        onLunch: false,
-        takenLunch: false,
+    // clock status for passing to components
+    const clockStatus = {
+        clockedIn,
+        onLunch,
+        takenLunch,
+        timeLog,
     };
-    const reducer = (state, action) => {
-        switch (action.type) {
-            case "loadState":
-                const timeLog = action.payload;
-                const newState = {...initState, ...timeLog};
-
-                // nothing else to do if we received no time log
-                if (!timeLog) {
-                    return newState;
-                }
-
-                // timeLog stores id in "id" but we want it in "timeLogId", so move it
-                newState.timeLogId = newState.id;
-                delete newState.id;
-                // only set up state if we have a clock in time and have not clocked out
-                if (timeLog.clockInTime && !timeLog.clockOutTime) {
-                    newState.clockedIn = true;
-
-                    // set up lunch state
-                    if (timeLog.offLunchTime) {
-                        newState.takenLunch = true;
-                    } else if (timeLog.onLunchTime && !timeLog.offLunchTime) {
-                        newState.onLunch = true;
-                        newState.takenLunch = true;
-                    }
-                }
-
-                return newState;
-
-            case "clockIn":
-                return {
-                    ...state,
-                    clockedIn: true,
-                };
-            
-            case "clockOut":
-                return {
-                    ...state,
-                    clockedIn: false,
-                    onLunch: false,
-                    takenLunch: false,
-                };
-            
-            case "startLunch":
-                return {
-                    ...state,
-                    onLunch: true,
-                    takenLunch: true,
-                };
-            
-            case "endLunch":
-                return {
-                    ...state,
-                    onLunch: false,
-                };
-        }
-    };
-    const [clockStatus, dispatch] = useReducer(reducer, initState);
-
-    const [loading, setLoading] = useState(true);
 
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
-            dispatch({ type: "clockIn" });
+            setClockedIn(true);
         },
 
         clockOut: async () => {
-            dispatch({ type: "clockOut" });
+            setClockedIn(false);
+            setOnLunch(false);
+            setTakenLunch(false);
         },
 
         startLunch: async () => {
-            dispatch({ type: "startLunch" });
+            setOnLunch(true);
+            setTakenLunch(true);
         },
 
         endLunch: async () => {
-            dispatch({ type: "endLunch" });
+            setOnLunch(false);
         },
     };
 
