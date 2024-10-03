@@ -53,10 +53,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container.outer}>
-            <ClockStatusBanner
-                clockedIn={clockStatus.clockedIn}
-                onLunch={clockStatus.onLunch}
-            />
+            <ClockStatusBanner clockStatus={clockStatus} />
 
             <View style={styles.container.inner}>
                 <View style={styles.container.intro}>
