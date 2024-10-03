@@ -1,5 +1,5 @@
 // React hooks
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 
 // RN components
 import { ActivityIndicator, Image, Text, View } from "react-native";
@@ -9,7 +9,8 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
 
 // database
-import { getOpenTimeLog } from "../../services/database/timeClock";
+import { Timestamp } from "firebase/firestore";
+import { getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
 
 // styles
 import styles from "./styles";
@@ -55,15 +56,45 @@ export default function HomeScreen() {
         timeLog,
     };
 
+    /**
+     * Update the specified time property in the database or revert the state if failed.
+     * @param {string} timeProp time property to update
+     * @returns true if successful, false if not
+     */
+    const updateTimeOrRevert = async (timeProp) => {
+        // save current time log in case we need to revert
+        const oldTimeLog = timeLog;
+
+        // get current time as a Timestamp
+        const curTime = Timestamp.now();
+
+        // set new time log
+        const newTimeLog = {...timeLog};
+        newTimeLog[timeProp] = curTime;
+        setTimeLog(newTimeLog);
+
+        // make update in Firebase
+        const success = await updateTimeLog(newTimeLog);
+
+        // if we fail, revert state
+        if (!success) {
+            setTimeLog(oldTimeLog);
+        }
+
+        return success;
+    };
+
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
+            // assume we will succeed and update state
             setClockedIn(true);
 
             // TODO: create a new time log and write it to the database
         },
 
         clockOut: async () => {
+            // assume we will succeed and update state
             setClockedIn(false);
             setOnLunch(false);
             setTakenLunch(false);
@@ -72,16 +103,31 @@ export default function HomeScreen() {
         },
 
         startLunch: async () => {
+            // assume we will succeed and update state
             setOnLunch(true);
             setTakenLunch(true);
 
-            // TODO: set lunch time to current time
+            // make update in Firebase
+            const success = await updateTimeOrRevert("onLunchTime");
+
+            // if we fail, revert state
+            if (!success) {
+                setOnLunch(false);
+                setTakenLunch(false);
+            }
         },
 
         endLunch: async () => {
+            // assume we will succeed and update state
             setOnLunch(false);
 
-            // TODO: set end lunch time to current time
+            // make update in Firebase
+            const success = await updateTimeOrRevert("offLunchTime");
+
+            // if we fail, revert state
+            if (!success) {
+                setOnLunch(true);
+            }
         },
     };
 
