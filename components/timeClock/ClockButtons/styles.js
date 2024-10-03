@@ -6,7 +6,8 @@ export default StyleSheet.create({
     container: {
         flexDirection: "row",
         flexWrap: "wrap",
-        gap: 15,
+        columnGap: 24,
+        justifyContent: "center",
     },
 
     clockBtn: {
