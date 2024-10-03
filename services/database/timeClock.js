@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, limit, orderBy, setDoc, doc } from "firebase/firestore";
 import { firestore as db } from "../../config/firebase";
 
 const timeClockCollection = "timeClockData";
@@ -34,4 +34,28 @@ export async function getOpenTimeLog(userId) {
     ));
 
     return timeLog;
+}
+
+/**
+ * Update the specified time log in the database.
+ * @param {TimeLog} timeLog time log with updated values
+ * @returns true if successful, false if not
+ */
+export async function updateTimeLog(timeLog) {
+    try {
+        const { id, ...toUpdate } = timeLog;
+        if (!id) {
+            // can't update a log with no ID
+            return false;
+        }
+
+        // update doc
+        await (setDoc(doc(db, timeClockCollection, id), toUpdate));
+
+        return true;
+    } catch (error) {
+        // catch and log any errors and return false
+        console.error(`Error updating time log ${id}:`, error);
+        return false;
+    }
 }
