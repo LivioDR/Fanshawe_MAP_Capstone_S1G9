@@ -4,6 +4,9 @@ import { useState } from "react";
 // RN components
 import { Image, Text, TouchableHighlight, View } from "react-native";
 
+// custom components
+import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
+
 // styles
 import styles from "./styles";
 
@@ -14,12 +17,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container.outer}>
-            {/* TODO: replace this with reactive banner component */}
-            <View style={styles.banner}>
-                <Text style={styles.banner.text}>
-                    You have been clocked in since 8:59 am.
-                </Text>
-            </View>
+            <ClockStatusBanner />
 
             <View style={styles.container.inner}>
                 <View style={styles.container.intro}>
