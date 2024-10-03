@@ -59,21 +59,29 @@ export default function HomeScreen() {
     const buttonActions = {
         clockIn: async () => {
             setClockedIn(true);
+
+            // TODO: create a new time log and write it to the database
         },
 
         clockOut: async () => {
             setClockedIn(false);
             setOnLunch(false);
             setTakenLunch(false);
+
+            // TODO: set end time and clear current time log
         },
 
         startLunch: async () => {
             setOnLunch(true);
             setTakenLunch(true);
+
+            // TODO: set lunch time to current time
         },
 
         endLunch: async () => {
             setOnLunch(false);
+
+            // TODO: set end lunch time to current time
         },
     };
 
