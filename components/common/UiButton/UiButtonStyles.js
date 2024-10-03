@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { dropShadowStyle } from "../../../utilities/variables";
 
 export default UiButtonStyles = StyleSheet.create({
     wrapper: {
@@ -15,5 +16,9 @@ export default UiButtonStyles = StyleSheet.create({
         fontSize: 18,
         flexWrap: 'wrap',
         fontWeight: 'bold',
+    },
+    notPressed: dropShadowStyle,
+    pressed: {
+        transform: [{ translateY: 3 }],
     },
 })
