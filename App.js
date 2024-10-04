@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 // navigation
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // icons
@@ -16,8 +16,19 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import HomeScreen from './screens/HomeScreen';
 import UserBio from "./screens/UserBioScreen/UserBio";
 
+// theme variables
+import { accent, highlight } from './utilities/variables';
+
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
+
+const NavTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        background: "#FFF",
+    }
+};
 
 // TODO: replace this with an auth variable of some sort
 const loggedIn = true;
@@ -33,13 +44,17 @@ function CompanyScreenPlaceholder() {
 
 export default function App() {
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={NavTheme}>
             <StatusBar style="auto" />
 
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
                     headerShown: false,
+                    tabBarActiveTintColor: accent,
+                    tabBarStyle: {
+                        backgroundColor: highlight,
+                    },
                 }}
             >
                 <Tab.Screen
