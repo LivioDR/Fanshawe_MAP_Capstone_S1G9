@@ -67,17 +67,17 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const updateEndTime = async (newEndTime) => {
         // assume DB will be successful first and set state
         const oldEndTime = endTime;
-        setStartTime(newEndTime);
+        setEndTime(newEndTime);
 
         // make DB update
         const success = updateUserBioInfoById(
             userId,
-            { workStartTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
         );
 
         // revert state if necessary
         if (!success) {
-            setStartTime(oldEndTime);
+            setEndTime(oldEndTime);
         }
     };
 
