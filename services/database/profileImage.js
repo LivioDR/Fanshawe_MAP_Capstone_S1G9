@@ -6,7 +6,6 @@ const getImageForUserId = async(id) => {
     try{
         const pathRef = ref(storage, `users/${id}/profile.jpg`)
         await getDownloadURL(pathRef).then(imgUrl => urlPath = imgUrl)
-        console.log(urlPath)
     }
     catch(e){
         console.error(e)
