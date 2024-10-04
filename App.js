@@ -28,7 +28,7 @@ export default function App() {
     const emailRegexTest = emailRegex.test(email);
 
     if (emailRegexTest == false) {
-      setEmailErrTxt("Please enter an email address in a valid format");
+      setEmailErrTxt("Please enter a valid email");
       setLoginBtnDisabled(true);
     } else {
       setEmailErrTxt("");
