@@ -1,5 +1,5 @@
 /*
-Styles for App.js
+Styles for the LoginScreen component
 */
 import { StyleSheet } from "react-native";
 
