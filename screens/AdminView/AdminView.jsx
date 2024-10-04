@@ -5,6 +5,7 @@ import styles from "./AdminViewStyles";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import UserCard from "../../components/adminView/userCard/UserCard";
+import LoadingScreen from "../../components/common/LoadingScreen/LoadingScreen";
 
 const AdminView = ({uid = 'super1234'}) => {
 
@@ -37,11 +38,7 @@ const AdminView = ({uid = 'super1234'}) => {
 
     if(loading){
         return(
-            <View style={styles.loading.container}>
-                <Text style={styles.loading.text}>
-                    Loading...
-                </Text>
-            </View>
+            <LoadingScreen/>
         )
     }
 

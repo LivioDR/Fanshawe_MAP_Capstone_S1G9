@@ -9,10 +9,12 @@ import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
+import LoadingScreen from "../../components/common/LoadingScreen/LoadingScreen";
 
 
 const UserBio = ({userId = 'user1234', canEdit = true}) => {
 
+    const [loading, setLoading] = useState(true)
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
@@ -51,11 +53,18 @@ const UserBio = ({userId = 'user1234', canEdit = true}) => {
 
             // set profle picture
             getImageForUserId(userId).then(img => setImgUrl(img))
+
+            setLoading(false)
         }
         getData(userId)
         
     },[])
 
+    if(loading){
+        return(
+            <LoadingScreen/>
+        )
+    }
 
     return(
         <SafeAreaView>

@@ -11,15 +11,4 @@ export default AdminViewStyles = StyleSheet.create({
     list: {
 
     },
-    loading: {
-        container: {
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        text: {
-            fontSize: 18,
-        },
-    }
 })
