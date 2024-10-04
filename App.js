@@ -7,7 +7,7 @@ import { useState } from "react";
 //From https://firebase.google.com/docs/auth/web/password-auth?_gl=1*pwxp5n*_up*MQ..*_ga*MTEzMDEwMjU5My4xNzI3Njg0NzMy*_ga_CW55HF8NVT*MTcyNzY4NDczMi4xLjAuMTcyNzY4NDczMi4wLjAuMA..#web
 //import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-//import { auth, signInWithEmailAndPassword } from "./config/firebase";
+import { auth, signInWithEmailAndPassword } from "./config/firebase";
 
 export default function App() {
   /* States */
@@ -29,17 +29,17 @@ export default function App() {
     console.log("User ID: ", email);
     console.log("Password: ", pwd);
 
-    // //Make a db request for auth (async)
-    // signInWithEmailAndPassword(auth, uid, pwd)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //   });
+    //Make a db request for auth (async)
+    signInWithEmailAndPassword(auth, email, pwd)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   return (
