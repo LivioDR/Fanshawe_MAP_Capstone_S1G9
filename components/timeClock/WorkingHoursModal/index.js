@@ -1,4 +1,6 @@
-import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { Modal, View, Text, TouchableHighlight } from "react-native";
+
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import TimePicker from "../../common/TimePicker";
 
@@ -30,6 +32,14 @@ export default function WorkingHoursModal({ shown, closeModal }) {
                         <Text style={styles.picker.label}>End Time</Text>
                         <TimePicker />
                     </View>
+
+                    <TouchableHighlight
+                        style={styles.close}
+                        onPress={closeModal}
+                        underlayColor="#A90000"
+                    >
+                        <FontAwesome name="close" size={14} color="white" />
+                    </TouchableHighlight>
                 </View>
             </View>
         </Modal>

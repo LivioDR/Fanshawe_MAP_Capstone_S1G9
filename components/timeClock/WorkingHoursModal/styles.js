@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { dropShadowStyle } from "../../../utilities/variables";
+import { dropShadowStyle, negative } from "../../../utilities/variables";
 
 export default StyleSheet.create({
     overlay: {
@@ -12,6 +12,7 @@ export default StyleSheet.create({
     },
 
     container: {
+        position: "relative",
         gap: 15,
         maxWidth: "90%",
         padding: 10,
@@ -38,6 +39,25 @@ export default StyleSheet.create({
 
         label: {
             fontSize: 16,
+        },
+    },
+
+    close: {
+        position: "absolute",
+        top: 8,
+        right: 8,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 22,
+        height: 22,
+        padding: 4,
+
+        backgroundColor: negative,
+        borderRadius: 5,
+
+        label: {
+            fontWeight: "bold",
+            color: "#FFF",
         },
     },
 });
