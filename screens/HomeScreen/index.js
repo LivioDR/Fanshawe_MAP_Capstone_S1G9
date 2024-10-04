@@ -26,7 +26,7 @@ export default function HomeScreen() {
     const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
 
     // TODO: replace with user ID of logged in user
-    const userId = "user1234";
+    const userId = "super1234";
     
     // TODO: replace with flag loaded from profile
     const isSalaried = true;
