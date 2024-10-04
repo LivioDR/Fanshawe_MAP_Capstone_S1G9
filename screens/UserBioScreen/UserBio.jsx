@@ -58,7 +58,7 @@ const UserBio = ({userId = 'user1234', canEdit = true}) => {
 
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={bioStyles.wrapper}>
             <UserBioEditScreen 
                 uid={userId} 
                 imgUrl={imgUrl} 
