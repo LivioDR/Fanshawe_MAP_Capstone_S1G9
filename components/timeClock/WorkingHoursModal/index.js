@@ -1,6 +1,8 @@
-import { Modal, View, Text } from "react-native";
+import { Modal, View, Text, TouchableOpacity } from "react-native";
+
+import TimePicker from "../../common/TimePicker";
+
 import styles from "./styles";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function WorkingHoursModal({ shown, closeModal }) {
     return (
@@ -22,11 +24,11 @@ export default function WorkingHoursModal({ shown, closeModal }) {
                     <View style={styles.picker.container}>
                         {/* TODO: fix auto popup on Android */}
                         <Text style={styles.picker.label}>Start Time</Text>
-                        <RNDateTimePicker mode="time" value={new Date()} />
+                        <TimePicker />
                     </View>
                     <View style={styles.picker.container}>
                         <Text style={styles.picker.label}>End Time</Text>
-                        <RNDateTimePicker mode="time" value={new Date()} />
+                        <TimePicker />
                     </View>
                 </View>
             </View>
