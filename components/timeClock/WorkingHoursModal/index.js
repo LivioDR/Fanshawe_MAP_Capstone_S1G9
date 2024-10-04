@@ -1,4 +1,4 @@
-import { Modal, View, Text, TouchableHighlight } from "react-native";
+import { Modal, View, Text, TouchableHighlight, Pressable } from "react-native";
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
@@ -13,8 +13,16 @@ export default function WorkingHoursModal({ shown, closeModal }) {
             animationType="fade"
             transparent={true}
         >
-            <View style={styles.overlay}>
-                <View style={styles.container}>
+            <Pressable
+                style={styles.overlay}
+                // allow pressing overlay background to close modal
+                onPress={closeModal}
+            >
+                <Pressable
+                    style={styles.container}
+                    // but prevent closing when pressing on the container or anything inside
+                    onPress={() => {}}
+                >
                     <View>
                         <Text style={styles.title}>Set Working Hours</Text>
                         <Text style={styles.subtitle}>
@@ -40,8 +48,8 @@ export default function WorkingHoursModal({ shown, closeModal }) {
                     >
                         <FontAwesome name="close" size={14} color="white" />
                     </TouchableHighlight>
-                </View>
-            </View>
+                </Pressable>
+            </Pressable>
         </Modal>
     );
 }
