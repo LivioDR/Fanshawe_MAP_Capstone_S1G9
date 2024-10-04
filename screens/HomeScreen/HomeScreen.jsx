@@ -15,13 +15,6 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
 
-// TODO: replace this with an auth variable of some sort
-const loggedIn = true;
-
-// TODO: replace this with a value retrieved from the DB
-const isAdmin = true;
-const userId = 'super1234';
-
 import UserBio from '../UserBioScreen/UserBio';
 import AdminView from '../AdminView/AdminView';
 
@@ -40,24 +33,8 @@ function CompanyScreenPlaceholder() {
         </View>
     );
 }
-function ProfileScreenPlaceholder() {
-    return (
-        // <View style={styles.container}>
-        //     <Text>Profile Screen</Text>
-        // </View>
-        <UserBio userId={userId}/>
-    );
-}
-function TeamScreenPlaceholder() {
-    return (
-        // <View style={styles.container}>
-        //     <Text>Team Screen</Text>
-        // </View>
-        <AdminView uid={userId}/>
-    )
-}
 
-export default function HomeScreen({userId = "super1234", isAdmin = true}) {
+export default function HomeScreen({userId, isAdmin}) {
     return (
         <NavigationContainer>
             <StatusBar style="auto" />
