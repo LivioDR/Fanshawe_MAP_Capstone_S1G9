@@ -18,6 +18,13 @@ const Tab = createBottomTabNavigator();
 // TODO: replace this with an auth variable of some sort
 const loggedIn = true;
 
+// TODO: replace this with a value retrieved from the DB
+const isAdmin = true;
+const userId = 'super1234';
+
+import UserBio from './screens/UserBioScreen/UserBio';
+import AdminView from './screens/AdminView/AdminView';
+
 // TODO: replace these placeholder components with screen components from screens/
 function HomeScreenPlaceholder() {
     return (
@@ -35,10 +42,19 @@ function CompanyScreenPlaceholder() {
 }
 function ProfileScreenPlaceholder() {
     return (
-        <View style={styles.container}>
-            <Text>Profile Screen</Text>
-        </View>
+        // <View style={styles.container}>
+        //     <Text>Profile Screen</Text>
+        // </View>
+        <UserBio userId={userId}/>
     );
+}
+function TeamScreenPlaceholder() {
+    return (
+        // <View style={styles.container}>
+        //     <Text>Team Screen</Text>
+        // </View>
+        <AdminView uid={userId}/>
+    )
 }
 
 export default function App() {
@@ -79,6 +95,23 @@ export default function App() {
                         ),
                     }}
                 />
+
+                {
+                isAdmin &&
+                <Tab.Screen
+                    name="Team"
+                    component={TeamScreenPlaceholder}
+                    options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                            <MaterialCommunityIcons
+                                name={focused ? "account-multiple" : "account-multiple-outline"}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
+                }
 
                 <Tab.Screen
                     name="Profile"
