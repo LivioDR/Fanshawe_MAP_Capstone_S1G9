@@ -35,10 +35,12 @@ export default function App() {
         // Signed in
         const user = userCredential.user;
         // ...
+        console.log("Signed in successfully");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
       });
   };
 
