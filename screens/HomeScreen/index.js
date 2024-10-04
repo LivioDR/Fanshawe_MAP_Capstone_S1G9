@@ -22,7 +22,7 @@ export default function HomeScreen() {
     const [takenLunch, setTakenLunch] = useState(false);
     const [timeLog, setTimeLog] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(true);
+    const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
     
     // TODO: replace with flag loaded from profile
     const isSalaried = true;
@@ -204,13 +204,16 @@ export default function HomeScreen() {
                     <TouchableOpacity
                         activeOpacity={0.5}
                         style={styles.workingHours.container}
-                        onPress={() => console.log("configure working hours")}
+                        onPress={() => setShowOfficeHourConfig(true)}
                     >
                         <Text style={styles.workingHours.text}>Set regular in-office hours</Text>
                     </TouchableOpacity>
                 }
 
-                <WorkingHoursModal shown={showOfficeHourConfig} />
+                <WorkingHoursModal
+                    shown={showOfficeHourConfig}
+                    closeModal={() => setShowOfficeHourConfig(false)}
+                />
             </View>
         </>;
 
