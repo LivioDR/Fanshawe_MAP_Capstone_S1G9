@@ -2,10 +2,11 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage"
 import { getFirestore } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+// https://firebase.google.com/docs/auth/web/password-auth?_gl=1*pwxp5n*_up*MQ..*_ga*MTEzMDEwMjU5My4xNzI3Njg0NzMy*_ga_CW55HF8NVT*MTcyNzY4NDczMi4xLjAuMTcyNzY4NDczMi4wLjAuMA..#web
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,14 +20,10 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
-console.log('API Key:', process.env.EXPO_PUBLIC_API_KEY);
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const firestore = getFirestore(app);
-
-export { storage, firestore }
-
 const auth = getAuth(app);
-export {auth, signInWithEmailAndPassword};
+
+export { auth, signInWithEmailAndPassword, storage, firestore }

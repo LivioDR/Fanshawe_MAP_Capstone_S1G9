@@ -3,11 +3,8 @@ import { Button, Text, TextInput, View } from "react-native";
 import styles from "./styles";
 import CTAButton from "./components/CTAButton";
 import { useState } from "react";
-
-//From https://firebase.google.com/docs/auth/web/password-auth?_gl=1*pwxp5n*_up*MQ..*_ga*MTEzMDEwMjU5My4xNzI3Njg0NzMy*_ga_CW55HF8NVT*MTcyNzY4NDczMi4xLjAuMTcyNzY4NDczMi4wLjAuMA..#web
-//import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
 import { auth, signInWithEmailAndPassword } from "./config/firebase";
+import Toast from 'react-native-toast-message';
 
 export default function App() {
   /* States */
@@ -25,6 +22,25 @@ export default function App() {
     setPwd(value);
   };
 
+  //Toast code
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Success ✅',
+      text2: 'Login successful'
+    });
+  }
+
+  const showErrorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Error 🛑',
+      text2: 'Incorrect username or password'
+    });
+  }
+
+
+
   const handleLoginPress = () => {
     console.log("User ID: ", email);
     console.log("Password: ", pwd);
@@ -36,11 +52,13 @@ export default function App() {
         const user = userCredential.user;
         // ...
         console.log("Signed in successfully");
+        showToast();
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage, errorCode);
+        showErrorToast();
       });
   };
 
@@ -65,6 +83,7 @@ export default function App() {
       </View>
 
       <StatusBar style="auto" />
+      <Toast />
     </View>
   );
 }
