@@ -7,6 +7,7 @@ import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-na
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
+import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 
 // database
 import { Timestamp } from "firebase/firestore";
@@ -14,7 +15,6 @@ import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/dat
 
 // styles
 import styles from "./styles";
-import { accent } from "../../utilities/variables";
 
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -22,6 +22,7 @@ export default function HomeScreen() {
     const [takenLunch, setTakenLunch] = useState(false);
     const [timeLog, setTimeLog] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(true);
     
     // TODO: replace with flag loaded from profile
     const isSalaried = true;
@@ -208,6 +209,8 @@ export default function HomeScreen() {
                         <Text style={styles.workingHours.text}>Set regular in-office hours</Text>
                     </TouchableOpacity>
                 }
+
+                <WorkingHoursModal shown={showOfficeHourConfig} />
             </View>
         </>;
 
