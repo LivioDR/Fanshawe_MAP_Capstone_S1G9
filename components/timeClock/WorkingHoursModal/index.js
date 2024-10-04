@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Modal, View, Text, TouchableHighlight, Pressable } from "react-native";
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -7,6 +9,10 @@ import TimePicker from "../../common/TimePicker";
 import styles from "./styles";
 
 export default function WorkingHoursModal({ shown, closeModal }) {
+    // TODO: replace these with times loaded from DB
+    const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
+    const [endTime, setEndTime] = useState(new Date(2024, 9, 4, 17));
+
     return (
         <Modal
             visible={shown}
@@ -34,11 +40,11 @@ export default function WorkingHoursModal({ shown, closeModal }) {
                     <View style={styles.picker.container}>
                         {/* TODO: fix auto popup on Android */}
                         <Text style={styles.picker.label}>Start Time</Text>
-                        <TimePicker />
+                        <TimePicker initialValue={startTime} onChange={setStartTime} />
                     </View>
                     <View style={styles.picker.container}>
                         <Text style={styles.picker.label}>End Time</Text>
-                        <TimePicker />
+                        <TimePicker  initialValue={endTime} onChange={setEndTime} />
                     </View>
 
                     <TouchableHighlight
