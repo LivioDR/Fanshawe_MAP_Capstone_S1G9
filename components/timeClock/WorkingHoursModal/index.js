@@ -5,10 +5,11 @@ import { Modal, View, Text, TouchableHighlight, Pressable } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import TimePicker from "../../common/TimePicker";
+import LoadingIndicator from "../../common/LoadingIndicator";
+
+import { getUserBioInfoById, updateUserBioInfoById } from "../../../services/database/userBioInfo";
 
 import styles from "./styles";
-import LoadingIndicator from "../../common/LoadingIndicator";
-import { getUserBioInfoById } from "../../../services/database/userBioInfo";
 
 export default function WorkingHoursModal({ userId, shown, closeModal }) {
     // TODO: replace these with times loaded from DB
@@ -38,6 +39,48 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         })();
     }, []);
 
+    /**
+     * Set a new start time in state and store to DB.
+     * @param {Date} newStartTime new start time to set
+     */
+    const updateStartTime = async (newStartTime) => {
+        // assume DB will be successful first and set state
+        const oldStartTime = startTime;
+        setStartTime(newStartTime);
+
+        // make DB update
+        const success = updateUserBioInfoById(
+            userId,
+            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+        );
+
+        // revert state if necessary
+        if (!success) {
+            setStartTime(oldStartTime);
+        }
+    };
+
+    /**
+     * Set a new end time in state and store to DB.
+     * @param {Date} newEndTime new end time to set
+     */
+    const updateEndTime = async (newEndTime) => {
+        // assume DB will be successful first and set state
+        const oldEndTime = endTime;
+        setStartTime(newEndTime);
+
+        // make DB update
+        const success = updateUserBioInfoById(
+            userId,
+            { workStartTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+        );
+
+        // revert state if necessary
+        if (!success) {
+            setStartTime(oldEndTime);
+        }
+    };
+
     const content = loading ?
         <LoadingIndicator /> :
         <>
@@ -52,11 +95,11 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
             <View style={styles.picker.container}>
                 {/* TODO: fix auto popup on Android */}
                 <Text style={styles.picker.label}>Start Time</Text>
-                <TimePicker initialValue={startTime} onChange={setStartTime} />
+                <TimePicker initialValue={startTime} onChange={updateStartTime} />
             </View>
             <View style={styles.picker.container}>
                 <Text style={styles.picker.label}>End Time</Text>
-                <TimePicker  initialValue={endTime} onChange={setEndTime} />
+                <TimePicker  initialValue={endTime} onChange={updateEndTime} />
             </View>
 
             <TouchableHighlight
