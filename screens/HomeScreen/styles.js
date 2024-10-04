@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { safeAreaPadding, dropShadowStyle, highlight } from "../../utilities/variables";
+import { safeAreaPadding, dropShadowStyle, highlight, accent } from "../../utilities/variables";
 
 export default StyleSheet.create({
     container: {
@@ -61,5 +61,19 @@ export default StyleSheet.create({
         fontWeight: "500",
         fontSize: 24,
         textAlign: "center",
+    },
+
+    workingHours: {
+        container: {
+            padding: 7,
+
+            backgroundColor: highlight,
+            borderRadius: 5,
+        },
+
+        text: {
+            fontSize: 17,
+            color: accent,
+        },
     },
 });

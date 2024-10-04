@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // RN components
-import { ActivityIndicator, Image, Text, View } from "react-native";
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-native";
 
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
@@ -14,6 +14,7 @@ import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/dat
 
 // styles
 import styles from "./styles";
+import { accent } from "../../utilities/variables";
 
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -21,6 +22,9 @@ export default function HomeScreen() {
     const [takenLunch, setTakenLunch] = useState(false);
     const [timeLog, setTimeLog] = useState(null);
     const [loading, setLoading] = useState(true);
+    
+    // TODO: replace with flag loaded from profile
+    const isSalaried = true;
 
     // async effect to load the user's current time log, if one exists
     useEffect(() => {
@@ -194,6 +198,16 @@ export default function HomeScreen() {
                 </View>
 
                 <ClockButtons clockStatus={clockStatus} actions={buttonActions} />
+
+                {isSalaried &&
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        style={styles.workingHours.container}
+                        onPress={() => console.log("configure working hours")}
+                    >
+                        <Text style={styles.workingHours.text}>Set regular in-office hours</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </>;
 
@@ -204,5 +218,6 @@ export default function HomeScreen() {
         ]}>
             {content}
         </View>
+        
     );
 }
