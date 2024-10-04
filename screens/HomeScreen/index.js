@@ -8,6 +8,7 @@ import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-na
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
 import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
+import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // database
 import { Timestamp } from "firebase/firestore";
@@ -23,6 +24,9 @@ export default function HomeScreen() {
     const [timeLog, setTimeLog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
+
+    // TODO: replace with user ID of logged in user
+    const userId = "user1234";
     
     // TODO: replace with flag loaded from profile
     const isSalaried = true;
@@ -31,7 +35,7 @@ export default function HomeScreen() {
     useEffect(() => {
         (async () => {
             // TODO: update hardcoded user id
-            const curTimeLog = await getOpenTimeLog("user1234").catch((err) => console.error(err));
+            const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
 
             if (curTimeLog) {
                 setTimeLog(curTimeLog);
@@ -94,7 +98,7 @@ export default function HomeScreen() {
     const buttonActions = {
         clockIn: async () => {
             // TODO: update hardcoded user id
-            const newTimeLog = await createTimeLog("user1234", Timestamp.now());
+            const newTimeLog = await createTimeLog(userId, Timestamp.now());
             if (newTimeLog) {
                 setTimeLog(newTimeLog);
                 setClockedIn(true);
@@ -171,10 +175,7 @@ export default function HomeScreen() {
 
     // get the content to display based on loading status
     const content = loading ?
-        <>
-            <ActivityIndicator size="large" />
-            <Text style={styles.container.outer.loading.indicatorText}>Loading...</Text>
-        </> :
+        <LoadingIndicator /> :
         <>
             <ClockStatusBanner clockStatus={clockStatus} />
 
@@ -211,6 +212,7 @@ export default function HomeScreen() {
                 }
 
                 <WorkingHoursModal
+                    userId={userId}
                     shown={showOfficeHourConfig}
                     closeModal={() => setShowOfficeHourConfig(false)}
                 />
