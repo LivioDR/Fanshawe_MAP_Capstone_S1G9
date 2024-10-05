@@ -62,7 +62,7 @@ const AdminView = ({uid = 'super1234'}) => {
                         email={member.item.email}
                         imgUrl={member.item.uri}
                         />}
-                        keyExtractor={member => member.uri}
+                        keyExtractor={member => member.uid}
                         />
             </View>
         </SafeAreaView>
