@@ -5,27 +5,35 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 // navigation
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // icons
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+// custom components
+import HomeScreen from './screens/HomeScreen';
+import UserBio from "./screens/UserBioScreen/UserBio";
+
+// theme variables
+import { accent, highlight } from './utilities/variables';
+
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
+
+const NavTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        background: "#FFF",
+    }
+};
 
 // TODO: replace this with an auth variable of some sort
 const loggedIn = true;
 
-// TODO: replace these placeholder components with screen components from screens/
-function HomeScreenPlaceholder() {
-    return (
-        <View style={styles.container}>
-            <Text>Home Screen</Text>
-        </View>
-    );
-}
+// TODO: replace these placeholder components with screen components from screens
 function CompanyScreenPlaceholder() {
     return (
         <View style={styles.container}>
@@ -33,23 +41,20 @@ function CompanyScreenPlaceholder() {
         </View>
     );
 }
-function ProfileScreenPlaceholder() {
-    return (
-        <View style={styles.container}>
-            <Text>Profile Screen</Text>
-        </View>
-    );
-}
 
 export default function App() {
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={NavTheme}>
             <StatusBar style="auto" />
 
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
                     headerShown: false,
+                    tabBarActiveTintColor: accent,
+                    tabBarStyle: {
+                        backgroundColor: highlight,
+                    },
                 }}
             >
                 <Tab.Screen
@@ -68,7 +73,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Home"
-                    component={HomeScreenPlaceholder}
+                    component={HomeScreen}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialCommunityIcons
@@ -82,7 +87,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Profile"
-                    component={ProfileScreenPlaceholder}
+                    component={UserBio}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialIcons
