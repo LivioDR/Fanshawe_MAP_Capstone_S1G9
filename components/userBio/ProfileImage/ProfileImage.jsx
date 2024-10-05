@@ -6,9 +6,11 @@ import ProfileImageStyles from "./ProfileImageStyles";
 
 const ProfileImage = ({url, imgSize = 96, placeholderSize = 48}) => {
 
+    const frameSize = imgSize + 4
+
     if(url){
         return(
-            <View style={{...ProfileImageStyles.container, width: imgSize+4, height: imgSize+4}}>
+            <View style={{...ProfileImageStyles.container, width: frameSize, height: frameSize}}>
                 <Image
                 source={{uri: url}}
                 width={imgSize}
@@ -22,7 +24,7 @@ const ProfileImage = ({url, imgSize = 96, placeholderSize = 48}) => {
     }
     else{
         return(
-            <View style={ProfileImageStyles.container}>
+            <View style={{...ProfileImageStyles.container, width: frameSize, height: frameSize}}>
                 <Ionicons name="person" size={placeholderSize} color="blue" />
             </View>
         )
