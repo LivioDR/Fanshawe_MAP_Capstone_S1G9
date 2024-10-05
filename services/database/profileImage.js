@@ -8,7 +8,7 @@ const getImageForUserId = async(id) => {
         await getDownloadURL(pathRef).then(imgUrl => urlPath = imgUrl)
     }
     catch(e){
-        console.error(e)
+        // console.error(e) // removed to avoid error being shown on placeholder images for new users
     }
     return urlPath
 }
