@@ -7,7 +7,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 // https://firebase.google.com/docs/web/setup#available-libraries
 // https://firebase.google.com/docs/auth/web/password-auth?_gl=1*pwxp5n*_up*MQ..*_ga*MTEzMDEwMjU5My4xNzI3Njg0NzMy*_ga_CW55HF8NVT*MTcyNzY4NDczMi4xLjAuMTcyNzY4NDczMi4wLjAuMA..#web
 
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence, sendPasswordResetEmail } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 // Your web app's Firebase configuration
@@ -32,4 +32,4 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
 
-export { auth, signInWithEmailAndPassword, storage, firestore }
+export { auth, sendPasswordResetEmail, signInWithEmailAndPassword, storage, firestore }
