@@ -57,6 +57,7 @@ export default function HomeScreen() {
             const userInfo = await getUserBioInfoById(userId);
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
+                setIsSalaried(userInfo.salaried);
             }
 
             setLoading(false);
