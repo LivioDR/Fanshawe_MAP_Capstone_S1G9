@@ -9,7 +9,6 @@ import {
   auth,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  fetchSignInMethodsForEmail,
   signOut,
 } from "../../config/firebase";
 
@@ -18,15 +17,15 @@ export default function LoginScreen(props) {
 
   //useEffect to make sure user is signed out upon hitting the login page
   useEffect(() => {
-    signOut(auth).then(() => {
-        // Sign-out successful.
-        console.log("All users signed out");
-      }).catch((error) => {
-        // An error happened.
-        console.log("Error signing users out");
+    signOut(auth)
+      .then(() => {
+        showSuccessToast("Successfully signed out");
+      })
+      .catch(() => {
+        showErrorToast("Error signing users out");
       });
-      
   }, []);
+
 
   /* States */
   const [email, setEmail] = useState("");
@@ -38,9 +37,27 @@ export default function LoginScreen(props) {
   const [passwordResetBtnDisabled, setPasswordResetBtnDisabled] =
     useState(true);
 
+  const [emailIsValid, setEmailIsValid] = useState(false);
+  const [pwdIsValid, setPwdIsValid] = useState(false);
+
+  //Tracks whenever the username or pwd changes and conducts the sanity check when they do
+  useEffect(() => {
+    credentialSanity();
+    console.log("cs entered use effect");
+  }, [emailIsValid, pwdIsValid]);
+
   /* Handlers */
   const handleModalToggle = () => {
     setShowModal(!showModal);
+  };
+
+  //Helper function for changing the login button state
+  const credentialSanity = () => {
+    if (emailIsValid && pwdIsValid) {
+      setLoginBtnDisabled(false);
+    } else {
+      setLoginBtnDisabled(true);
+    }
   };
 
   //If regex is true do not set an error message
@@ -52,12 +69,12 @@ export default function LoginScreen(props) {
     const emailRegexTest = emailRegex.test(value);
 
     if (emailRegexTest == false) {
+      setEmailIsValid(false);
       setEmailErrTxt("Please enter a valid email");
-      setLoginBtnDisabled(true);
       setPasswordResetBtnDisabled(true);
     } else {
+      setEmailIsValid(true);
       setEmailErrTxt("");
-      setLoginBtnDisabled(false);
       setPasswordResetBtnDisabled(false);
     }
   };
@@ -65,17 +82,51 @@ export default function LoginScreen(props) {
   const handlePwdChange = (value) => {
     setPwd(value);
 
-    //Sanity check for empty textbox
-    if (value.length > 0) {
-      setPwdErrTxt("");
-      setLoginBtnDisabled(false);
-    } else {
+    if (value.length === 0) {
+      setPwdIsValid(false);
       setPwdErrTxt("Please enter a password");
-      setLoginBtnDisabled(true);
+    } else {
+      setPwdIsValid(true);
+      setPwdErrTxt("");
     }
   };
 
-  //Toast code
+  const handleLoginPress = () => {
+    //Make a db request for auth (async)
+    signInWithEmailAndPassword(auth, email, pwd)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        showSuccessToast("Login successful");
+      })
+      .catch(() => {
+        showErrorToast("Incorrect username or password");
+
+        //Clearing password field if incorrect
+        handlePwdChange("");
+      });
+  };
+
+  //Simply show modal, handle other logic in Modal class
+  const handleForgotPasswordPress = () => {
+    handleModalToggle();
+  };
+
+  const handleSendPasswordResetLink = () => {
+    //Due to security, theres no way in Firebase to sanity check whether an email is
+    //in the DB,
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        showSuccessToast("Password reset via email requested");
+      })
+      .catch(() => {
+        showErrorToast(
+          "There was an error, sending the link, please try again"
+        );
+      });
+  };
+
+  /* Toast logic */
   const showSuccessToast = (msg) => {
     Toast.show({
       type: "success",
@@ -95,65 +146,6 @@ export default function LoginScreen(props) {
     });
   };
 
-  const handleLoginPress = () => {
-    //Make a db request for auth (async)
-    signInWithEmailAndPassword(auth, email, pwd)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        showSuccessToast("Login successful");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage, errorCode);
-        showErrorToast("Incorrect username or password");
-
-        //Clearing password field if incorrect
-        handlePwdChange("");
-      });
-  };
-
-  //Simply show modal, handle other logic in Modal class
-  const handleForgotPasswordPress = () => {
-    handleModalToggle();
-  };
-
-  const handleSendPasswordResetLink = () => {
-    //Error, get email method now deprecated: https://github.com/firebase/firebase-android-sdk/issues/5586
-    //First check if email exists in DB, using clientside fetchSignInMethodsForEmail (as get userByEmail is only in the Admin SDK)
-    //If no sign in method for provided email it does not exist in auth and can echo this to the user (using a toast)
-
-    console.log("Curr email:", auth);
-    fetchSignInMethodsForEmail(auth, email)
-      .then((signInMethodsArr) => {
-        console.log("Curr email: ", email);
-        console.log("Sign in methods arr: ", signInMethodsArr);
-
-        if (signInMethodsArr.length > 0) {
-          sendPasswordResetEmail(auth, email)
-            .then(() => {
-              showSuccessToast("Password reset email sent");
-            })
-            .catch((error) => {
-              const errorCode = error.code;
-              const errorMessage = error.message;
-
-              showErrorToast("Registered email but error sending reset email");
-            });
-        } else {
-          showErrorToast("This is not a registered email");
-        }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorMessage, errorCode);
-        console.log("Something went wrong");
-      });
-  };
-
   return (
     <>
       <View style={styles.container} setCredentials={props.setCredentials}>
@@ -171,8 +163,9 @@ export default function LoginScreen(props) {
         <TextInput
           style={styles.textInputContainer}
           placeholder="Password"
-          secureTextEntry={true}
           onChangeText={handlePwdChange}
+          secureTextEntry={true}
+          value={pwd}
         />
 
         <InputMsgBox text={pwdErrTxt}></InputMsgBox>
@@ -194,7 +187,6 @@ export default function LoginScreen(props) {
 
         <Modal animationType="slide" visible={showModal}>
           <View style={styles.modalView}>
-            <Button title="Close" onPress={handleModalToggle}></Button>
             <TextInput
               style={styles.textInputContainer}
               placeholder="Email Address"
@@ -211,6 +203,8 @@ export default function LoginScreen(props) {
               onPress={handleSendPasswordResetLink}
               disabled={passwordResetBtnDisabled}
             ></CTAButton>
+
+            <Button title="Close" onPress={handleModalToggle}></Button>
           </View>
           <Toast />
         </Modal>

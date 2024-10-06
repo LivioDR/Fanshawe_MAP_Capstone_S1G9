@@ -19,21 +19,15 @@ export default StyleSheet.create({
   },
 
   textInputContainer: {
-    color: '#000000',
-    backgroundColor: '#EFEFEF',
+    color: "#000000",
+    backgroundColor: "#EFEFEF",
     height: 50,
     width: 280,
     borderRadius: 5,
     paddingLeft: 10,
-    borderColor: '#000000',
-    borderWidth: '1px'
-},
-
-
-
-
-
-
+    borderColor: "#000000",
+    borderWidth: "1px",
+  },
   container: {
     height: 50,
     width: 280,

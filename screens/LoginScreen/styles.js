@@ -6,16 +6,21 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   modalView: {
     alignSelf: "stretch",
-    backgroundColor: "#e5d5ba",
     marginTop: 150,
     margin: 20,
     padding: 10,
     borderRadius: 10,
     borderWidth: 4,
-    borderColor: "#bcbcbc",
+    borderColor: "#D3D3D3",
     zIndex: -1,
+    alignItems: "center",
   },
+  nativeBtn: {
 
+    width: 280,
+    paddingLeft: 0,
+
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

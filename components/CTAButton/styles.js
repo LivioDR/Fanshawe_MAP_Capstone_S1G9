@@ -7,7 +7,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     disabledBtn:{
 
-        backgroundColor: '#595959',
+        backgroundColor: '#D3D3D3',
 
     },
     enabledBtn:{
