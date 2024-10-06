@@ -8,9 +8,9 @@ import {
     signInWithEmailAndPassword,
     signOut,
 } from "firebase/auth";
-import CTAButton from "../../components/CTAButton";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
+import UiButton from "../../components/common/UiButton/UiButton";
 
 export default function LoginScreen({ setCredentials }) {
   /* States */
@@ -180,11 +180,12 @@ export default function LoginScreen({ setCredentials }) {
 
         <InputMsgBox text={pwdErrTxt}></InputMsgBox>
 
-        <CTAButton
-          title="Login"
-          onPress={handleLoginPress}
+        <UiButton
+          label="Login"
+          funcToCall={handleLoginPress}
           disabled={loginBtnDisabled}
-        ></CTAButton>
+          type="CTA"
+        ></UiButton>
 
         <Button
           title="Forgotten Password?"
@@ -208,18 +209,17 @@ export default function LoginScreen({ setCredentials }) {
 
             <InputMsgBox text={emailErrTxt}></InputMsgBox>
 
-            <CTAButton
-              title="Send Password Reset Link"
-              onPress={handleSendPasswordResetLink}
+            <UiButton
+              label="Send Password Reset Link"
+              funcToCall={handleSendPasswordResetLink}
               disabled={passwordResetBtnDisabled}
-            ></CTAButton>
+              type="CTA"
+            ></UiButton>
 
             <Button title="Close" onPress={handleModalToggle}></Button>
           </View>
           <Toast />
         </Modal>
-
-        <StatusBar style="auto" />
       </View>
     </>
   );
