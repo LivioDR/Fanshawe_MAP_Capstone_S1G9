@@ -12,7 +12,7 @@ import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
 
-export default function LoginScreen({ setCredentials }) {
+export default function LoginScreen({ loginSuccess }) {
   /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -100,6 +100,7 @@ export default function LoginScreen({ setCredentials }) {
         // Signed in
         const user = userCredential.user;
         showSuccessToast("Login successful");
+        loginSuccess(userCredential);
       })
       .catch(() => {
         showErrorToast("Incorrect username or password");
@@ -158,7 +159,7 @@ export default function LoginScreen({ setCredentials }) {
 
   return (
     <>
-      <View style={styles.container} setCredentials={setCredentials}>
+      <View style={styles.container}>
         <Toast />
         <TextInput
           style={styles.textInputContainer}
