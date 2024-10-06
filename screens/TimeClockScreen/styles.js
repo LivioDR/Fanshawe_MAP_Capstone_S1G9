@@ -8,8 +8,6 @@ export default StyleSheet.create({
             flex: 1,
             alignItems: "center",
 
-            paddingTop: safeAreaPadding,
-
             backgroundColor: "#FFF",
 
             loading: {

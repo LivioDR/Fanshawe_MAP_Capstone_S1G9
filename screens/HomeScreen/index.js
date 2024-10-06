@@ -1,5 +1,5 @@
 // RN elements
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 
 // navigation
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
@@ -39,13 +39,20 @@ function CompanyScreenPlaceholder() {
     );
 }
 
-export default function HomeScreen() {
+export default function HomeScreen({ logOut }) {
     return (
         <NavigationContainer theme={NavTheme}>
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    headerShown: false,
+                    headerTitle: "",
+                    headerLeft: () => (
+                        <Button
+                            onPress={logOut}
+                            title="Log Out"
+                            color={accent}
+                        />
+                    ),
                     tabBarActiveTintColor: accent,
                     tabBarStyle: {
                         backgroundColor: highlight,
@@ -56,6 +63,7 @@ export default function HomeScreen() {
                     name="Company"
                     component={CompanyScreenPlaceholder}
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons
                                 name="apartment"
@@ -84,6 +92,7 @@ export default function HomeScreen() {
                     name="Profile"
                     component={UserBio}
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialIcons
                                 name={focused ? "person" : "person-outline"}

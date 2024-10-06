@@ -20,7 +20,14 @@ export default function App() {
         setLoginCredential(credential);
     };
 
-    const shownScreen = loginCredential ? <HomeScreen /> : <LoginScreen loginSuccess={onLogin} />;
+    /**
+     * Log the user out and return to the login screen.
+     */
+    const onLogout = () => {
+        setLoginCredential(null);
+    };
+
+    const shownScreen = loginCredential ? <HomeScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
 
     return (
         <CredentialProvider userCreds={loginCredential}>
