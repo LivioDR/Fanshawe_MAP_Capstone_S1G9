@@ -12,7 +12,7 @@ import CTAButton from "../../components/CTAButton";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 
-export default function LoginScreen(props) {
+export default function LoginScreen({ setCredentials }) {
   /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -158,7 +158,7 @@ export default function LoginScreen(props) {
 
   return (
     <>
-      <View style={styles.container} setCredentials={props.setCredentials}>
+      <View style={styles.container} setCredentials={setCredentials}>
         <Toast />
         <TextInput
           style={styles.textInputContainer}
