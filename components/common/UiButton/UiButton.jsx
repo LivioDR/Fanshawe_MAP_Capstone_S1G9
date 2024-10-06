@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Pressable, Text } from "react-native";
-import { accent, negative, positive } from "../../../utilities/variables";
+import { accent, cta, negative, positive } from "../../../utilities/variables";
 import styles from "./UiButtonStyles";
 
 const typeStyles = StyleSheet.create({
@@ -19,6 +19,14 @@ const typeStyles = StyleSheet.create({
         },
         textElem: {
             color: 'white',
+        },
+    },
+    CTA: {
+        wrapper: {
+            backgroundColor: cta,
+        },
+        textElem: {
+            color: 'black',
         },
     },
     primary: {

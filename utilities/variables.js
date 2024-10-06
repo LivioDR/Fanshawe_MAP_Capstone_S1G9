@@ -19,3 +19,4 @@ export const highlight = "#EFEFEF";
 export const positive = "#45CA44";
 export const negative = "#C90000";
 export const accent = "#316CB1";
+export const cta = "#00FFFF";
