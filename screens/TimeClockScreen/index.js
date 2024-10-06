@@ -14,6 +14,7 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 // database
 import { Timestamp } from "firebase/firestore";
 import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
 // styles
 import styles from "./styles";
@@ -25,17 +26,15 @@ export default function HomeScreen() {
     const [timeLog, setTimeLog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
+    const [isSalaried, setIsSalaried] = useState(false);
+    const [userName, setUserName] = useState("Jonathan Handfeld Miller-Smith III");
 
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
-    
-    // TODO: replace with flag loaded from profile
-    const isSalaried = true;
 
-    // async effect to load the user's current time log, if one exists
+    // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
         (async () => {
-            // TODO: update hardcoded user id
             const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
 
             if (curTimeLog) {
@@ -53,6 +52,11 @@ export default function HomeScreen() {
                         setTakenLunch(true);
                     }
                 }
+            }
+
+            const userInfo = await getUserBioInfoById(userId);
+            if (userInfo) {
+                setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
             }
 
             setLoading(false);
@@ -191,7 +195,7 @@ export default function HomeScreen() {
 
                     <Text style={styles.welcomeText}>
                         {/* TODO: get name from user profile */}
-                        Welcome, Jonathan Handfeld Miller-Smith III.
+                        Welcome, {userName}.
                     </Text>
 
                     {/* TODO: readd later, make birthday banner display reactive */}
