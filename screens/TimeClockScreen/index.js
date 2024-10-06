@@ -18,6 +18,8 @@ import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
 // styles
 import styles from "./styles";
+import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
+import { getImageForUserId } from "../../services/database/profileImage";
 
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -28,6 +30,7 @@ export default function HomeScreen() {
     const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
     const [isSalaried, setIsSalaried] = useState(false);
     const [userName, setUserName] = useState("Jonathan Handfeld Miller-Smith III");
+    const [userProfileImage, setUserProfileImage] = useState("");
 
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
@@ -58,6 +61,11 @@ export default function HomeScreen() {
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
                 setIsSalaried(userInfo.salaried);
+            }
+
+            const userImageURL = await getImageForUserId(userId);
+            if (userImageURL) {
+                setUserProfileImage(userImageURL);
             }
 
             setLoading(false);
@@ -188,9 +196,11 @@ export default function HomeScreen() {
             <View style={styles.container.inner}>
                 <View style={styles.container.intro}>
                     <View style={styles.container.image}>
-                        <Image
-                            style={styles.profileImage}
-                            source={require("../../assets/profile.png")}
+                        <ProfileImage
+                            url={userProfileImage}
+                            imgSize={125}
+                            // TODO: make this a bit more elegant
+                            customStyles={{ borderWidth: 0, width: 125, height: 125 }}
                         />
                     </View>
 
