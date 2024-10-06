@@ -5,13 +5,14 @@ import bioStyles from "./UserBioStyles";
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
 import UiButton from "../../components/common/UiButton/UiButton";
 // Functions import
+import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 
 
-const UserBio = ({userId = 'user1234', canEdit = true}) => {
+const UserBio = ({ canEdit = true }) => {
 
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
@@ -22,6 +23,8 @@ const UserBio = ({userId = 'user1234', canEdit = true}) => {
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
+    const userCreds = useCredentials();
+    const userId = userCreds.user.uid;
 
     useEffect(()=>{
         const getData = async(id) => {

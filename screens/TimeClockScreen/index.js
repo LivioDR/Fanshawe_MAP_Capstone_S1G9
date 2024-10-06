@@ -1,8 +1,9 @@
-// React hooks
+// hooks
 import { useEffect, useState } from "react";
+import { useCredentials } from "../../utilities/userCredentialUtils";
 
 // RN components
-import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
@@ -25,8 +26,8 @@ export default function HomeScreen() {
     const [loading, setLoading] = useState(true);
     const [showOfficeHourConfig, setShowOfficeHourConfig] = useState(false);
 
-    // TODO: replace with user ID of logged in user
-    const userId = "super1234";
+    const userCreds = useCredentials();
+    const userId = userCreds.user.uid;
     
     // TODO: replace with flag loaded from profile
     const isSalaried = true;
