@@ -1,6 +1,6 @@
 import styles from "./styles";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
 import CTAButton from "../../components/CTAButton";
@@ -10,29 +10,40 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   fetchSignInMethodsForEmail,
+  signOut,
 } from "../../config/firebase";
-import PasswordResetModal from "../../components/PasswordResetModal";
 
 export default function LoginScreen(props) {
-  /* States */
+  /* Hooks */
 
-  //User Input states
+  //useEffect to make sure user is signed out upon hitting the login page
+  useEffect(() => {
+    signOut(auth).then(() => {
+        // Sign-out successful.
+        console.log("All users signed out");
+      }).catch((error) => {
+        // An error happened.
+        console.log("Error signing users out");
+      });
+      
+  }, []);
+
+  /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [emailErrTxt, setEmailErrTxt] = useState("");
   const [pwdErrTxt, setPwdErrTxt] = useState("");
   const [loginBtnDisabled, setLoginBtnDisabled] = useState(true);
-
-  //Other states
   const [showModal, setShowModal] = useState(false);
+  const [passwordResetBtnDisabled, setPasswordResetBtnDisabled] =
+    useState(true);
 
   /* Handlers */
-
   const handleModalToggle = () => {
     setShowModal(!showModal);
   };
 
-  //If regex fine set errTxt to nothing
+  //If regex is true do not set an error message
   const handleEmailChange = (value) => {
     setEmail(value);
 
@@ -43,9 +54,11 @@ export default function LoginScreen(props) {
     if (emailRegexTest == false) {
       setEmailErrTxt("Please enter a valid email");
       setLoginBtnDisabled(true);
+      setPasswordResetBtnDisabled(true);
     } else {
       setEmailErrTxt("");
-      //setLoginBtnDisabled(false);
+      setLoginBtnDisabled(false);
+      setPasswordResetBtnDisabled(false);
     }
   };
 
@@ -61,8 +74,6 @@ export default function LoginScreen(props) {
       setLoginBtnDisabled(true);
     }
   };
-
-  //Helper function for validating both fields and if so
 
   //Toast code
   const showSuccessToast = (msg) => {
@@ -109,47 +120,44 @@ export default function LoginScreen(props) {
   };
 
   const handleSendPasswordResetLink = () => {
-    //First check if email exists in DBm, using clientside fetchSignInMethodsForEmail (as get userByEmail is only in the Admin SDK)
+    //Error, get email method now deprecated: https://github.com/firebase/firebase-android-sdk/issues/5586
+    //First check if email exists in DB, using clientside fetchSignInMethodsForEmail (as get userByEmail is only in the Admin SDK)
     //If no sign in method for provided email it does not exist in auth and can echo this to the user (using a toast)
 
+    console.log("Curr email:", auth);
     fetchSignInMethodsForEmail(auth, email)
-      .then(() => {
+      .then((signInMethodsArr) => {
+        console.log("Curr email: ", email);
+        console.log("Sign in methods arr: ", signInMethodsArr);
 
-        //Email is registered
-        sendPasswordResetEmail(auth, email)
-        .then(() => {
+        if (signInMethodsArr.length > 0) {
+          sendPasswordResetEmail(auth, email)
+            .then(() => {
+              showSuccessToast("Password reset email sent");
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
 
-            showSuccessToast("Password reset email sent");
- 
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-
-          showErrorToast("Registered email but error sending reset email");
-   
-        });
-
+              showErrorToast("Registered email but error sending reset email");
+            });
+        } else {
+          showErrorToast("This is not a registered email");
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
         console.log(errorMessage, errorCode);
-        console.log("Non registered email");
-
-        showErrorToast("This is not a registered email");
+        console.log("Something went wrong");
       });
-
-
   };
 
   return (
     <>
-      
-
       <View style={styles.container} setCredentials={props.setCredentials}>
-      <Toast />
+        <Toast />
         <TextInput
           style={styles.textInputContainer}
           placeholder="Email Address"
@@ -201,6 +209,7 @@ export default function LoginScreen(props) {
             <CTAButton
               title="Send Password Reset Link"
               onPress={handleSendPasswordResetLink}
+              disabled={passwordResetBtnDisabled}
             ></CTAButton>
           </View>
           <Toast />
