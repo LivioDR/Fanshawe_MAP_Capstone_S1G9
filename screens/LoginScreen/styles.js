@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
     borderColor: "#000000",
-    borderWidth: "1px",
+    borderWidth: 1,
   },
   footer: {
     position: "absolute",
