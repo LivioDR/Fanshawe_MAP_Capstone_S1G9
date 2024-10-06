@@ -16,7 +16,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // custom components
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/TimeClockScreen';
 import UserBio from "./screens/UserBioScreen/UserBio";
 
 // theme variables
