@@ -3,14 +3,14 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
+import { 
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signOut,
+} from "firebase/auth";
 import CTAButton from "../../components/CTAButton";
 import InputMsgBox from "../../components/InputMsgBox";
-import {
-  auth,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
-} from "../../config/firebase";
+import { auth } from "../../config/firebase";
 
 export default function LoginScreen(props) {
   /* States */
