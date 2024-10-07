@@ -8,7 +8,7 @@ import InputField from "../../components/common/InputField/InputField";
 
 const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismiss, isShown}) => {
 
-    const [address, setAddress] = useState('')
+    const [address, setAddress] = useState(userData.address)
 
     useEffect(()=>{
         setAddress(userData.address)
@@ -16,16 +16,18 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
 
     const updateUserInfo = async() => {
         // saving the user info in Firestore
-        if(await updateUserBioInfoById(uid, {'address': address})){
-            setUserData(prev => {
-                let newData = {...prev,
-                    address: address,
-                }
-                return newData
-            })
-        }
-        else{
-            console.error("An error occurred while updating the data")
+        if(address && address != ''){
+            if(await updateUserBioInfoById(uid, {'address': address})){
+                setUserData(prev => {
+                    let newData = {...prev,
+                        address: address,
+                    }
+                    return newData
+                })
+            }
+            else{
+                console.error("An error occurred while updating the data")
+            }
         }
     }
 
