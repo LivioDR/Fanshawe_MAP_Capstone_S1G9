@@ -6,7 +6,6 @@ export default UserBioStyles = StyleSheet.create({
     },
     body: {
         width: '100%',
-        // paddingVertical: 12,
     },
     buttonsWrapper: {
         width: '100%',
