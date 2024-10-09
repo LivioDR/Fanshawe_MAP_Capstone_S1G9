@@ -32,7 +32,7 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: Platform.OS === 'ios' ? 0 : 1,
+        quality: Platform.OS === 'ios' ? 0.2 : 1,
         });
     
         if (!result.canceled) {
