@@ -1,5 +1,4 @@
 import styles from "./styles";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -31,13 +30,14 @@ export default function LoginScreen({ loginSuccess }) {
   Ensures that there are no active users signed in when the login page is entered
   */
   useEffect(() => {
-    signOut(auth)
-      .then(() => {
-        showSuccessToast("Successfully signed out");
-      })
-      .catch(() => {
-        showErrorToast("Error signing users out");
-      });
+    (async () => {
+        await signOut(auth).catch(() => showErrorToast("Error signing users out"));
+        if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
+            const [debugEmail, debugPassword] = process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
+            const debugCredential = await signInWithEmailAndPassword(auth, debugEmail, debugPassword);
+            loginSuccess(debugCredential);
+        }
+    })();
   }, []);
 
   /*
