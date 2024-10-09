@@ -27,7 +27,6 @@ const setUserBioInfoById = async(id, userData) => {
     try{
         const docRef = doc(db, usersColName, id)
         const result = await setDoc(docRef, userData)
-        console.log(result)
     }
     catch(e){
         console.error(e)

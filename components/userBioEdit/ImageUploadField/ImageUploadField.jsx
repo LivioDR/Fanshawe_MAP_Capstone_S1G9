@@ -37,7 +37,6 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
     
         if (!result.canceled) {
             const fileUri = result.assets[0].uri
-            console.log(fileUri)
             const newImgUrl = await setImageForUserId(uid, fileUri, setLoading)
             setImgUrl(newImgUrl);
         }
