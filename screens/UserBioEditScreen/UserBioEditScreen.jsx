@@ -9,14 +9,21 @@ import InputField from "../../components/common/InputField/InputField";
 const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismiss, isShown}) => {
 
     const [address, setAddress] = useState(userData.address)
+    const [alert, setAlert] = useState(null)
 
     useEffect(()=>{
         setAddress(userData.address)
     },[])
 
+    const clearAlert    = () => setAlert(null)
+    const errorAlert    = () => setAlert("An error occurred. Please try again later.")
+    const successAlert  = () => setAlert("Changes saved successfully!")
+    const emptyAlert    = () => setAlert("Please enter a valid address.")
+
     const updateUserInfo = async() => {
         // saving the user info in Firestore
-        if(address && address != ''){
+        if(address && address?.trim() !== ''){
+            setAlert(null)
             if(await updateUserBioInfoById(uid, {'address': address})){
                 setUserData(prev => {
                     let newData = {...prev,
@@ -24,10 +31,20 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                     }
                     return newData
                 })
+                // then close modal
+                successAlert()
+                setTimeout(()=>{
+                    clearAlert()
+                    dismiss()
+                },1500)
+
             }
             else{
-                console.error("An error occurred while updating the data")
+                errorAlert()
             }
+        }
+        else{
+            emptyAlert()
         }
     }
 
@@ -56,7 +73,10 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                 <View style={styles.btnContainer}>
                     <UiButton
                         label={"Cancel"}
-                        funcToCall={dismiss}
+                        funcToCall={()=>{
+                            clearAlert()   
+                            dismiss()
+                        }}
                     />
                     <UiButton
                         label={"Save"}
@@ -64,11 +84,13 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                         funcToCall={()=>{
                             // save data
                             updateUserInfo()
-                            // then close modal
-                            dismiss()
                         }}
                     />
                 </View>
+                {
+                    alert &&
+                    <Text>{alert}</Text>
+                }
             </View>
         </Modal>
     )
