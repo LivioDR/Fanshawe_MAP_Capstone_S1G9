@@ -4,11 +4,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileImageStyles from "./ProfileImageStyles";
 
 
-const ProfileImage = ({url, imgSize = 96, placeholderSize = 48}) => {
+const ProfileImage = ({url, imgSize = 96, placeholderSize = 48, customStyles = {}}) => {
 
     if(url){
         return(
-            <View style={{...ProfileImageStyles.container, width: imgSize+4, height: imgSize+4}}>
+            <View style={{...ProfileImageStyles.container, width: imgSize+4, height: imgSize+4, ...customStyles}}>
                 <Image
                 source={{uri: url}}
                 width={imgSize}
