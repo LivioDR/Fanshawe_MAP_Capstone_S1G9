@@ -1,5 +1,5 @@
 // RN elements
-import { Button, Text, View } from "react-native";
+import { Button } from "react-native";
 
 // navigation
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
@@ -10,14 +10,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 // custom components
+import CompanyScreen from "../CompanyScreen";
 import TimeClockScreen from "../TimeClockScreen";
 import UserBio from "../UserBioScreen/UserBio";
 
 // theme variables
 import { accent, highlight } from "../../utilities/variables";
-
-// custom styles
-import styles from "./styles";
 
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
@@ -29,15 +27,6 @@ const NavTheme = {
         background: "#FFF",
     }
 };
-
-// TODO: replace these placeholder components with screen components from screens
-function CompanyScreenPlaceholder() {
-    return (
-        <View style={styles.container}>
-            <Text>Company Screen</Text>
-        </View>
-    );
-}
 
 export default function HomeScreen({ logOut }) {
     return (
@@ -61,7 +50,7 @@ export default function HomeScreen({ logOut }) {
             >
                 <Tab.Screen
                     name="Company"
-                    component={CompanyScreenPlaceholder}
+                    component={CompanyScreen}
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
