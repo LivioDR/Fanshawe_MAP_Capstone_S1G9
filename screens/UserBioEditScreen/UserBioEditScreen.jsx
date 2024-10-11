@@ -74,7 +74,8 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                     <UiButton
                         label={"Cancel"}
                         funcToCall={()=>{
-                            clearAlert()   
+                            clearAlert()
+                            setAddress(userData.address)
                             dismiss()
                         }}
                     />
