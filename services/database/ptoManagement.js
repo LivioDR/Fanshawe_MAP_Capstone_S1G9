@@ -1,5 +1,5 @@
 import { firestore as db } from "../../config/firebase"
-import { doc, collection, getDoc, getDocs, query, where, updateDoc } from "firebase/firestore"
+import { doc, collection, getDoc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore"
 
 const usersColName = "usersInfo"
 const ptoColName = "daysOffRequests"
@@ -64,13 +64,33 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
 }
 
 
-// Creates a new request in the database
-const requestDays = async(userId, managerId, category, requestedDays, from, until) => {
-
-
+// Creates a new request in the database - QA OK
+const requestDays = async(userId, managerId, category, from, until) => {
+    let result = false
+    
+    const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24))
+    
+    try{
+        const colRef = collection(db, ptoColName)
+        const document = await addDoc(colRef,{
+            requesterId: userId,
+            reviewerId: managerId,
+            category: category,
+            from: from,
+            until: until,
+            isApproved: null,
+            reviewedOn: null,
+            requestedDays: requestedDays,
+        })
+        result = true
+    }
+    catch(e){
+        console.debug(e)
+    }
+    return result
 }
 
-// Returns all the requests made to the manager of the passed ID
+// Returns all the requests made to the manager of the passed ID - QA OK
 const getAllRequests = async(managerId) => {
     // creating an array to store all the requests to be displayed in the UI
     let arrayOfRequests = []
