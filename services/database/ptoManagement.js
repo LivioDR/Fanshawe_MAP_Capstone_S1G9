@@ -65,10 +65,10 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
 
 
 // Creates a new request in the database - QA OK
-const requestDays = async(userId, managerId, category, from, until) => {
+const requestDays = async(userId, managerId, category, from, until, reason) => {
     let result = false
     
-    const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24))
+    const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24)) + 1 // the range is inclusive of both the first and last day
     
     try{
         const colRef = collection(db, ptoColName)
@@ -80,6 +80,7 @@ const requestDays = async(userId, managerId, category, from, until) => {
             until: until,
             isApproved: null,
             reviewedOn: null,
+            reason: reason,
             requestedDays: requestedDays,
         })
         result = true
