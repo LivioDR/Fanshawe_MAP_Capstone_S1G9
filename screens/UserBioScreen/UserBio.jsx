@@ -4,6 +4,7 @@ import bioStyles from "./UserBioStyles";
 // Components import
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
 import UiButton from "../../components/common/UiButton/UiButton";
+import LoadingIndicator from "../../components/common/LoadingIndicator";
 // Functions import
 import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getImageForUserId } from "../../services/database/profileImage";
@@ -13,6 +14,8 @@ import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 
 
 const UserBio = ({ canEdit = true }) => {
+
+    const [loading, setLoading] = useState(true)
 
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
@@ -54,11 +57,26 @@ const UserBio = ({ canEdit = true }) => {
 
             // set profle picture
             getImageForUserId(userId).then(img => setImgUrl(img))
+
+            // show the data
+            setLoading(false)
         }
         getData(userId)
         
     },[])
 
+    if(loading){
+        return(
+            <View style={{
+                width: '100%',
+                display: 'flex',
+                marginVertical: '80%',
+                alignItems: 'center',
+            }}>
+                <LoadingIndicator/>
+            </View>
+        )
+    }
 
     return(
         <SafeAreaView style={bioStyles.wrapper}>
