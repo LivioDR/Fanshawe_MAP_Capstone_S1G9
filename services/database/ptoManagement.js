@@ -9,9 +9,11 @@ const checkAvailableDays = async(userId, category) => {
     const dbCategory = `remaining${category.trim()}Days` // PTO || Sick
     let numberOfDaysToReturn
     let errors = []
+
     try{
         const docRef = doc(db,usersColName, userId)
         const document = await getDoc(docRef)
+
         if (document.exists()) {
             userData = document.data()
             numberOfDaysToReturn = userData[dbCategory]
@@ -33,10 +35,11 @@ const checkAvailableDays = async(userId, category) => {
 // To add days pass a positive value, to subtract, pass a negative value
 const updateAvailableDays = async(userId, category, daysToAdd) => {
     const dbCategory = `remaining${category.trim()}Days` // PTO || Sick
-    let availableDays
+    let availableDays = 0
 
     const requestAvailableDays = await checkAvailableDays(userId, category)
-    if(!requestAvailableDays.errors){
+
+    if(requestAvailableDays.errors.length == 0){
         availableDays = requestAvailableDays.message
     }
     else{
@@ -122,19 +125,68 @@ const getAllRequests = async(managerId) => {
     }
 }
 
-const reviewRequest = async(reqId, requestedById, category, days, approval) => {
+// Gets a request information by its ID
+const getRequestbyId = async(id) => {
+    let requestInfo
+    let errors = []
+    try{
+        const docRef = doc(db, ptoColName, id)
+        const document = await getDoc(docRef)
+
+        if(document.exists()){
+            requestInfo = document.data()
+        }
+        else{
+            errors.push(`Request with id ${id} not found`)
+        }
+    }
+    catch(e){
+        console.debug(e)
+        errors.push(e)
+    }
+    return {
+        errors: errors,
+        message: requestInfo
+    }
+}
+
+
+// Reviews a request made by an employee and updates the request status and the remaining days for that employee if approved
+const reviewRequest = async(reqId, approval) => {
     let result = false
     let errors = []
+
+    // gets all the info from the request in the database
+    let requestInfo = await getRequestbyId(reqId)
+    if(requestInfo.errors.length > 0){
+        return {
+            requestInfo
+        }
+    }
+    else{
+        requestInfo = requestInfo.message
+    }
+
+    // then I separate the variables that I'm going to use only from that request
+    const category = requestInfo.category
+    const days = requestInfo.requestedDays
+    const requestedById = requestInfo.requesterId
 
     try{
         // getting the reference to the document to update
         const docRef = doc(db, ptoColName, reqId)
+
         // setting then the isApproval status and the date when the update happended
-        await updateDoc(docRef, {isApproved: approval, reviewedOn: new Date()})
+        await updateDoc(docRef, {
+            isApproved: approval, 
+            reviewedOn: new Date()
+        })
+        
         if(approval){
             // if the request was approved, updates the available days for the requester
-            const updateReq = await updateAvailableDays(requestedById, category, days)
-            if(!updateReq.errors){
+            const updateReq = await updateAvailableDays(requestedById, category, -days) // passing a negative value to subtract the requested days
+
+            if(updateReq.errors.length == 0){
                 result = true
             }
             else{
