@@ -80,10 +80,10 @@ const getAllRequests = async(managerId) => {
         // getting a reference to the days off collection
         const colRef = collection(db, ptoColName)
         // setting the query with that reference and the conditions
-        const query = query(colRef, where("reviewerId","==",managerId))
+        const q = query(colRef, where("reviewerId","==",managerId))
     
         // then getting the data from that query
-        const querySnapshot = await getDocs(query)
+        const querySnapshot = await getDocs(q)
 
         querySnapshot.forEach(snap => {
             arrayOfRequests.push({
