@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { highlight, lightDropShadowStyle } from "../../../utilities/variables";
+import { highlight, lightDropShadowStyle } from "../../../../utilities/variables";
 
 export default StyleSheet.create({
     container: {

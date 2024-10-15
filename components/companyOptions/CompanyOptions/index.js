@@ -2,7 +2,7 @@ import { View, FlatList } from "react-native";
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import CompanyOptionSelector from "../CompanyOptionSelector";
+import CompanyOptionSelector from "./CompanyOptionSelector";
 
 import styles from "./styles";
 
