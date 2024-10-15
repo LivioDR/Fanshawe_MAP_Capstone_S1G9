@@ -60,6 +60,7 @@ const AdminView = ({uid = 'super1234'}) => {
                 <FlatList
                     data={teamMembers}
                     renderItem={member => <UserCard 
+                        id={member.item.uid}
                         name={`${member.item.firstName} ${member.item.lastName}`}
                         role={member.item.role}
                         email={member.item.email}
