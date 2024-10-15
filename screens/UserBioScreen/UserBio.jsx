@@ -11,8 +11,8 @@ import { getTeamInfoById, getUserBioInfoById } from "../../services/database/use
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 
-
-const UserBio = ({ canEdit = true }) => {
+// TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
+const UserBio = ({ userId, canEdit = true }) => {
 
     const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
@@ -23,8 +23,11 @@ const UserBio = ({ canEdit = true }) => {
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
-    const userCreds = useCredentials();
-    const userId = userCreds.user.uid;
+    const userCreds = useCredentials()
+    const authUserId = userCreds.user.uid
+    if (!userId) {
+        userId = authUserId
+    }
 
     useEffect(()=>{
         const getData = async(id) => {
@@ -76,7 +79,8 @@ const UserBio = ({ canEdit = true }) => {
                 role={userData.role} 
                 imgUrl={imgUrl}
                 onPressFunc={()=>{showModal()}}  
-                canEdit={canEdit}  
+                // TODO: rework this to base off of admin role and if we're viewing current logged in user
+                canEdit={userId === authUserId}  
             />
             <View style={bioStyles.body}>
                 <TextWithLabel label={'Corporate email'} textValue={userData.email} />
@@ -88,10 +92,11 @@ const UserBio = ({ canEdit = true }) => {
                 <TextWithLabel label={'Supervisor'} textValue={`${superData.firstName} ${superData.lastName}`} />
                 <TextWithLabel label={'Supervisor email'} textValue={superData.email} />
             </View>
+            {userId === authUserId &&
             <View style={bioStyles.buttonsWrapper}>
                 <UiButton label={"PTO"} type="default"/>
                 <UiButton label={"Emergency contacts"} type="warning"/>
-            </View>
+            </View>}
         </SafeAreaView>
     )
 }
