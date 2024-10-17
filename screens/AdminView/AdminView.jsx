@@ -66,7 +66,7 @@ const AdminView = ({uid = 'super1234'}) => {
                             imgUrl={user.item.uri}
                         />
                     )}
-                    keyExtractor={user => user.uri}
+                    keyExtractor={user => user.uid}
                     scrollEnabled={false}   // disable scroll so we can scroll the whole view instead
                 />
             </View>
