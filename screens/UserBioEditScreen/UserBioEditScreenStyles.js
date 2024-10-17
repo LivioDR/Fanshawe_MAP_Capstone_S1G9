@@ -13,7 +13,7 @@ export default UserBioEditScreenStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        padding: '10%',
+        padding: '5%',
         justifyContent: 'space-between'
     },
 })
