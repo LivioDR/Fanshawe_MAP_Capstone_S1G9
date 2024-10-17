@@ -29,7 +29,7 @@ const UserCard = ({id, name, role, email, imgUrl}) => {
                 <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
                 <View style={styles.textWrapper}>
                     <Text style={styles.name}>
-                        {`${name}${authUserId === id ? " (me)" : ""}`}
+                        {name}
                     </Text>
                     <Text style={styles.role}>
                         {role}
