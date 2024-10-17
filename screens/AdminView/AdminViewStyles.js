@@ -1,16 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export default AdminViewStyles = StyleSheet.create({
-    header: {
-        paddingVertical: 20,
-    },
     title: {
         textAlign: 'center',
         fontSize: 24,
     },
-    list: {
 
-    },
     loading: {
         container: {
             display: 'flex',
@@ -18,8 +13,24 @@ export default AdminViewStyles = StyleSheet.create({
             justifyContent: 'center',
             alignItems: 'center',
         },
+
         text: {
             fontSize: 18,
         },
-    }
+    },
+
+    scroll: {
+        outer: {
+            minHeight: "100%",
+        },
+
+        inner: {
+            paddingVertical: 20,
+            gap: 15,
+        },
+    },
+
+    list: {
+        gap: 10,
+    },
 })

@@ -1,39 +1,76 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, SafeAreaView } from "react-native";
-import BioHeader from "../../components/userBio/BioHeader/BioHeader";
+import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import styles from "./AdminViewStyles";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import UserCard from "../../components/adminView/userCard/UserCard";
+import { useCredentials } from "../../utilities/userCredentialUtils";
 
 const AdminView = ({uid = 'super1234'}) => {
 
-    const [adminInfo, setAdminInfo] = useState(undefined)
-    const [imgUrl, setImgUrl] = useState(undefined)
     const [teamMembers, setTeamMembers] = useState(undefined)
+    const [teamSupervisors, setTeamSupervisors] = useState(undefined)
     const [loading, setLoading] = useState(true)
     
+    const userCreds = useCredentials()
+    const authUserId = userCreds.user.uid
 
     useEffect(()=>{
         (async()=>{
             const myInfo = await getUserBioInfoById(uid)
-            setAdminInfo(myInfo)
-
-            const myImg = await getImageForUserId(uid)
-            setImgUrl(myImg)
-
             const myTeam = await getTeamMembersIdsByTeamId(myInfo.teamId)
-            let myTeamDetails = []
+            const myTeamDetails = []
+            const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
                 const detail = await getUserBioInfoById(myTeam[i])
                 const imgPath = await getImageForUserId(myTeam[i])
-                myTeamDetails.push({...detail, uri: imgPath, uid: myTeam[i]})
+                const userDetail = {...detail, uri: imgPath, uid: myTeam[i]}
+                if (detail.isSupervisor) {
+                    myTeamSupervisorDetails.push(userDetail)
+                } else {
+                    myTeamDetails.push(userDetail)
+                }
             }
             setTeamMembers(myTeamDetails)
+            setTeamSupervisors(myTeamSupervisorDetails)
             setLoading(false)
         })()
     },[])
 
+    /**
+     * Generate a header and FlatList for the given users list.
+     * @param {string} title list title
+     * @param {object[]} users array of user objects
+     * @returns a View containing the generated header and list
+     */
+    const createUserCards = (title, users) => {
+        // don't create anything if no users provided, no point in an empty header
+        if (!users || users.length === 0) {
+            return
+        }
+
+        return (
+            <View style={styles.list}>
+                <Text style={styles.title}>
+                    {title}
+                </Text>
+                <FlatList
+                    data={users}
+                    renderItem={user => (
+                        <UserCard
+                            id={user.item.uid}
+                            name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? " (me)" : ""}`}
+                            role={user.item.role}
+                            email={user.item.email}
+                            imgUrl={user.item.uri}
+                        />
+                    )}
+                    keyExtractor={user => user.uri}
+                    scrollEnabled={false}   // disable scroll so we can scroll the whole view instead
+                />
+            </View>
+        )
+    }
 
     if(loading){
         return(
@@ -47,28 +84,13 @@ const AdminView = ({uid = 'super1234'}) => {
 
     return(
         <SafeAreaView>
-            <View style={styles.header}>
-                <BioHeader 
-                    name={`${adminInfo.firstName} ${adminInfo.lastName}`}
-                    role={adminInfo.role}
-                    imgUrl={imgUrl}
-                    canEdit={false}
-                    />
-                <Text style={styles.title}>
-                    Team members
-                </Text>
-                <FlatList
-                    data={teamMembers}
-                    renderItem={member => <UserCard 
-                        id={member.item.uid}
-                        name={`${member.item.firstName} ${member.item.lastName}`}
-                        role={member.item.role}
-                        email={member.item.email}
-                        imgUrl={member.item.uri}
-                        />}
-                        keyExtractor={member => member.uri}
-                        />
-            </View>
+            <ScrollView
+                style={styles.scroll.outer}
+                contentContainerStyle={styles.scroll.inner}
+            >
+                {createUserCards("Supervisors", teamSupervisors)}
+                {createUserCards("Team Members", teamMembers)}
+            </ScrollView>
         </SafeAreaView>
     )
 }
