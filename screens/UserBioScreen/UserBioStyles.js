@@ -14,4 +14,9 @@ export default UserBioStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
     },
+    loading: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
 })

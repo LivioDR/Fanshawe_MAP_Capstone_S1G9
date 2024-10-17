@@ -70,12 +70,7 @@ const UserBio = ({ userId, canEdit = true }) => {
 
     if(loading){
         return(
-            <View style={{
-                width: '100%',
-                display: 'flex',
-                marginVertical: '80%',
-                alignItems: 'center',
-            }}>
+            <View style={bioStyles.loading}>
                 <LoadingIndicator/>
             </View>
         )
