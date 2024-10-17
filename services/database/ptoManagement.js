@@ -36,6 +36,7 @@ const checkAvailableDays = async(userId, category) => {
 const updateAvailableDays = async(userId, category, daysToAdd) => {
     const dbCategory = `remaining${category.trim()}Days` // PTO || Sick
     let availableDays = 0
+    let errors = []
 
     const requestAvailableDays = await checkAvailableDays(userId, category)
 
@@ -44,26 +45,37 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
     }
     else{
         return {
-            errors: requestAvailableDays.errors,
+            errors: [...errors, ...requestAvailableDays.errors],
             message: "An error occurred while retrieving the available days data"
+        }
+    }
+
+    if(availableDays + daysToAdd < 0){
+        return {
+            errors: ["Not enough days"],
+            message: `Not enough available days. Available: ${availableDays}. Requested: ${-daysToAdd}`
         }
     }
 
     try{
         const docRef = doc(db,usersColName, userId)
-        const document = await updateDoc(docRef, {[dbCategory]: availableDays + daysToAdd})
-        if (document.exists()) {
-            userData = document.data()
-            numberOfDaysToReturn = userData[dbCategory]
-        } 
-        else {
-            console.debug("Document not found");
-        }
+        await updateDoc(docRef, {[dbCategory]: availableDays + daysToAdd})
     }
     catch(e){
         errors.push(e)
     }
-
+    if(errors.length == 0){
+        return {
+            errors: errors,
+            message: `Days updated correctly`
+        }
+    }
+    else{
+        return {
+            errors: errors,
+            message: `An error occurred`
+        }
+    }
 }
 
 
@@ -74,19 +86,28 @@ const requestDays = async(userId, managerId, category, from, until, reason) => {
     const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24)) + 1 // the range is inclusive of both the first and last day
     
     try{
-        const colRef = collection(db, ptoColName)
-        const document = await addDoc(colRef,{
-            requesterId: userId,
-            reviewerId: managerId,
-            category: category,
-            from: from,
-            until: until,
-            isApproved: null,
-            reviewedOn: null,
-            reason: reason,
-            requestedDays: requestedDays,
-        })
-        result = true
+        // updating the available days for the requesting user, by passing a negative value to the updateAvailableDays function
+        const updateReq = await updateAvailableDays(userId, category, -requestedDays)
+        // then creating a request in the database
+        if(updateReq.errors.length == 0){
+            const colRef = collection(db, ptoColName)
+            const document = await addDoc(colRef,{
+                requesterId: userId,
+                reviewerId: managerId,
+                category: category,
+                from: from,
+                until: until,
+                isApproved: null,
+                reviewedOn: null,
+                reason: reason,
+                requestedDays: requestedDays,
+            })
+            result = true
+        }
+        else{
+            return updateReq.errors
+        }
+
     }
     catch(e){
         console.debug(e)
@@ -182,9 +203,9 @@ const reviewRequest = async(reqId, approval) => {
             reviewedOn: new Date()
         })
         
-        if(approval){
-            // if the request was approved, updates the available days for the requester
-            const updateReq = await updateAvailableDays(requestedById, category, -days) // passing a negative value to subtract the requested days
+        if(!approval){
+            // if the request was not approved, updates the available days for the requester to restore the days previously subtracted when creating the request
+            const updateReq = await updateAvailableDays(requestedById, category, days) // passing a positive value to give back the requested days on refusal
 
             if(updateReq.errors.length == 0){
                 result = true
