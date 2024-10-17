@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
-import UserCard from "../../components/adminView/userCard/UserCard";
+import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
-import styles from "./AdminViewStyles";
+import styles from "./TeamScreenStyles";
 
-const AdminView = ({uid = 'super1234'}) => {
+const TeamScreen = ({uid = 'super1234'}) => {
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
@@ -93,4 +93,4 @@ const AdminView = ({uid = 'super1234'}) => {
         </SafeAreaView>
     )
 }
-export default AdminView
+export default TeamScreen
