@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
-import styles from "./AdminViewStyles";
+import UserCard from "../../components/adminView/userCard/UserCard";
+import LoadingIndicator from "../../components/common/LoadingIndicator";
+import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
-import UserCard from "../../components/adminView/userCard/UserCard";
-import { useCredentials } from "../../utilities/userCredentialUtils";
+import styles from "./AdminViewStyles";
 
 const AdminView = ({uid = 'super1234'}) => {
 
@@ -73,11 +74,9 @@ const AdminView = ({uid = 'super1234'}) => {
     }
 
     if(loading){
-        return(
-            <View style={styles.loading.container}>
-                <Text style={styles.loading.text}>
-                    Loading...
-                </Text>
+        return (
+            <View style={styles.loading}>
+                <LoadingIndicator />
             </View>
         )
     }

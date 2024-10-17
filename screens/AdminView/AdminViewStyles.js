@@ -7,16 +7,9 @@ export default AdminViewStyles = StyleSheet.create({
     },
 
     loading: {
-        container: {
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-
-        text: {
-            fontSize: 18,
-        },
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
     },
 
     scroll: {
