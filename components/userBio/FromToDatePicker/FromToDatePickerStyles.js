@@ -14,6 +14,10 @@ export default FromToDatePickerStyles = StyleSheet.create({
         paddingHorizontal: 12,
         fontWeight: 'bold',
     },
+    androidDate: {
+        fontSize: 18,
+        paddingHorizontal: 12,
+    },  
     picker: {
         paddingBottom: 12,
     },
