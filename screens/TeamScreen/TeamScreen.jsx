@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../utilities/userCredentialUtils";
@@ -12,6 +13,11 @@ const TeamScreen = ({ uid }) => {
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
     const [loading, setLoading] = useState(true)
+
+    const route = useRoute()
+    if (route && route.params?.id) {
+        uid = route.params.id
+    }
     
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
