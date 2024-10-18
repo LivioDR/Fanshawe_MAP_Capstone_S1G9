@@ -14,7 +14,7 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
         reason: "",
         from: "",
         until: "",
-        alert: "",
+        alert: " ",
     })
 
     const toggleSwitch = () => {
@@ -71,6 +71,9 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
                     type="primary"
                     />
                 </View>
+                <Text>
+                    {requestInfo.alert}
+                </Text>
             </View>
         </Modal>
     )
