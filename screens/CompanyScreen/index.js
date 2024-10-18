@@ -26,12 +26,11 @@ export default function CompanyScreen() {
 
             <Stack.Screen
                 name="MyTeamScreen"
+                component={TeamScreen}
                 options={{
                     headerTitle: "My Team",
                 }}
-            >
-                {(_) => <TeamScreen uid={authUserId} />}
-            </Stack.Screen>
+            />
 
             <Stack.Screen
                 name="TeamMemberDetails"

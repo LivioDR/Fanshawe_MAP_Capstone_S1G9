@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../utilities/userCredentialUtils";
@@ -7,7 +8,7 @@ import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/da
 import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./TeamScreenStyles";
 
-const TeamScreen = ({uid = 'super1234'}) => {
+const TeamScreen = ({ uid }) => {
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
@@ -15,6 +16,9 @@ const TeamScreen = ({uid = 'super1234'}) => {
     
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
+    if (!uid) {
+        uid = authUserId
+    }
 
     useEffect(()=>{
         (async()=>{
