@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import bioStyles from "./UserBioStyles";
 // Components import
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
@@ -28,6 +29,11 @@ const UserBio = ({ userId, canEdit = true }) => {
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
+
+    const route = useRoute()
+    if (route && route.params?.id) {
+        userId = route.params.id
+    }
 
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
