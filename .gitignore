@@ -37,3 +37,6 @@ yarn-error.*
 
 # VSCode configs
 .vscode/
+
+# diffs/patches for complex branches
+diffs/

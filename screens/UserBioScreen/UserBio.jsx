@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import bioStyles from "./UserBioStyles";
 // Components import
 import TextWithLabel from "../../components/common/TextWithLabel/TextWithLabel";
 import UiButton from "../../components/common/UiButton/UiButton";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
+import BioHeader from "../../components/userBio/BioHeader/BioHeader";
+import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
+import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 // Functions import
 import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
-import BioHeader from "../../components/userBio/BioHeader/BioHeader";
-import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
+import { getOpenTimeLog } from "../../services/database/timeClock";
 
-
-const UserBio = ({ canEdit = true }) => {
+// TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
+const UserBio = ({ userId, canEdit = true }) => {
 
     const [loading, setLoading] = useState(true)
 
@@ -21,13 +24,22 @@ const UserBio = ({ canEdit = true }) => {
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
     const [teamData, setTeamData] = useState({})
+    const [clockStatus, setClockStatus] = useState({})
     const [showEditModal, setShowEditModal] = useState(false)
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
-    const userCreds = useCredentials();
-    const userId = userCreds.user.uid;
+    const route = useRoute()
+    if (route && route.params?.id) {
+        userId = route.params.id
+    }
+
+    const userCreds = useCredentials()
+    const authUserId = userCreds.user.uid
+    if (!userId) {
+        userId = authUserId
+    }
 
     useEffect(()=>{
         const getData = async(id) => {
@@ -38,7 +50,7 @@ const UserBio = ({ canEdit = true }) => {
             // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                let supervisorData = await getUserBioInfoById(superId)
+                const supervisorData = await getUserBioInfoById(superId)
                 // get supervisor data
                 setSuperData(supervisorData)
             }
@@ -52,11 +64,23 @@ const UserBio = ({ canEdit = true }) => {
 
             // team data
             const teamId = data.teamId
-            let teamInfo = await getTeamInfoById(teamId)
+            const teamInfo = await getTeamInfoById(teamId)
             setTeamData(teamInfo)
 
             // set profle picture
-            getImageForUserId(userId).then(img => setImgUrl(img))
+            const img = await getImageForUserId(userId)
+            setImgUrl(img)
+
+            // time clock data
+            const timeLog = await getOpenTimeLog(userId)
+            if (timeLog) {
+                const newClockStatus = {
+                    clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
+                    onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
+                    timeLog,
+                }
+                setClockStatus(newClockStatus)
+            }
 
             // show the data
             setLoading(false)
@@ -67,18 +91,16 @@ const UserBio = ({ canEdit = true }) => {
 
     if(loading){
         return(
-            <View style={{
-                width: '100%',
-                display: 'flex',
-                marginVertical: '80%',
-                alignItems: 'center',
-            }}>
+            <View style={bioStyles.loading}>
                 <LoadingIndicator/>
             </View>
         )
     }
 
     return(
+        <>
+        {userId !== authUserId &&
+        <ClockStatusBanner clockStatus={clockStatus} name={userData.firstName} />}
         <SafeAreaView style={bioStyles.wrapper}>
             <UserBioEditScreen 
                 uid={userId} 
@@ -94,7 +116,8 @@ const UserBio = ({ canEdit = true }) => {
                 role={userData.role} 
                 imgUrl={imgUrl}
                 onPressFunc={()=>{showModal()}}  
-                canEdit={canEdit}  
+                // TODO: rework this to base off of admin role and if we're viewing current logged in user
+                canEdit={userId === authUserId}  
             />
             <View style={bioStyles.body}>
                 <TextWithLabel label={'Corporate email'} textValue={userData.email} />
@@ -106,11 +129,13 @@ const UserBio = ({ canEdit = true }) => {
                 <TextWithLabel label={'Supervisor'} textValue={`${superData.firstName} ${superData.lastName}`} />
                 <TextWithLabel label={'Supervisor email'} textValue={superData.email} />
             </View>
+            {userId === authUserId &&
             <View style={bioStyles.buttonsWrapper}>
                 <UiButton label={"PTO"} type="default"/>
                 <UiButton label={"Emergency contacts"} type="warning"/>
-            </View>
+            </View>}
         </SafeAreaView>
+        </>
     )
 }
 export default UserBio

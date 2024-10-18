@@ -4,18 +4,22 @@ import { Timestamp } from "firebase/firestore";
 
 import styles from "./styles";
 
-export default function ClockStatusBanner({ clockStatus }) {
+export default function ClockStatusBanner({ clockStatus, name }) {
     const clockInTime = clockStatus.timeLog?.clockInTime ? timestampToTimeString(clockStatus.timeLog.clockInTime) : "";
     const lunchTime = clockStatus.timeLog?.onLunchTime ? timestampToTimeString(clockStatus.timeLog.onLunchTime) : "";
 
+    const isAre = name ? "is" : "are";
+    const hasHave = name ? "has" : "have";
+    name = name ? name : "You";
+
     let bannerStyle = styles.banner.clockedOut;
-    let bannerText = "You are not clocked in.";
+    let bannerText = `${name} ${isAre} not clocked in.`;
     if (clockStatus.onLunch) {
         bannerStyle = styles.banner.onLunch;
-        bannerText = `You have been on lunch since ${lunchTime}.`;
+        bannerText = `${name} ${hasHave} been on lunch since ${lunchTime}.`;
     } else if (clockStatus.clockedIn) {
         bannerStyle = styles.banner.clockedIn;
-        bannerText = `You have been clocked in since ${clockInTime}.`;
+        bannerText = `${name} ${hasHave} been clocked in since ${clockInTime}.`;
     }
 
     return (
