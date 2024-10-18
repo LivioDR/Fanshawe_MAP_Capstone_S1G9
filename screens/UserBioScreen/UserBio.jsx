@@ -78,6 +78,7 @@ const UserBio = ({ canEdit = true }) => {
             />
             <PTORequestScreen
                 userId={userId}
+                supervisorId={userData.supervisorId}
                 isShown={showPtoModal}
                 dismiss={hidePto}
                 pto={userData.remainingPTODays}
