@@ -5,6 +5,7 @@ import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCat
 import styles from "./PTORequestScreenStyles";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
+import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 
 
 const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => {
@@ -12,8 +13,8 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
         reason: "",
-        from: "",
-        until: "",
+        from: new Date(),
+        until: new Date(),
         alert: " ",
     })
 
@@ -32,6 +33,28 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
         })
     }
 
+    const setFromDate = (date) => {
+        setRequestInfo(prev => {
+            const newRequestInfo = {...prev}
+            newRequestInfo.from = date 
+            return newRequestInfo
+        })
+        console.debug(`From:`)
+        console.debug(requestInfo)
+    }
+
+    const setUntilDate = (date) => {
+        setRequestInfo(prev => {
+            const newRequestInfo = {...prev}
+            newRequestInfo.until = date 
+            return newRequestInfo
+        })
+        console.debug(`Until:`)
+        console.debug(requestInfo)
+    }
+
+    
+
 
     return(
         <Modal
@@ -45,6 +68,11 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
+
+                <View style={styles.btnContainer}>
+                    <FromToDatePicker label={"From"} initialValue={requestInfo.from} setDate={setFromDate}/>
+                    <FromToDatePicker label={"To"} initialValue={requestInfo.until} setDate={setUntilDate}/>
+                </View>
 
                 <Text style={styles.subtitle}>
                     Select category

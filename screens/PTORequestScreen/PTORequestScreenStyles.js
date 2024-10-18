@@ -11,7 +11,7 @@ export default PTORequestScreenStyles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 18,
-        padding: 5,
+        padding: 12,
     },
     btnContainer: {
         display: 'flex',
