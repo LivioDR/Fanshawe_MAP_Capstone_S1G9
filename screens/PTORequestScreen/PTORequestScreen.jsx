@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Modal, Button } from "react-native";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCategorySwitch";
@@ -6,9 +6,11 @@ import styles from "./PTORequestScreenStyles";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
+import { requestDays } from "../../services/database/ptoManagement";
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
 
-const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => {
+const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, updateInfo}) => {
 
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
@@ -18,6 +20,7 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
         alert: " ",
     })
 
+    // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
         setRequestInfo(prev => {
             const newRequestInfo = {...prev}
@@ -39,8 +42,6 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
             newRequestInfo.from = date 
             return newRequestInfo
         })
-        console.debug(`From:`)
-        console.debug(requestInfo)
     }
 
     const setUntilDate = (date) => {
@@ -49,8 +50,37 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
             newRequestInfo.until = date 
             return newRequestInfo
         })
-        console.debug(`Until:`)
-        console.debug(requestInfo)
+    }
+
+    const updateAlert = (msg) => {
+        setRequestInfo(prev => {
+            const newRequestInfo = {...prev}
+            newRequestInfo.alert = msg
+            return newRequestInfo
+        })
+    }
+    // END OF STATE MANAGEMENT FUNCTIONS
+
+    // This function takes the data entered by the user and creates a request in the system
+    // If the request fails for any reason, it displays an alert
+    // If it is requested successfully, displays a success message and closes the modal after a set time
+    const requestTimeOff = async() => {
+        let category = requestInfo.category ? "Sick" : "PTO"
+        
+        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason)
+
+        if(result.errors.length == 0){
+            updateAlert(result.message)
+    
+            updateInfo(await getUserBioInfoById(userId))
+    
+            setTimeout(()=>{
+                dismiss()
+            }, 2500)
+        }
+        else{
+            updateAlert(result.errors[0])
+        }
     }
 
     
@@ -95,7 +125,7 @@ const PTORequestScreen = ({userId, isShown, dismiss, pto, sick, updateInfo}) => 
                     />
                     <UiButton
                     label={"Request"}
-                    // funcToCall={}
+                    funcToCall={requestTimeOff}
                     type="primary"
                     />
                 </View>
