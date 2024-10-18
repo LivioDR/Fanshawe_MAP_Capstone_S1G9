@@ -75,7 +75,8 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
             updateInfo(await getUserBioInfoById(userId))
     
             setTimeout(()=>{
-                dismiss()
+                // clears the alert before closing the modal
+                clearAndClose()
             }, 2500)
         }
         else{
@@ -83,7 +84,11 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
         }
     }
 
-    
+    const clearAndClose = () => {
+        updateReason("")
+        updateAlert(" ")
+        dismiss()
+    }
 
 
     return(
@@ -120,7 +125,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
                 <View style={styles.btnContainer}>
                     <UiButton
                     label={"Cancel"}
-                    funcToCall={dismiss}
+                    funcToCall={clearAndClose}
                     type="default"
                     />
                     <UiButton
