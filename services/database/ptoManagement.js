@@ -52,7 +52,7 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
 
     if(availableDays + daysToAdd < 0){
         return {
-            errors: ["Not enough days"],
+            errors: [`Not enough days. Available: ${availableDays}. Requested: ${-daysToAdd}`],
             message: `Not enough available days. Available: ${availableDays}. Requested: ${-daysToAdd}`
         }
     }
@@ -105,14 +105,27 @@ const requestDays = async(userId, managerId, category, from, until, reason) => {
             result = true
         }
         else{
-            return updateReq.errors
+            return updateReq
         }
-
     }
     catch(e){
-        console.debug(e)
+        return {
+            message: "An error occurred. Please try again later.",
+            errors: [e]
+        }
     }
-    return result
+    if(result){
+        return {
+            message: "Request sent succesfully",
+            errors: []
+        }
+    }
+    else{
+        return {
+            message: "An error occurred. Please try again later.",
+            errors: ["Unexpected error found"]
+        }
+    }
 }
 
 // Returns all the requests made to the manager of the passed ID - QA OK
