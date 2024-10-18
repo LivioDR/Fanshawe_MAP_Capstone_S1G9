@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TextInput } from "react-native";
 import styles from "./InputFieldStyles";
 
-const InputField = ({label, value, setValue, autoComplete = ""}) => {
+const InputField = ({label, value, setValue, autoComplete = "", autoCapitalize = "words"}) => {
     return(
         <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>
@@ -10,7 +10,7 @@ const InputField = ({label, value, setValue, autoComplete = ""}) => {
             </Text>
             <TextInput
                 style={styles.inputField}
-                autoCapitalize="words"
+                autoCapitalize={autoCapitalize}
                 autoComplete={autoComplete}
                 autoCorrect={false}
                 value={value}
