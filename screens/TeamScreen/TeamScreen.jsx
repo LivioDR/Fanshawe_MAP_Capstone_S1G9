@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
-import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../utilities/userCredentialUtils";
