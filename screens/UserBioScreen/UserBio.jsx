@@ -9,11 +9,13 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 import BioHeader from "../../components/userBio/BioHeader/BioHeader";
 import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
+import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../utilities/userCredentialUtils";
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getOpenTimeLog } from "../../services/database/timeClock";
+
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -26,10 +28,14 @@ const UserBio = ({ userId, canEdit = true }) => {
     const [teamData, setTeamData] = useState({})
     const [clockStatus, setClockStatus] = useState({})
     const [showEditModal, setShowEditModal] = useState(false)
+    const [showPtoModal, setShowPtoModal] = useState(false)
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
+    const showPto = () => {setShowPtoModal(true)}
+    const hidePto = () => {setShowPtoModal(false)}
+    
     const route = useRoute()
     if (route && route.params?.id) {
         userId = route.params.id
@@ -111,6 +117,15 @@ const UserBio = ({ userId, canEdit = true }) => {
                 dismiss={hideModal} 
                 isShown={showEditModal} 
             />
+            <PTORequestScreen
+                userId={userId}
+                supervisorId={userData.supervisorId}
+                isShown={showPtoModal}
+                dismiss={hidePto}
+                pto={userData.remainingPTODays}
+                sick={userData.remainingSickDays}
+                updateInfo={setUserData}
+            />
             <BioHeader 
                 name={`${userData.firstName} ${userData.lastName}`} 
                 role={userData.role} 
@@ -131,7 +146,7 @@ const UserBio = ({ userId, canEdit = true }) => {
             </View>
             {userId === authUserId &&
             <View style={bioStyles.buttonsWrapper}>
-                <UiButton label={"PTO"} type="default"/>
+                <UiButton label={"PTO"} type="default" funcToCall={showPto}/>
                 <UiButton label={"Emergency contacts"} type="warning"/>
             </View>}
         </SafeAreaView>
