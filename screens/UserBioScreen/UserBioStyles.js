@@ -6,7 +6,6 @@ export default UserBioStyles = StyleSheet.create({
     },
     body: {
         width: '100%',
-        // paddingVertical: 12,
     },
     buttonsWrapper: {
         width: '100%',
@@ -14,5 +13,10 @@ export default UserBioStyles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-around',
+    },
+    loading: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
     },
 })
