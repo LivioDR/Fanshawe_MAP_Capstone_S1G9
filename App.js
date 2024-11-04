@@ -3,8 +3,6 @@ import { StatusBar } from 'expo-status-bar';
 
 // hooks and providers
 import { useState } from 'react';
-import { Provider } from 'react-redux';
-import store from './services/state/store';
 import { CredentialProvider } from './utilities/userCredentialUtils';
 
 // custom components
@@ -32,13 +30,9 @@ export default function App() {
     const shownScreen = loginCredential ? <HomeScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
 
     return (
-        <Provider store={store}>
         <CredentialProvider userCreds={loginCredential}>
-
             <StatusBar style="auto" />
             {shownScreen}
-            
         </CredentialProvider>
-        </Provider>
     );
 }

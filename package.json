@@ -14,7 +14,6 @@
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
-    "@reduxjs/toolkit": "^2.3.0",
     "@types/react": "^18.3.11",
     "@types/react-test-renderer": "^18.3.0",
     "expo": "~51.0.28",
@@ -24,7 +23,7 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-toast-message": "^2.2.1",
-    "react-redux": "^9.1.2"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
