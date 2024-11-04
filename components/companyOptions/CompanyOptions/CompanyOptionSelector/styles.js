@@ -11,6 +11,7 @@ export default StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 10,
         backgroundColor: highlight,
+        ...lightDropShadowStyle,
     },
 
     iconContainer: {
