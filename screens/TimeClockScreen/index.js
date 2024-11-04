@@ -1,6 +1,6 @@
 // hooks
 import { useEffect, useState } from "react";
-import { useCredentials } from "../../utilities/userCredentialUtils";
+import { useCredentials } from "../../services/state/userCredentials";
 
 // RN components
 import { Image, Text, TouchableOpacity, View } from "react-native";

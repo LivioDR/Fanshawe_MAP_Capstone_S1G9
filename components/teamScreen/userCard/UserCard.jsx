@@ -3,7 +3,7 @@ import { View, Text, TouchableHighlight } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import { highlight } from "../../../utilities/variables";
-import { useCredentials } from "../../../utilities/userCredentialUtils";
+import { useCredentials } from "../../../services/state/userCredentials";
 import styles from "./UserCardStyles";
 
 const UserCard = ({id, name, role, email, imgUrl}) => {

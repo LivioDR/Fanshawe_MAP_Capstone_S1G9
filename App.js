@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 
 // hooks and providers
 import { useState } from 'react';
-import { CredentialProvider } from './utilities/userCredentialUtils';
+import { CredentialProvider } from './services/state/userCredentials';
 
 // custom components
 import LoginScreen from './screens/LoginScreen';

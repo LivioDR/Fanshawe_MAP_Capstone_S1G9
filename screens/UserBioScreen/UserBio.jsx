@@ -11,7 +11,7 @@ import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
-import { useCredentials } from "../../utilities/userCredentialUtils";
+import { useCredentials } from "../../services/state/userCredentials";
 import { getImageForUserId } from "../../services/database/profileImage";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getOpenTimeLog } from "../../services/database/timeClock";
