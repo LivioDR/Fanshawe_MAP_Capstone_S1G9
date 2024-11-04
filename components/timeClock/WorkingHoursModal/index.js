@@ -7,7 +7,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TimePicker from "../../common/TimePicker";
 import LoadingIndicator from "../../common/LoadingIndicator";
 
-import { getUserBioInfoById, updateUserBioInfoById } from "../../../services/database/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo } from "../../../services/state/userBioInfo";
+import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
 
 import styles from "./styles";
 
@@ -16,11 +17,12 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
     const [endTime, setEndTime] = useState(new Date(2024, 9, 4, 17));
     const [loading, setLoading] = useState(true);
+    const bioInfoContext = useBioInfo();
 
     // async effect to load user working hours data
     useEffect(() => {
         (async () => {
-            const userInfo = await getUserBioInfoById(userId);
+            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
             if (userInfo) {
                 if ("workStartTime" in userInfo) {
                     const savedStartTime = userInfo.workStartTime.split(":");
