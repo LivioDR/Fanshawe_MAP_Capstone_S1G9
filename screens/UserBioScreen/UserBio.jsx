@@ -13,9 +13,9 @@ import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
 import { getImageForUserId } from "../../services/database/profileImage";
-import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getTeamInfoById } from "../../services/database/userBioInfo";
 import { getOpenTimeLog } from "../../services/database/timeClock";
-
+import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -47,16 +47,18 @@ const UserBio = ({ userId, canEdit = true }) => {
         userId = authUserId
     }
 
+    const bioInfoContext = useBioInfo()
+
     useEffect(()=>{
         const getData = async(id) => {
             // get user data
-            let data = await getUserBioInfoById(id)
+            let data = await getOrLoadUserBioInfo(id, bioInfoContext)
             setUserData(data)
 
             // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                const supervisorData = await getUserBioInfoById(superId)
+                const supervisorData = await getOrLoadUserBioInfo(superId, bioInfoContext)
                 // get supervisor data
                 setSuperData(supervisorData)
             }
@@ -74,18 +76,20 @@ const UserBio = ({ userId, canEdit = true }) => {
             setTeamData(teamInfo)
 
             // set profle picture
-            const img = await getImageForUserId(userId)
+            const img = await getImageForUserId(id)
             setImgUrl(img)
 
-            // time clock data
-            const timeLog = await getOpenTimeLog(userId)
-            if (timeLog) {
-                const newClockStatus = {
-                    clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
-                    onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
-                    timeLog,
+            // time clock data, only load if this is not the logged in user
+            if (id !== authUserId) {
+                const timeLog = await getOpenTimeLog(id)
+                if (timeLog) {
+                    const newClockStatus = {
+                        clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
+                        onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
+                        timeLog,
+                    }
+                    setClockStatus(newClockStatus)
                 }
-                setClockStatus(newClockStatus)
             }
 
             // show the data

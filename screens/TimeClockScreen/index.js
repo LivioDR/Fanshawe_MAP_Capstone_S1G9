@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useCredentials } from "../../services/state/userCredentials";
 
 // RN components
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
@@ -11,10 +11,10 @@ import ClockButtons from "../../components/timeClock/ClockButtons";
 import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 
-// database
+// database and state
 import { Timestamp } from "firebase/firestore";
 import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
-import { getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
 
 // styles
 import styles from "./styles";
@@ -34,6 +34,9 @@ export default function HomeScreen() {
 
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
+
+    // get context for user bio
+    const bioInfoContext = useBioInfo();
 
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
@@ -57,7 +60,8 @@ export default function HomeScreen() {
                 }
             }
 
-            const userInfo = await getUserBioInfoById(userId);
+            // get or load user bio info
+            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
                 setIsSalaried(userInfo.salaried);
