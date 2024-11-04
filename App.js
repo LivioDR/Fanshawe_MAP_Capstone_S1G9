@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 // hooks and providers
 import { useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
+import { UserBioInfoProvider } from './services/state/userBioInfo';
 
 // custom components
 import LoginScreen from './screens/LoginScreen';
@@ -31,8 +32,12 @@ export default function App() {
 
     return (
         <CredentialProvider userCreds={loginCredential}>
+        <UserBioInfoProvider>
+
             <StatusBar style="auto" />
             {shownScreen}
+
+        </UserBioInfoProvider>
         </CredentialProvider>
     );
 }
