@@ -1,10 +1,12 @@
 import { createContext, useContext, useState } from "react";
 
 import { getTeamInfoById, getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById } from "../database/userBioInfo";
+import { getImageForUserId, setImageForUserId } from "../database/profileImage";
 
 const defaultState = {
     bios: {},
     teams: {},
+    images: {},
 };
 
 const UserBioInfoContext = createContext(defaultState);
@@ -33,10 +35,12 @@ export function useBioInfo() {
  */
 export async function getOrLoadUserBioInfo(userId, bioState) {
     if (bioState.bios[userId]) {
+        console.log("getting user from state");
         return bioState.bios[userId];
     }
 
     const bio = await getUserBioInfoById(userId);
+    console.log("getting user from db");
 
     if (bio) {
         bioState.updateBio({ bios: { ...bioState.bios, [userId]: bio } });
@@ -98,10 +102,12 @@ export async function updateUserBioInfo(userId, data, bioState) {
  */
 export async function getOrLoadTeamInfo(teamId, bioState) {
     if (bioState.teams[teamId]) {
+        console.log("getting team from state");
         return bioState.teams[teamId];
     }
 
     const team = await getTeamInfoById(teamId);
+    console.log("getting team from db");
 
     if (team) {
         bioState.updateBio({ teams: { ...bioState.teams, [teamId]: team } });
@@ -117,4 +123,42 @@ export async function getOrLoadTeamInfo(teamId, bioState) {
 export async function getTeamMemberIds(teamId, bioState) {
     const teamInfo = await getOrLoadTeamInfo(teamId, bioState);
     return teamInfo.employees;
+}
+
+/**
+ * Retrieve from state or load the profile image URL for the specified user.
+ * @param {object} bioState current bio state from useBioInfo
+ */
+export async function getOrLoadProfileImage(userId, bioState) {
+    if (bioState.images[userId]) {
+        console.log("getting image from state");
+        return bioState.images[userId];
+    }
+
+    const urlPath = await getImageForUserId(userId);
+    console.log("getting image from db");
+
+    if (urlPath) {
+        bioState.updateBio({ images: { ...bioState.images, [userId]: urlPath } });
+    }
+
+    return urlPath;
+}
+
+/**
+ * Set the user's profile image, also updating state.
+ * @param {string} userId user ID to update
+ * @param {string} uri image URI
+ * @param {function} setLoading loading state function
+ * @param {object} bioState current bio state from useBioInfo
+ * @returns the URL path of the uploaded image, or undefined if failed
+ */
+export async function setProfileImage(userId, uri, setLoading, bioState) {
+    const urlPath = await setImageForUserId(userId, uri, setLoading);
+
+    if (urlPath) {
+        bioState.updateBio({ images: { ...bioState.images, [userId]: urlPath } });
+    }
+
+    return urlPath
 }
