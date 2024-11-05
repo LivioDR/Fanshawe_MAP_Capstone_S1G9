@@ -7,8 +7,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TimePicker from "../../common/TimePicker";
 import LoadingIndicator from "../../common/LoadingIndicator";
 
-import { useBioInfo, getOrLoadUserBioInfo } from "../../../services/state/userBioInfo";
-import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
 
 import styles from "./styles";
 
@@ -51,9 +50,10 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setStartTime(newStartTime);
 
         // make DB update
-        const success = updateUserBioInfoById(
+        const success = updateUserBioInfo(
             userId,
-            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
+            bioInfoContext
         );
 
         // revert state if necessary
@@ -72,9 +72,10 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setEndTime(newEndTime);
 
         // make DB update
-        const success = updateUserBioInfoById(
+        const success = updateUserBioInfo(
             userId,
-            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
+            bioInfoContext
         );
 
         // revert state if necessary
