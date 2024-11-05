@@ -75,7 +75,8 @@ export async function updateUserBioInfo(userId, data, bioState) {
     // assume update will be successful and update state first
     // save current state in case we need to revert state
     const lastBio = bioState.bios[userId];
-    bioState.updateBio({ bios: { ...bioState.bios, [userId]: data } });
+    const newState = { bios: { ...bioState.bios, [userId]: { ...lastBio, ...data } } }
+    bioState.updateBio(newState);
 
     // do database update
     const success = await updateUserBioInfoById(userId, data);
