@@ -67,9 +67,4 @@ const getTeamInfoById = async(id) => {
     return teamData
 }
 
-const getTeamMembersIdsByTeamId = async(id) => {
-    const team = await getTeamInfoById(id)
-    return team.employees
-}
-
-export { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById, getTeamInfoById, getTeamMembersIdsByTeamId }
+export { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById, getTeamInfoById }
