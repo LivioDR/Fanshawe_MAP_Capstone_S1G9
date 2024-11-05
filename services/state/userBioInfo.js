@@ -1,9 +1,10 @@
 import { createContext, useContext, useState } from "react";
 
-import { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById } from "../database/userBioInfo";
+import { getTeamInfoById, getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById } from "../database/userBioInfo";
 
 const defaultState = {
     bios: {},
+    teams: {},
 };
 
 const UserBioInfoContext = createContext(defaultState);
@@ -89,4 +90,31 @@ export async function updateUserBioInfo(userId, data, bioState) {
     }
 
     return success;
+}
+
+/**
+ * Retrieve from state or load team info for the specified team.
+ * @param {object} bioState current bio state from useBioInfo
+ */
+export async function getOrLoadTeamInfo(teamId, bioState) {
+    if (bioState.teams[teamId]) {
+        return bioState.teams[teamId];
+    }
+
+    const team = await getTeamInfoById(teamId);
+
+    if (team) {
+        bioState.updateBio({ teams: { ...bioState.teams, [teamId]: team } });
+    }
+
+    return team;
+}
+
+/**
+ * Retrieve from state or load the list of employee IDs for the specified team.
+ * @param {object} bioState current bio state from useBioInfo
+ */
+export async function getTeamMemberIds(teamId, bioState) {
+    const teamInfo = await getOrLoadTeamInfo(teamId, bioState);
+    return teamInfo.employees;
 }
