@@ -12,9 +12,8 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
-import { getImageForUserId } from "../../services/database/profileImage";
 import { getOpenTimeLog } from "../../services/database/timeClock";
-import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo } from "../../services/state/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -75,7 +74,7 @@ const UserBio = ({ userId, canEdit = true }) => {
             setTeamData(teamInfo)
 
             // set profle picture
-            const img = await getImageForUserId(id)
+            const img = await getOrLoadProfileImage(id, bioInfoContext)
             setImgUrl(img)
 
             // time clock data, only load if this is not the logged in user

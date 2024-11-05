@@ -10,16 +10,15 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
 import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
+import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
 import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
-import { getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
+import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
 
 // styles
 import styles from "./styles";
-import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
-import { getImageForUserId } from "../../services/database/profileImage";
 
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -67,7 +66,7 @@ export default function HomeScreen() {
                 setIsSalaried(userInfo.salaried);
             }
 
-            const userImageURL = await getImageForUserId(userId);
+            const userImageURL = await getOrLoadProfileImage(userId, bioInfoContext);
             if (userImageURL) {
                 setUserProfileImage(userImageURL);
             }
