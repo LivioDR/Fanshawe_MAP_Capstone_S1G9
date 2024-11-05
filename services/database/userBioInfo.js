@@ -24,13 +24,16 @@ const getUserBioInfoById = async(id) => {
 }
 
 const setUserBioInfoById = async(id, userData) => {
+    let result = false
     try{
         const docRef = doc(db, usersColName, id)
-        const result = await setDoc(docRef, userData)
+        await setDoc(docRef, userData)
+        result = true
     }
     catch(e){
         console.error(e)
     }
+    return result
 }
 
 const updateUserBioInfoById = async(id, infoToUpdate) => {

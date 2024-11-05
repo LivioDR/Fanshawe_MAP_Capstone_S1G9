@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { getUserBioInfoById } from "../database/userBioInfo";
+import { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById } from "../database/userBioInfo";
 
 const defaultState = {
     bios: {},
@@ -28,7 +28,7 @@ export function useBioInfo() {
 
 /**
  * Retrieve from state or load bio info for the specified user.
- * @param {function} bioState current bio state from useBioInfo
+ * @param {object} bioState current bio state from useBioInfo
  */
 export async function getOrLoadUserBioInfo(userId, bioState) {
     if (bioState.bios[userId]) {
@@ -42,4 +42,46 @@ export async function getOrLoadUserBioInfo(userId, bioState) {
     }
 
     return bio;
+}
+
+/**
+ * Set the specified user's bio info with state support.
+ * @param {string} userId user ID to set
+ * @param {object} data bio data to set
+ * @param {object} bioState current bio info state object
+ */
+export async function setUserBioInfo(userId, data, bioState) {
+    // assume set will be successful and update state first
+    // save current state in case we need to revert state
+    const lastBio = bioState.bios[userId];
+    bioState.updateBio({ bios: { ...bioState.bios, [userId]: data } });
+
+    // do database update
+    const success = await setUserBioInfoById(userId, data);
+
+    // revert state on failure
+    if (!success) {
+        bioState.updateBio({ bios: { ...bioState.bios, [userId]: lastBio } });
+    }
+}
+
+/**
+ * Update the specified user's bio info with state support.
+ * @param {string} userId user ID to update
+ * @param {object} data bio data to update
+ * @param {object} bioState current bio info state object
+ */
+export async function updateUserBioInfo(userId, data, bioState) {
+    // assume update will be successful and update state first
+    // save current state in case we need to revert state
+    const lastBio = bioState.bios[userId];
+    bioState.updateBio({ bios: { ...bioState.bios, [userId]: data } });
+
+    // do database update
+    const success = await updateUserBioInfoById(userId, data);
+
+    // revert state on failure
+    if (!success) {
+        bioState.updateBio({ bios: { ...bioState.bios, [userId]: lastBio } });
+    }
 }
