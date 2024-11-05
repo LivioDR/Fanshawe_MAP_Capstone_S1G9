@@ -63,6 +63,8 @@ export async function setUserBioInfo(userId, data, bioState) {
     if (!success) {
         bioState.updateBio({ bios: { ...bioState.bios, [userId]: lastBio } });
     }
+
+    return success;
 }
 
 /**
@@ -85,4 +87,6 @@ export async function updateUserBioInfo(userId, data, bioState) {
     if (!success) {
         bioState.updateBio({ bios: { ...bioState.bios, [userId]: lastBio } });
     }
+
+    return success;
 }
