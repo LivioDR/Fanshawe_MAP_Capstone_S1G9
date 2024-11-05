@@ -13,9 +13,8 @@ import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
 import { getImageForUserId } from "../../services/database/profileImage";
-import { getTeamInfoById } from "../../services/database/userBioInfo";
 import { getOpenTimeLog } from "../../services/database/timeClock";
-import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo } from "../../services/state/userBioInfo";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -72,7 +71,7 @@ const UserBio = ({ userId, canEdit = true }) => {
 
             // team data
             const teamId = data.teamId
-            const teamInfo = await getTeamInfoById(teamId)
+            const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
             setTeamData(teamInfo)
 
             // set profle picture

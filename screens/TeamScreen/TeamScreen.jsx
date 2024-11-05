@@ -4,10 +4,9 @@ import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../services/state/userCredentials";
-import { getTeamMembersIdsByTeamId } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./TeamScreenStyles";
-import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo, getTeamMemberIds } from "../../services/state/userBioInfo";
 
 const TeamScreen = ({ uid }) => {
 
@@ -31,7 +30,7 @@ const TeamScreen = ({ uid }) => {
     useEffect(()=>{
         (async()=>{
             const myInfo = await getOrLoadUserBioInfo(uid, bioInfoContext)
-            const myTeam = await getTeamMembersIdsByTeamId(myInfo.teamId)
+            const myTeam = await getTeamMemberIds(myInfo.teamId, bioInfoContext)
             const myTeamDetails = []
             const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
