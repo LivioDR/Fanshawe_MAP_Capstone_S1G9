@@ -32,6 +32,7 @@ export function useBioInfo() {
 /**
  * Retrieve from state or load bio info for the specified user.
  * @param {object} bioState current bio state from useBioInfo
+ * @returns user bio info, or undefined if not found
  */
 export async function getOrLoadUserBioInfo(userId, bioState) {
     if (bioState.bios[userId]) {
@@ -54,6 +55,7 @@ export async function getOrLoadUserBioInfo(userId, bioState) {
  * @param {string} userId user ID to set
  * @param {object} data bio data to set
  * @param {object} bioState current bio info state object
+ * @returns true if successful, false if failed
  */
 export async function setUserBioInfo(userId, data, bioState) {
     // assume set will be successful and update state first
@@ -77,6 +79,7 @@ export async function setUserBioInfo(userId, data, bioState) {
  * @param {string} userId user ID to update
  * @param {object} data bio data to update
  * @param {object} bioState current bio info state object
+ * @returns true if successful, false if failed
  */
 export async function updateUserBioInfo(userId, data, bioState) {
     // assume update will be successful and update state first
@@ -99,6 +102,7 @@ export async function updateUserBioInfo(userId, data, bioState) {
 /**
  * Retrieve from state or load team info for the specified team.
  * @param {object} bioState current bio state from useBioInfo
+ * @returns team info, or undefined if not found
  */
 export async function getOrLoadTeamInfo(teamId, bioState) {
     if (bioState.teams[teamId]) {
@@ -119,6 +123,7 @@ export async function getOrLoadTeamInfo(teamId, bioState) {
 /**
  * Retrieve from state or load the list of employee IDs for the specified team.
  * @param {object} bioState current bio state from useBioInfo
+ * @returns list of employees for the given team, or undefined if not found
  */
 export async function getTeamMemberIds(teamId, bioState) {
     const teamInfo = await getOrLoadTeamInfo(teamId, bioState);
@@ -128,6 +133,7 @@ export async function getTeamMemberIds(teamId, bioState) {
 /**
  * Retrieve from state or load the profile image URL for the specified user.
  * @param {object} bioState current bio state from useBioInfo
+ * @returns image URL, or undefined if not found
  */
 export async function getOrLoadProfileImage(userId, bioState) {
     if (bioState.images[userId]) {

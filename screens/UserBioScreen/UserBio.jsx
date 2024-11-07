@@ -12,8 +12,8 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
-import { getOpenTimeLog } from "../../services/database/timeClock";
 import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
+import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -46,6 +46,7 @@ const UserBio = ({ userId, canEdit = true }) => {
     }
 
     const bioInfoContext = useBioInfo()
+    const timeLogContext = useTimeLog()
 
     useEffect(()=>{
         const getData = async(id) => {
@@ -79,7 +80,7 @@ const UserBio = ({ userId, canEdit = true }) => {
 
             // time clock data, only load if this is not the logged in user
             if (id !== authUserId) {
-                const timeLog = await getOpenTimeLog(id)
+                const timeLog = await getOrLoadOpenTimeLog(id, timeLogContext)
                 if (timeLog) {
                     const newClockStatus = {
                         clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,

@@ -14,8 +14,9 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
-import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
+import { createTimeLog, updateTimeLog } from "../../services/database/timeClock";
 import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
+import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 
 // styles
 import styles from "./styles";
@@ -36,11 +37,13 @@ export default function HomeScreen() {
 
     // get context for user bio
     const bioInfoContext = useBioInfo();
+    // and for time logs
+    const timeLogContext = useTimeLog();
 
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
         (async () => {
-            const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
+            const curTimeLog = await getOrLoadOpenTimeLog(userId, timeLogContext).catch((err) => console.error(err));
 
             if (curTimeLog) {
                 setTimeLog(curTimeLog);
