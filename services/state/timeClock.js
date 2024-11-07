@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { getOpenTimeLog, updateTimeLog as updateTimeLogDB } from "../database/timeClock";
+import { createTimeLog, getOpenTimeLog, updateTimeLog as updateTimeLogDB } from "../database/timeClock";
 
 const defaultState = {
     logs: {},
@@ -70,4 +70,27 @@ export async function updateTimeLog(userId, data, timeLogState) {
     }
 
     return success;
+}
+
+/**
+ * Create a new time log for the specified user, clocking in at the specified time.
+ * @param {string} userId user ID to clock in
+ * @param {Timestamp} clockInTime time the user clocked in
+ * @param {object} timeLogState current time log state object
+ * @returns created TimeLog, or undefined if failed for some reason
+ */
+export async function clockIn(userId, clockInTime, timeLogState) {
+    // attempt creating a new time log first
+    const newTimeLog = await createTimeLog(userId, clockInTime);
+
+    // failed, return the undefined time log
+    if (!newTimeLog) {
+        return newTimeLog;
+    }
+
+    // update state with new time log
+    timeLogState.updateLog({ logs: { ...timeLogState.logs, [userId]: newTimeLog } });
+
+    // return created time log
+    return newTimeLog;
 }

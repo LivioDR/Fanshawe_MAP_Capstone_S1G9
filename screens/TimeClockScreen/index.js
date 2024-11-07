@@ -14,9 +14,8 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
-import { createTimeLog } from "../../services/database/timeClock";
 import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog } from "../../services/state/timeClock";
+import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn } from "../../services/state/timeClock";
 
 // styles
 import styles from "./styles";
@@ -117,8 +116,7 @@ export default function HomeScreen() {
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
-            // TODO: update hardcoded user id
-            const newTimeLog = await createTimeLog(userId, Timestamp.now());
+            const newTimeLog = await clockIn(userId, Timestamp.now(), timeLogContext);
             if (newTimeLog) {
                 setTimeLog(newTimeLog);
                 setClockedIn(true);
