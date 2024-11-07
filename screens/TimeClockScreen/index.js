@@ -14,9 +14,9 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
-import { createTimeLog, updateTimeLog } from "../../services/database/timeClock";
+import { createTimeLog } from "../../services/database/timeClock";
 import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
+import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog } from "../../services/state/timeClock";
 
 // styles
 import styles from "./styles";
@@ -103,8 +103,8 @@ export default function HomeScreen() {
         newTimeLog[timeProp] = curTime;
         setTimeLog(newTimeLog);
 
-        // make update in Firebase
-        const success = await updateTimeLog(newTimeLog);
+        // make update in Firebase and global state
+        const success = await updateTimeLog(userId, newTimeLog, timeLogContext);
 
         // if we fail, revert state
         if (!success) {
@@ -152,7 +152,7 @@ export default function HomeScreen() {
             }
             setTimeLog(null);
 
-            // make update in Firebase
+            // make update in Firebase and global state
             const success = await updateTimeLog(newTimeLog);
 
             // if we fail, revert state
