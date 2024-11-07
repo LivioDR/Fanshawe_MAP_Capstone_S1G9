@@ -64,7 +64,7 @@ export async function updateTimeLog(timeLog) {
  * Create a new time log for the specified user, clocking in at the specified time.
  * @param {string} userId user ID to clock in
  * @param {Timestamp} clockInTime time the user clocked in
- * @returns created TimeLog, or null if failed for some reason
+ * @returns created TimeLog, or undefined if failed for some reason
  */
 export async function createTimeLog(userId, clockInTime) {
     try {
@@ -82,6 +82,6 @@ export async function createTimeLog(userId, clockInTime) {
     } catch (error) {
         // catch and log any errors and return false
         console.error(`Error creating time log:`, error);
-        return null;
+        return undefined;
     }
 }
