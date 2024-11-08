@@ -94,3 +94,27 @@ export async function clockIn(userId, clockInTime, timeLogState) {
     // return created time log
     return newTimeLog;
 }
+
+/**
+ * Clock out the specified user, closing the open time log and deleting it from state.
+ * @param {string} userId user ID to clock out
+ * @param {TimeLog} closedTimeLog updated time log that we're closing
+ * @param {object} timeLogState current time log state object
+ * @returns true if successful, false if failed
+ */
+export async function clockOut(userId, closedTimeLog, timeLogState) {
+    // update database first
+    const success = await updateTimeLogDB(closedTimeLog);
+
+    // if failed, just return false
+    if (!success) {
+        return false;
+    }
+
+    // successful update in DB, remove time log from state
+    const newLogs = { ...timeLogState.logs };
+    delete newLogs[userId];
+    timeLogState.updateLog({ logs: newLogs });
+
+    return true;
+}

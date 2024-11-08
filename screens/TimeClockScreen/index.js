@@ -15,7 +15,7 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 // database and state
 import { Timestamp } from "firebase/firestore";
 import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn } from "../../services/state/timeClock";
+import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } from "../../services/state/timeClock";
 
 // styles
 import styles from "./styles";
@@ -151,7 +151,7 @@ export default function HomeScreen() {
             setTimeLog(null);
 
             // make update in Firebase and global state
-            const success = await updateTimeLog(newTimeLog);
+            const success = await clockOut(userId, newTimeLog, timeLogContext);
 
             // if we fail, revert state
             if (!success) {
