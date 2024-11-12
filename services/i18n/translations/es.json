@@ -1,4 +1,30 @@
 {
+    "common": {
+        "copy": "Desarrollado por IndusTree 🌳 © derechos de autor 2024",
+
+        "logOut": "Cerrar la sesión",
+
+        "nav": {
+            "company": "Empresa",
+            "home": "Hogar",
+            "profile": "Perfil"
+        }
+    },
+
+    "login": {
+        "email": "Email",
+        "password": "Contraseña",
+
+        "login": "Iniciar sesión",
+        "forgotPassword": "¿Olvidó la contraseña?",
+
+        "success": "Éxito {{icon}}",
+        "error": "Error {{icon}}",
+
+        "sendPasswordReset": "Restablecer la contraseña",
+        "passwordResetSuccess": "¡Email de restablecimiento de contraseña enviado!"
+    },
+    
     "timeClock": {
         "welcome": "Bienvenido, {{name}}.",
         "setOfficeHours": "Establecer un horario de oficina regular",
@@ -17,10 +43,10 @@
         },
 
         "buttons": {
-            "clockIn": "Clock In",
-            "clockOut": "Clock Out",
-            "startLunch": "Start Lunch",
-            "endLunch": "End Lunch"
+            "clockIn": "Fichar",
+            "clockOut": "Fichar al salir",
+            "startLunch": "Empezar el almuerzo",
+            "endLunch": "Terminar del almuerzo"
         },
 
         "workingHours": {
@@ -32,6 +58,13 @@
     },
 
     "errors": {
-        "generic": "Algo salió mal, inténtalo de nuevo más tarde."
+        "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
+
+        "login": {
+            "signOut": "Error al cerrar sesión.",
+            "invalidEmail": "Por favor ingrese un email válido.",
+            "noPassword": "Se requiere contraseña.",
+            "invalidCredentials": "Nombre de usuario o contraseña no válidos."
+        }
     }
 }

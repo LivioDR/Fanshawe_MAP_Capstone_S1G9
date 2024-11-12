@@ -1,4 +1,30 @@
 {
+    "common": {
+        "copy": "Powered by IndusTree 🌳 © Copyright 2024",
+
+        "logOut": "Log Out",
+
+        "nav": {
+            "company": "Company",
+            "home": "Home",
+            "profile": "Profile"
+        }
+    },
+
+    "login": {
+        "email": "E-mail",
+        "password": "Password",
+
+        "login": "Login",
+        "forgotPassword": "Forgot password",
+
+        "success": "Success {{icon}}",
+        "error": "Error {{icon}}",
+
+        "sendPasswordReset": "Reset Password",
+        "passwordResetSuccess": "Password reset email sent!"
+    },
+    
     "timeClock": {
         "welcome": "Welcome, {{name}}.",
         "setOfficeHours": "Set regular in-office hours",
@@ -32,6 +58,13 @@
     },
 
     "errors": {
-        "generic": "Something went wrong, try again later."
+        "generic": "Something went wrong, try again later.",
+
+        "login": {
+            "signOut": "Error signing out.",
+            "invalidEmail": "Please enter a valid email.",
+            "noPassword": "Password is required.",
+            "invalidCredentials": "Invalid username or password."
+        }
     }
 }

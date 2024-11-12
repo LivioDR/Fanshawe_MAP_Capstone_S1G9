@@ -1,3 +1,6 @@
+// localization
+import { useTranslation } from "react-i18next";
+
 // RN elements
 import { Button } from "react-native";
 
@@ -29,6 +32,8 @@ const NavTheme = {
 };
 
 export default function HomeScreen({ logOut }) {
+    const { t } = useTranslation();
+
     return (
         <NavigationContainer theme={NavTheme}>
             <Tab.Navigator
@@ -38,7 +43,7 @@ export default function HomeScreen({ logOut }) {
                     headerLeft: () => (
                         <Button
                             onPress={logOut}
-                            title="Log Out"
+                            title={t("common.logOut")}
                             color={accent}
                         />
                     ),
@@ -60,6 +65,7 @@ export default function HomeScreen({ logOut }) {
                                 color={color}
                             />
                         ),
+                        tabBarLabel: t("common.nav.company"),
                     }}
                 />
 
@@ -74,6 +80,7 @@ export default function HomeScreen({ logOut }) {
                                 color={color}
                             />
                         ),
+                        tabBarLabel: t("common.nav.home"),
                     }}
                 />
 
@@ -89,6 +96,7 @@ export default function HomeScreen({ logOut }) {
                                 color={color}
                             />
                         ),
+                        tabBarLabel: t("common.nav.profile"),
                     }}
                 />
             </Tab.Navigator>
