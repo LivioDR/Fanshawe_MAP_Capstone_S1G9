@@ -14,6 +14,11 @@ export default UserBioStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
     },
+    button: {
+        height: 50,
+        width: undefined,
+        minWidth: "40%"
+    },
     loading: {
         flex: 1,
         alignItems: "center",

@@ -149,8 +149,8 @@ const UserBio = ({ userId, canEdit = true }) => {
             </View>
             {userId === authUserId &&
             <View style={bioStyles.buttonsWrapper}>
-                <UiButton label={"PTO"} type="default" funcToCall={showPto}/>
-                <UiButton label={"Emergency contacts"} type="warning"/>
+                <UiButton label={"PTO"} type="default" funcToCall={showPto} customStyles={{ wrapper: bioStyles.button }}/>
+                <UiButton label={"Emergency contacts"} type="warning" customStyles={{ wrapper: bioStyles.button }}/>
             </View>}
         </SafeAreaView>
         </>
