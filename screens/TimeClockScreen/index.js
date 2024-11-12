@@ -1,25 +1,24 @@
 // hooks
 import { useEffect, useState } from "react";
-import { useCredentials } from "../../utilities/userCredentialUtils";
+import { useCredentials } from "../../services/state/userCredentials";
 
 // RN components
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 // custom components
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import ClockButtons from "../../components/timeClock/ClockButtons";
 import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
+import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
-// database
+// database and state
 import { Timestamp } from "firebase/firestore";
-import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
-import { getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
+import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } from "../../services/state/timeClock";
 
 // styles
 import styles from "./styles";
-import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
-import { getImageForUserId } from "../../services/database/profileImage";
 
 export default function HomeScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -35,10 +34,15 @@ export default function HomeScreen() {
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
 
+    // get context for user bio
+    const bioInfoContext = useBioInfo();
+    // and for time logs
+    const timeLogContext = useTimeLog();
+
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
         (async () => {
-            const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
+            const curTimeLog = await getOrLoadOpenTimeLog(userId, timeLogContext).catch((err) => console.error(err));
 
             if (curTimeLog) {
                 setTimeLog(curTimeLog);
@@ -57,13 +61,14 @@ export default function HomeScreen() {
                 }
             }
 
-            const userInfo = await getUserBioInfoById(userId);
+            // get or load user bio info
+            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
                 setIsSalaried(userInfo.salaried);
             }
 
-            const userImageURL = await getImageForUserId(userId);
+            const userImageURL = await getOrLoadProfileImage(userId, bioInfoContext);
             if (userImageURL) {
                 setUserProfileImage(userImageURL);
             }
@@ -97,8 +102,8 @@ export default function HomeScreen() {
         newTimeLog[timeProp] = curTime;
         setTimeLog(newTimeLog);
 
-        // make update in Firebase
-        const success = await updateTimeLog(newTimeLog);
+        // make update in Firebase and global state
+        const success = await updateTimeLog(userId, newTimeLog, timeLogContext);
 
         // if we fail, revert state
         if (!success) {
@@ -111,8 +116,7 @@ export default function HomeScreen() {
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
-            // TODO: update hardcoded user id
-            const newTimeLog = await createTimeLog(userId, Timestamp.now());
+            const newTimeLog = await clockIn(userId, Timestamp.now(), timeLogContext);
             if (newTimeLog) {
                 setTimeLog(newTimeLog);
                 setClockedIn(true);
@@ -146,8 +150,8 @@ export default function HomeScreen() {
             }
             setTimeLog(null);
 
-            // make update in Firebase
-            const success = await updateTimeLog(newTimeLog);
+            // make update in Firebase and global state
+            const success = await clockOut(userId, newTimeLog, timeLogContext);
 
             // if we fail, revert state
             if (!success) {

@@ -11,11 +11,9 @@ import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
-import { useCredentials } from "../../utilities/userCredentialUtils";
-import { getImageForUserId } from "../../services/database/profileImage";
-import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
-import { getOpenTimeLog } from "../../services/database/timeClock";
-
+import { useCredentials } from "../../services/state/userCredentials";
+import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
+import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -29,12 +27,19 @@ const UserBio = ({ userId, canEdit = true }) => {
     const [clockStatus, setClockStatus] = useState({})
     const [showEditModal, setShowEditModal] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(false)
+    const [needsRefresh, setNeedsRefresh] = useState(false)
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
     const showPto = () => {setShowPtoModal(true)}
-    const hidePto = () => {setShowPtoModal(false)}
+    const hidePto = () => {
+        setShowPtoModal(false)
+        // flag that we need to refresh the user data from state when PTO modal is closed
+        // possible TODO: use global state directly in this screen instead of duplicating state,
+        // which would allow circumventing this
+        setNeedsRefresh(true)
+    }
     
     const route = useRoute()
     if (route && route.params?.id) {
@@ -47,16 +52,36 @@ const UserBio = ({ userId, canEdit = true }) => {
         userId = authUserId
     }
 
+    // set an effect that refreshes the current user's bio data if it's needed
+    // normally, updating a dependent state var in an effect isn't a good idea because
+    // it can cause infinite loops, but this case is safe because we have a conditional
+    // it will run once when the screen opens and do nothing,
+    // once when the PTO modal is closed because needsRefresh = true,
+    // then run once more after changing needsRefresh to false and do nothing
+    // not the most elegant solution, but it's quick and dirty and it works without a huge overhaul of state in the app
+    useEffect(() => {
+        (async () => {
+            if (needsRefresh) {
+                const data = await getOrLoadUserBioInfo(userId, bioInfoContext)
+                setUserData(data)
+                setNeedsRefresh(false)
+            }
+        })()
+    }, [needsRefresh])
+
+    const bioInfoContext = useBioInfo()
+    const timeLogContext = useTimeLog()
+
     useEffect(()=>{
         const getData = async(id) => {
             // get user data
-            let data = await getUserBioInfoById(id)
+            let data = await getOrLoadUserBioInfo(id, bioInfoContext)
             setUserData(data)
 
             // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                const supervisorData = await getUserBioInfoById(superId)
+                const supervisorData = await getOrLoadUserBioInfo(superId, bioInfoContext)
                 // get supervisor data
                 setSuperData(supervisorData)
             }
@@ -70,22 +95,24 @@ const UserBio = ({ userId, canEdit = true }) => {
 
             // team data
             const teamId = data.teamId
-            const teamInfo = await getTeamInfoById(teamId)
+            const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
             setTeamData(teamInfo)
 
             // set profle picture
-            const img = await getImageForUserId(userId)
+            const img = await getOrLoadProfileImage(id, bioInfoContext)
             setImgUrl(img)
 
-            // time clock data
-            const timeLog = await getOpenTimeLog(userId)
-            if (timeLog) {
-                const newClockStatus = {
-                    clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
-                    onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
-                    timeLog,
+            // time clock data, only load if this is not the logged in user
+            if (id !== authUserId) {
+                const timeLog = await getOrLoadOpenTimeLog(id, timeLogContext)
+                if (timeLog) {
+                    const newClockStatus = {
+                        clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
+                        onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
+                        timeLog,
+                    }
+                    setClockStatus(newClockStatus)
                 }
-                setClockStatus(newClockStatus)
             }
 
             // show the data
@@ -124,7 +151,6 @@ const UserBio = ({ userId, canEdit = true }) => {
                 dismiss={hidePto}
                 pto={userData.remainingPTODays}
                 sick={userData.remainingSickDays}
-                updateInfo={setUserData}
             />
             <BioHeader 
                 name={`${userData.firstName} ${userData.lastName}`} 

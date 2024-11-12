@@ -7,7 +7,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TimePicker from "../../common/TimePicker";
 import LoadingIndicator from "../../common/LoadingIndicator";
 
-import { getUserBioInfoById, updateUserBioInfoById } from "../../../services/database/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
 
 import styles from "./styles";
 
@@ -16,11 +16,12 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
     const [endTime, setEndTime] = useState(new Date(2024, 9, 4, 17));
     const [loading, setLoading] = useState(true);
+    const bioInfoContext = useBioInfo();
 
     // async effect to load user working hours data
     useEffect(() => {
         (async () => {
-            const userInfo = await getUserBioInfoById(userId);
+            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
             if (userInfo) {
                 if ("workStartTime" in userInfo) {
                     const savedStartTime = userInfo.workStartTime.split(":");
@@ -49,9 +50,10 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setStartTime(newStartTime);
 
         // make DB update
-        const success = updateUserBioInfoById(
+        const success = updateUserBioInfo(
             userId,
-            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
+            bioInfoContext
         );
 
         // revert state if necessary
@@ -70,9 +72,10 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setEndTime(newEndTime);
 
         // make DB update
-        const success = updateUserBioInfoById(
+        const success = updateUserBioInfo(
             userId,
-            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
+            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
+            bioInfoContext
         );
 
         // revert state if necessary
