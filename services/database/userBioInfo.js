@@ -24,13 +24,16 @@ const getUserBioInfoById = async(id) => {
 }
 
 const setUserBioInfoById = async(id, userData) => {
+    let result = false
     try{
         const docRef = doc(db, usersColName, id)
-        const result = await setDoc(docRef, userData)
+        await setDoc(docRef, userData)
+        result = true
     }
     catch(e){
         console.error(e)
     }
+    return result
 }
 
 const updateUserBioInfoById = async(id, infoToUpdate) => {
@@ -64,9 +67,4 @@ const getTeamInfoById = async(id) => {
     return teamData
 }
 
-const getTeamMembersIdsByTeamId = async(id) => {
-    const team = await getTeamInfoById(id)
-    return team.employees
-}
-
-export { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById, getTeamInfoById, getTeamMembersIdsByTeamId }
+export { getUserBioInfoById, setUserBioInfoById, updateUserBioInfoById, getTeamInfoById }

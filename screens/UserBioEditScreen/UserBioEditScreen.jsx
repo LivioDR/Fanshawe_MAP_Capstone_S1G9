@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Modal } from "react-native";
+import { View, Text, Modal } from "react-native";
 import styles from "./UserBioEditScreenStyles";
 import UiButton from "../../components/common/UiButton/UiButton";
 import ImageUploadField from "../../components/userBioEdit/ImageUploadField/ImageUploadField";
-import { updateUserBioInfoById } from "../../services/database/userBioInfo";
+import { useBioInfo, updateUserBioInfo } from "../../services/state/userBioInfo";
 import InputField from "../../components/common/InputField/InputField";
 
 const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismiss, isShown}) => {
 
     const [address, setAddress] = useState(userData.address)
     const [alert, setAlert] = useState(null)
+    const bioInfoContext = useBioInfo()
 
     useEffect(()=>{
         setAddress(userData.address)
@@ -24,7 +25,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
         // saving the user info in Firestore
         if(address && address?.trim() !== ''){
             setAlert(null)
-            if(await updateUserBioInfoById(uid, {'address': address})){
+            if(await updateUserBioInfo(uid, {'address': address}, bioInfoContext)){
                 setUserData(prev => {
                     let newData = {...prev,
                         address: address,

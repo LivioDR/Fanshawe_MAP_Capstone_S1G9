@@ -13,7 +13,7 @@ export class TimeLog {
  * Get the currently open (clocked in but not out) time log for a user.
  * Returns null if none is found.
  * @param {string} userId user ID to fetch for
- * @returns a TimeLog object, or null
+ * @returns a TimeLog object, or undefined
  */
 export async function getOpenTimeLog(userId) {
     // get list of time logs for this user with no clock out time
@@ -28,7 +28,7 @@ export async function getOpenTimeLog(userId) {
         )
     );
 
-    let timeLog = null;
+    let timeLog = undefined;
     snapshot.forEach((doc) => (
         timeLog = Object.assign(new TimeLog(), { ...doc.data(), id: doc.id, userId })
     ));
@@ -64,7 +64,7 @@ export async function updateTimeLog(timeLog) {
  * Create a new time log for the specified user, clocking in at the specified time.
  * @param {string} userId user ID to clock in
  * @param {Timestamp} clockInTime time the user clocked in
- * @returns created TimeLog, or null if failed for some reason
+ * @returns created TimeLog, or undefined if failed for some reason
  */
 export async function createTimeLog(userId, clockInTime) {
     try {
@@ -82,6 +82,6 @@ export async function createTimeLog(userId, clockInTime) {
     } catch (error) {
         // catch and log any errors and return false
         console.error(`Error creating time log:`, error);
-        return null;
+        return undefined;
     }
 }

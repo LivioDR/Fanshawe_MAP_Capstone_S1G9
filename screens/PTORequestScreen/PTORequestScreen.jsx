@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { View, Text, Modal, Button } from "react-native";
+import { useState } from "react";
+import { View, Text, Modal } from "react-native";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCategorySwitch";
 import styles from "./PTORequestScreenStyles";
@@ -7,10 +7,10 @@ import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 import { requestDays } from "../../services/database/ptoManagement";
-import { getUserBioInfoById } from "../../services/database/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
 
 
-const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, updateInfo}) => {
+const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) => {
 
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
@@ -19,6 +19,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
         until: new Date(),
         alert: " ",
     })
+    const bioInfoContext = useBioInfo()
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
@@ -67,12 +68,10 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
     const requestTimeOff = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
         
-        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason)
+        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
         if(result.errors.length == 0){
             updateAlert(result.message)
-    
-            updateInfo(await getUserBioInfoById(userId))
     
             setTimeout(()=>{
                 // clears the alert before closing the modal
