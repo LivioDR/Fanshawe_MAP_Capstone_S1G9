@@ -1,6 +1,9 @@
 // Expo status bar
 import { StatusBar } from 'expo-status-bar';
 
+// localization
+import { initI18next } from "./services/i18n/i18n";
+
 // hooks and providers
 import { useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
@@ -10,6 +13,9 @@ import { TimeLogProvider } from './services/state/timeClock';
 // custom components
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
+
+// initialize translation
+initI18next();
 
 export default function App() {
     const [loginCredential, setLoginCredential] = useState(null);
