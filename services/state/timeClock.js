@@ -33,12 +33,10 @@ export function useTimeLog() {
  */
 export async function getOrLoadOpenTimeLog(userId, timeLogState) {
     if (timeLogState.logs[userId]) {
-        console.log("getting open time log from state");
         return timeLogState.logs[userId];
     }
 
     const timeLog = await getOpenTimeLog(userId);
-    console.log("getting open time log from db");
 
     if (timeLog) {
         timeLogState.updateLog({ logs: { ...timeLogState.logs, [userId]: timeLog } });
