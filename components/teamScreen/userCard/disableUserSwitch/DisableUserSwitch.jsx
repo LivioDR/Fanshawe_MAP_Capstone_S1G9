@@ -14,17 +14,18 @@ const styles = StyleSheet.create({
 })
 
 
-const DisableUserSwitch = ({id, isDisabled, setDisable}) => {
+const DisableUserSwitch = ({isEnabled, setEnabled}) => {
 
 
     return(
         <View>
             <Text>
-                Disable
+                Enabled
             </Text>
             <Switch
-                value={isDisabled}
-                onChange={()=>{console.log(`Toggled user ${id}`)}}
+                value={isEnabled}
+                onChange={setEnabled}
+                ios_backgroundColor="#f00000"
             />
         </View>
     )

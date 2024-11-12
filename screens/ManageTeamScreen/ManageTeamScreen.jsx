@@ -70,7 +70,7 @@ const ManageTeamScreen = ({ uid }) => {
                     renderItem={user => (
                         <UserCard
                             interactive={false}
-                            isDisabled={user.item.isDisabled || false}
+                            isEnabled={user.item.isEnabled}
                             id={user.item.uid}
                             name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? " (me)" : ""}`}
                             role={user.item.role}
