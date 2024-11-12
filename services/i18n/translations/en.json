@@ -57,6 +57,14 @@
         }
     },
 
+    "team": {
+        "myTeam": "My Team",
+        "memberDetails": "Team Member Details",
+
+        "supervisors": "Supervisors",
+        "members": "Team Members"
+    },
+
     "errors": {
         "generic": "Something went wrong, try again later.",
 

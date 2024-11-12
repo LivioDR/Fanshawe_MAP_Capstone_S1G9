@@ -57,6 +57,14 @@
         }
     },
 
+    "team": {
+        "myTeam": "Mi equipo",
+        "memberDetails": "Perfil del miembro del equipo",
+
+        "supervisors": "Supervisores",
+        "members": "Miembros del equipo"
+    },
+
     "errors": {
         "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
 

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -10,6 +12,8 @@ import UserBio from "../UserBioScreen/UserBio";
 const Stack = createStackNavigator();
 
 export default function CompanyScreen() {
+    const { t } = useTranslation();
+
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -24,7 +28,7 @@ export default function CompanyScreen() {
                 name="MyTeamScreen"
                 component={TeamScreen}
                 options={{
-                    headerTitle: "My Team",
+                    headerTitle: t("team.myTeam"),
                 }}
             />
 
@@ -32,7 +36,7 @@ export default function CompanyScreen() {
                 name="TeamMemberDetails"
                 component={UserBio}
                 options={{
-                    headerTitle: "Team Member Details",
+                    headerTitle: t("team.memberDetails"),
                 }}
             />
         </Stack.Navigator>

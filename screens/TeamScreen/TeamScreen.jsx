@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
@@ -22,9 +23,10 @@ const TeamScreen = ({ uid }) => {
     const authUserId = userCreds.user.uid
     if (!uid) {
         uid = authUserId
-
     }
     const bioInfoContext = useBioInfo()
+
+    const { t } = useTranslation()
 
     useEffect(()=>{
         (async()=>{
@@ -97,8 +99,8 @@ const TeamScreen = ({ uid }) => {
                 style={styles.scroll.outer}
                 contentContainerStyle={styles.scroll.inner}
             >
-                {createUserCards("Supervisors", teamSupervisors)}
-                {createUserCards("Team Members", teamMembers)}
+                {createUserCards(t("team.supervisors"), teamSupervisors)}
+                {createUserCards(t("team.members"), teamMembers)}
             </ScrollView>
         </SafeAreaView>
     )
