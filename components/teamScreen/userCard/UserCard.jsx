@@ -5,8 +5,9 @@ import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import { highlight } from "../../../utilities/variables";
 import { useCredentials } from "../../../utilities/userCredentialUtils";
 import styles from "./UserCardStyles";
+import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 
-const UserCard = ({id, name, role, email, imgUrl}) => {
+const UserCard = ({id, name, role, email, imgUrl, isDisabled = false, interactive = true}) => {
     const navigation = useNavigation()
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
@@ -19,27 +20,48 @@ const UserCard = ({id, name, role, email, imgUrl}) => {
         } :
         undefined
 
-    return(
-        <TouchableHighlight
-            style={styles.container}
-            underlayColor={highlight}
-            onPress={navToDetails}
-        >
-            <>
-                <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
-                <View style={styles.textWrapper}>
-                    <Text style={styles.name}>
-                        {name}
-                    </Text>
-                    <Text style={styles.role}>
-                        {role}
-                    </Text>
-                    <Text style={styles.email}>
-                        {email}
-                    </Text>
+        if(interactive){
+            return(
+                <TouchableHighlight
+                    style={styles.container}
+                    underlayColor={highlight}
+                    onPress={navToDetails}
+                >
+                    <>
+                        <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
+                        <View style={styles.textWrapper}>
+                            <Text style={styles.name}>
+                                {name}
+                            </Text>
+                            <Text style={styles.role}>
+                                {role}
+                            </Text>
+                            <Text style={styles.email}>
+                                {email}
+                            </Text>
+                        </View>
+                    </>
+                </TouchableHighlight>
+            )
+        }
+        else{
+            return(
+                <View style={styles.container}>
+                    <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
+                    <View style={styles.textWithSwitchWrapper}>
+                        <Text style={styles.name}>
+                            {name}
+                        </Text>
+                        <Text style={styles.role}>
+                            {role}
+                        </Text>
+                        <Text style={styles.email}>
+                            {email}
+                        </Text>
+                    </View>
+                    <DisableUserSwitch id={id} isDisabled={isDisabled}/>
                 </View>
-            </>
-        </TouchableHighlight>
-    )
+            )
+        }
 }
 export default UserCard
