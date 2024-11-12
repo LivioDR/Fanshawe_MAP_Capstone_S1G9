@@ -1,3 +1,37 @@
 {
-    
+    "timeClock": {
+        "welcome": "Welcome, {{name}}.",
+        "setOfficeHours": "Set regular in-office hours",
+
+        "status": {
+            "user": {
+                "clockedOut": "You are not clocked in.",
+                "clockedIn": "You have been clocked in since {{clockInTime}}",
+                "onLunch": "You have been on lunch since {{lunchTime}}"
+            },
+            "other": {
+                "clockedOut": "{{name}} is not clocked in.",
+                "clockedIn": "{{name}} has been clocked in since {{clockInTime}}",
+                "onLunch": "{{name}} has been on lunch since {{lunchTime}}"
+            }
+        },
+
+        "buttons": {
+            "clockIn": "Clock In",
+            "clockOut": "Clock Out",
+            "startLunch": "Start Lunch",
+            "endLunch": "End Lunch"
+        },
+
+        "workingHours": {
+            "title": "Set Working Hours",
+            "description": "Use the selectors to set the hours that you are typically at work on an average day.",
+            "start": "Start Time",
+            "end": "End Time"
+        }
+    },
+
+    "errors": {
+        "generic": "Something went wrong, try again later."
+    }
 }

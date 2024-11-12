@@ -1,3 +1,6 @@
+// localization
+import { useTranslation } from "react-i18next";
+
 // hooks
 import { useEffect, useState } from "react";
 import { useCredentials } from "../../services/state/userCredentials";
@@ -38,6 +41,9 @@ export default function HomeScreen() {
     const bioInfoContext = useBioInfo();
     // and for time logs
     const timeLogContext = useTimeLog();
+
+    // localization
+    const { t } = useTranslation();
 
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
@@ -122,7 +128,7 @@ export default function HomeScreen() {
                 setClockedIn(true);
             } else {
                 // TODO: handle errors more elegantly
-                console.error("Something went wrong, try again later.");
+                console.error(t("errors.generic"));
             }
         },
 
@@ -209,8 +215,7 @@ export default function HomeScreen() {
                     </View>
 
                     <Text style={styles.welcomeText}>
-                        {/* TODO: get name from user profile */}
-                        Welcome, {userName}.
+                        {t("timeClock.welcome", { name: userName })}
                     </Text>
 
                     {/* TODO: readd later, make birthday banner display reactive */}
@@ -227,7 +232,7 @@ export default function HomeScreen() {
                         style={styles.workingHours.container}
                         onPress={() => setShowOfficeHourConfig(true)}
                     >
-                        <Text style={styles.workingHours.text}>Set regular in-office hours</Text>
+                        <Text style={styles.workingHours.text}>{t("timeClock.setOfficeHours")}</Text>
                     </TouchableOpacity>
                 }
 

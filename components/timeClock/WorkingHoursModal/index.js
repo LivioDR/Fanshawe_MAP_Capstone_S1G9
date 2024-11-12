@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { useEffect, useState } from "react";
 
 import { Modal, View, Text, TouchableHighlight, Pressable } from "react-native";
@@ -12,11 +14,12 @@ import { useBioInfo, getOrLoadUserBioInfo, updateUserBioInfo } from "../../../se
 import styles from "./styles";
 
 export default function WorkingHoursModal({ userId, shown, closeModal }) {
-    // TODO: replace these with times loaded from DB
     const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
     const [endTime, setEndTime] = useState(new Date(2024, 9, 4, 17));
     const [loading, setLoading] = useState(true);
     const bioInfoContext = useBioInfo();
+
+    const { t } = useTranslation();
 
     // async effect to load user working hours data
     useEffect(() => {
@@ -88,20 +91,17 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         <LoadingIndicator /> :
         <>
             <View>
-                <Text style={styles.title}>Set Working Hours</Text>
-                <Text style={styles.subtitle}>
-                    Use the selectors to set the hours that you are typically
-                    at work on an average day.
-                </Text>
+                <Text style={styles.title}>{t("timeClock.workingHours.title")}</Text>
+                <Text style={styles.subtitle}>{t("timeClock.workingHours.description")}</Text>
             </View>
 
             <View style={styles.picker.container}>
                 {/* TODO: fix auto popup on Android */}
-                <Text style={styles.picker.label}>Start Time</Text>
+                <Text style={styles.picker.label}>{t("timeClock.workingHours.start")}</Text>
                 <TimePicker initialValue={startTime} onChange={updateStartTime} />
             </View>
             <View style={styles.picker.container}>
-                <Text style={styles.picker.label}>End Time</Text>
+                <Text style={styles.picker.label}>{t("timeClock.workingHours.end")}</Text>
                 <TimePicker  initialValue={endTime} onChange={updateEndTime} />
             </View>
 
