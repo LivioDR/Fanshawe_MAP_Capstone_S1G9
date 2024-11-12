@@ -12,6 +12,11 @@ const options = [
         destination: "MyTeamScreen",
         icon: <MaterialIcons name="people" size={30} color="black" />,
     },
+    {
+        caption: "Manage Team",
+        destination: "ManageTeamScreen",
+        icon: <MaterialIcons name="people" size={30} color="black" />,
+    },
 ];
 
 export default function CompanyOptions() {
