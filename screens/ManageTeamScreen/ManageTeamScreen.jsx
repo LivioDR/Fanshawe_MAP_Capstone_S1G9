@@ -3,7 +3,7 @@ import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
-import { useCredentials } from "../../utilities/userCredentialUtils";
+import { useCredentials } from "../../services/state/userCredentials";
 import { getTeamMembersIdsByTeamId, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./ManageTeamScreenStyles";
