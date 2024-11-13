@@ -18,7 +18,7 @@
     },
 
     "login": {
-        "email": "E-mail",
+        "email": "Email",
         "password": "Password",
 
         "login": "Login",
@@ -64,12 +64,12 @@
     },
 
     "profile": {
-        "companyEmail": "Corporate E-mail",
+        "companyEmail": "Corporate Email",
         "address": "Address",
         "birthDate": "Birth Date",
         "team": "Team",
         "supervisor": "Supervisor",
-        "supervisorEmail": "Supervisor E-mail",
+        "supervisorEmail": "Supervisor Email",
 
         "emergencyContacts": "Emergency Contacts",
 
@@ -113,7 +113,7 @@
             "signOut": "Error signing out.",
             "invalidEmail": "Please enter a valid email.",
             "noPassword": "Password is required.",
-            "invalidCredentials": "Invalid username or password."
+            "invalidCredentials": "Invalid email or password."
         },
 
         "bio": {
