@@ -1,5 +1,6 @@
 import { firestore as db } from "../../config/firebase"
 import { doc, collection, getDoc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore"
+import { updateUserBioInfo } from "../state/userBioInfo"
 
 const usersColName = "usersInfo"
 const ptoColName = "daysOffRequests"
@@ -33,7 +34,7 @@ const checkAvailableDays = async(userId, category) => {
 
 // Add or subtracts the number of days passed to the daysToAdd variable for a user in the set category
 // To add days pass a positive value, to subtract, pass a negative value
-const updateAvailableDays = async(userId, category, daysToAdd) => {
+const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
     const dbCategory = `remaining${category.trim()}Days` // PTO || Sick
     let availableDays = 0
     let errors = []
@@ -58,8 +59,7 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
     }
 
     try{
-        const docRef = doc(db,usersColName, userId)
-        await updateDoc(docRef, {[dbCategory]: availableDays + daysToAdd})
+        await updateUserBioInfo(userId, {[dbCategory]: availableDays + daysToAdd}, bioState)
     }
     catch(e){
         errors.push(e)
@@ -80,14 +80,14 @@ const updateAvailableDays = async(userId, category, daysToAdd) => {
 
 
 // Creates a new request in the database - QA OK
-const requestDays = async(userId, managerId, category, from, until, reason) => {
+const requestDays = async(userId, managerId, category, from, until, reason, bioState) => {
     let result = false
     
     const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24)) + 1 // the range is inclusive of both the first and last day
     
     try{
         // updating the available days for the requesting user, by passing a negative value to the updateAvailableDays function
-        const updateReq = await updateAvailableDays(userId, category, -requestedDays)
+        const updateReq = await updateAvailableDays(userId, category, -requestedDays, bioState)
         // then creating a request in the database
         if(updateReq.errors.length == 0){
             const colRef = collection(db, ptoColName)
@@ -186,7 +186,7 @@ const getRequestbyId = async(id) => {
 
 
 // Reviews a request made by an employee and updates the request status and the remaining days for that employee if approved
-const reviewRequest = async(reqId, approval) => {
+const reviewRequest = async(reqId, approval, bioState) => {
     let result = false
     let errors = []
 
@@ -218,7 +218,7 @@ const reviewRequest = async(reqId, approval) => {
         
         if(!approval){
             // if the request was not approved, updates the available days for the requester to restore the days previously subtracted when creating the request
-            const updateReq = await updateAvailableDays(requestedById, category, days) // passing a positive value to give back the requested days on refusal
+            const updateReq = await updateAvailableDays(requestedById, category, days, bioState) // passing a positive value to give back the requested days on refusal
 
             if(updateReq.errors.length == 0){
                 result = true

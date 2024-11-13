@@ -27,12 +27,19 @@ const UserBio = ({ userId, canEdit = true }) => {
     const [clockStatus, setClockStatus] = useState({})
     const [showEditModal, setShowEditModal] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(false)
+    const [needsRefresh, setNeedsRefresh] = useState(false)
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
     const showPto = () => {setShowPtoModal(true)}
-    const hidePto = () => {setShowPtoModal(false)}
+    const hidePto = () => {
+        setShowPtoModal(false)
+        // flag that we need to refresh the user data from state when PTO modal is closed
+        // possible TODO: use global state directly in this screen instead of duplicating state,
+        // which would allow circumventing this
+        setNeedsRefresh(true)
+    }
     
     const route = useRoute()
     if (route && route.params?.id) {
@@ -44,6 +51,23 @@ const UserBio = ({ userId, canEdit = true }) => {
     if (!userId) {
         userId = authUserId
     }
+
+    // set an effect that refreshes the current user's bio data if it's needed
+    // normally, updating a dependent state var in an effect isn't a good idea because
+    // it can cause infinite loops, but this case is safe because we have a conditional
+    // it will run once when the screen opens and do nothing,
+    // once when the PTO modal is closed because needsRefresh = true,
+    // then run once more after changing needsRefresh to false and do nothing
+    // not the most elegant solution, but it's quick and dirty and it works without a huge overhaul of state in the app
+    useEffect(() => {
+        (async () => {
+            if (needsRefresh) {
+                const data = await getOrLoadUserBioInfo(userId, bioInfoContext)
+                setUserData(data)
+                setNeedsRefresh(false)
+            }
+        })()
+    }, [needsRefresh])
 
     const bioInfoContext = useBioInfo()
     const timeLogContext = useTimeLog()
@@ -127,7 +151,6 @@ const UserBio = ({ userId, canEdit = true }) => {
                 dismiss={hidePto}
                 pto={userData.remainingPTODays}
                 sick={userData.remainingSickDays}
-                updateInfo={setUserData}
             />
             <BioHeader 
                 name={`${userData.firstName} ${userData.lastName}`} 

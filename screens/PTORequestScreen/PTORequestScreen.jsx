@@ -10,7 +10,7 @@ import { requestDays } from "../../services/database/ptoManagement";
 import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
 
 
-const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, updateInfo}) => {
+const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) => {
 
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
@@ -68,12 +68,10 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick, up
     const requestTimeOff = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
         
-        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason)
+        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
         if(result.errors.length == 0){
             updateAlert(result.message)
-    
-            updateInfo(await getOrLoadUserBioInfo(userId, bioInfoContext))
     
             setTimeout(()=>{
                 // clears the alert before closing the modal
