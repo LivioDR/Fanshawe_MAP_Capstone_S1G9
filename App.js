@@ -12,7 +12,7 @@ import { TimeLogProvider } from './services/state/timeClock';
 
 // custom components
 import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
+import AppScreen from './screens/AppScreen';
 
 // initialize translation
 initI18next();
@@ -35,7 +35,7 @@ export default function App() {
         setLoginCredential(null);
     };
 
-    const shownScreen = loginCredential ? <HomeScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
+    const shownScreen = loginCredential ? <AppScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
 
     return (
         <CredentialProvider userCreds={loginCredential}>

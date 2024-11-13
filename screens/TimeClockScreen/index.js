@@ -23,7 +23,7 @@ import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } fr
 // styles
 import styles from "./styles";
 
-export default function HomeScreen() {
+export default function TimeClockScreen() {
     const [clockedIn, setClockedIn] = useState(false);
     const [onLunch, setOnLunch] = useState(false);
     const [takenLunch, setTakenLunch] = useState(false);

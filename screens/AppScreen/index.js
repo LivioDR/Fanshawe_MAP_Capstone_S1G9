@@ -31,7 +31,7 @@ const NavTheme = {
     }
 };
 
-export default function HomeScreen({ logOut }) {
+export default function AppScreen({ logOut }) {
     const { t } = useTranslation();
 
     return (
