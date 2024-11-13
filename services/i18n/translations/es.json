@@ -2,10 +2,10 @@
     "common": {
         "copy": "Desarrollado por IndusTree 🌳 © derechos de autor 2024",
 
-        "logOut": "Cerrar la sesión",
+        "logOut": "Cerrar sesión",
         "nav": {
             "company": "Empresa",
-            "home": "Hogar",
+            "home": "Inicio",
             "profile": "Perfil"
         },
 
@@ -18,48 +18,48 @@
     },
 
     "login": {
-        "email": "Email",
+        "email": "Correo electrónico",
         "password": "Contraseña",
 
         "login": "Iniciar sesión",
-        "forgotPassword": "¿Olvidó la contraseña?",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
 
         "success": "Éxito {{icon}}",
         "error": "Error {{icon}}",
 
         "sendPasswordReset": "Restablecer la contraseña",
-        "passwordResetSuccess": "¡Email de restablecimiento de contraseña enviado!"
+        "passwordResetSuccess": "¡Email de recuperación enviado!"
     },
     
     "timeClock": {
-        "welcome": "Bienvenido, {{name}}.",
-        "setOfficeHours": "Establecer un horario de oficina regular",
+        "welcome": "Bienvenido/a, {{name}}.",
+        "setOfficeHours": "Setear un horario de oficina regular",
 
         "status": {
             "user": {
-                "clockedOut": "You are not clocked in.",
-                "clockedIn": "You have been clocked in since {{clockInTime}}",
-                "onLunch": "You have been on lunch since {{lunchTime}}"
+                "clockedOut": "No estás registrado.",
+                "clockedIn": "Has estado registrado desde las {{clockInTime}}",
+                "onLunch": "Has estado almorzando desde las {{lunchTime}}"
             },
             "other": {
-                "clockedOut": "{{name}} is not clocked in.",
-                "clockedIn": "{{name}} has been clocked in since {{clockInTime}}",
-                "onLunch": "{{name}} has been on lunch since {{lunchTime}}"
+                "clockedOut": "{{name}} no está registrado.",
+                "clockedIn": "{{name}} ha estado registrado desde las {{clockInTime}}",
+                "onLunch": "{{name}} ha estado almorzando desdes las {{lunchTime}}"
             }
         },
 
         "buttons": {
-            "clockIn": "Fichar",
-            "clockOut": "Fichar al salir",
+            "clockIn": "Fichar entrada",
+            "clockOut": "Fichar salida",
             "startLunch": "Empezar el almuerzo",
             "endLunch": "Terminar del almuerzo"
         },
 
         "workingHours": {
-            "title": "Establecer horas de trabajo",
-            "description": "Use the selectors to set the hours that you are typically at work on an average day.",
+            "title": "Setear horas de trabajo",
+            "description": "Utiliza los selectores para setear las horas en las que trabajas en un día típico.",
             "start": "Hora de inicio",
-            "end": "Hora de finalización"
+            "end": "Hora de fin"
         }
     },
 
@@ -76,18 +76,18 @@
         "uploadPicture": "Cargar nueva foto",
 
         "pto": {
-            "pto": "PTO",
+            "pto": "Licencia",
             "sick": "Enfermedad",
 
             "daysRemaining": "Días restantes",
-            "ptoRemaining": "Días de PTO restantes",
+            "ptoRemaining": "Días de licencia restantes",
             "sickRemaining": "Días de enfermedad restantes",
-            "from": "Del",
+            "from": "Desde",
             "to": "Hasta",
             "selectCategory": "Seleccionar categoría",
-            "reason": "Razón",
+            "reason": "Motivo",
 
-            "request": "Pedir",
+            "request": "Solicitar",
 
             "daysUpdateSuccess": "Días actualizado correctamente",
             "requestSuccess": "Solicitud enviada correctamente"
@@ -107,23 +107,23 @@
     "errors": {
         "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
         "requestFailed": "Error en la solicitud de red.",
-        "unexpected": "Error inesperado encontrado.",
+        "unexpected": "Se encontró un error inesperado.",
 
         "login": {
             "signOut": "Error al cerrar sesión.",
-            "invalidEmail": "Por favor ingrese un email válido.",
+            "invalidEmail": "Por favor, ingrese una dirección de correo válida.",
             "noPassword": "Se requiere contraseña.",
-            "invalidCredentials": "Nombre de usuario o contraseña no válidos."
+            "invalidCredentials": "Correo electrónico o contraseña no válidos."
         },
 
         "bio": {
-            "invalidAddress": "Por favor ingrese un domicilio válido.",
-            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!",
+            "invalidAddress": "Por favor, ingrese un domicilio válido.",
+            "noCameraPerm": "Lo siento, necesitamos acceso a la galería para habilitar esta función!",
 
             "pto": {
-                "getAvailableFailed": "An error occurred while retrieving the available days data.",
-                "notEnoughDays": "Not enough available days. Available: {{availableDays}}. Requested: {{daysToAdd}}",
-                "requestNotFound": "Request with ID {{id}} not found."
+                "getAvailableFailed": "Ha ocurrido un error al intentar recuperar los datos de días disponibles.",
+                "notEnoughDays": "No posee suficientes días disponibles. Disponible: {{availableDays}}. Solicitado: {{daysToAdd}}",
+                "requestNotFound": "Solicitud con ID {{id}} no encontrada."
             }
         }
     }
