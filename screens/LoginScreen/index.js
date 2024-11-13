@@ -192,7 +192,7 @@ export default function LoginScreen({ loginSuccess }) {
         />
 
         <View style={styles.footer}>
-          <Text>{t("common.copy")}</Text>
+          <Text style={styles.footerText}>{t("common.copy")}</Text>
         </View>
 
         <Modal animationType="slide" visible={showModal}>
