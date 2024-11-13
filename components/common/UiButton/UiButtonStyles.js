@@ -3,9 +3,6 @@ import { dropShadowStyle, highlight } from "../../../utilities/variables";
 
 export default UiButtonStyles = StyleSheet.create({
     wrapper: {
-        display: 'flex',
-        width: '40%',
-        // height: 50,
         borderRadius: 10,
         justifyContent: 'center',
         backgroundColor: 'lightgrey',

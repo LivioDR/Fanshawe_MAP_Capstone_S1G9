@@ -8,16 +8,12 @@ export default UserBioStyles = StyleSheet.create({
         width: '100%',
     },
     buttonsWrapper: {
-        width: '100%',
-        display: 'flex',
         flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'space-around',
+        paddingHorizontal: "5%",
+        gap: 20,
     },
     button: {
-        height: 50,
-        width: undefined,
-        minWidth: "40%"
+        flex: 1,
     },
     loading: {
         flex: 1,

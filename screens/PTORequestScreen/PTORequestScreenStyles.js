@@ -14,10 +14,13 @@ export default PTORequestScreenStyles = StyleSheet.create({
         padding: 12,
     },
     btnContainer: {
-        display: 'flex',
         flexDirection: 'row',
         width: '100%',
         padding: '5%',
+        gap: 20,
         justifyContent: 'space-between'
+    },
+    button: {
+        flex: 1,
     },
 })

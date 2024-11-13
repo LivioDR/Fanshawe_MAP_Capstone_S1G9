@@ -126,11 +126,13 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
                     label={"Cancel"}
                     funcToCall={clearAndClose}
                     type="default"
+                    customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
                     label={"Request"}
                     funcToCall={requestTimeOff}
                     type="primary"
+                    customStyles={{ wrapper: styles.button }}
                     />
                 </View>
                 <Text>

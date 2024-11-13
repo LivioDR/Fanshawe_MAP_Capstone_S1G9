@@ -79,6 +79,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                             setAddress(userData.address)
                             dismiss()
                         }}
+                        customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
                         label={"Save"}
@@ -87,6 +88,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                             // save data
                             updateUserInfo()
                         }}
+                        customStyles={{ wrapper: styles.button }}
                     />
                 </View>
                 {
