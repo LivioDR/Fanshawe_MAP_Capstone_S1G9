@@ -6,6 +6,7 @@ import CompanyOptions from "../../components/companyOptions/CompanyOptions";
 import TeamScreen from "../TeamScreen/TeamScreen";
 import UserBio from "../UserBioScreen/UserBio";
 import ManageTeamScreen from "../ManageTeamScreen/ManageTeamScreen";
+import NewMemberScreen from "../NewMemberScreen/NewMemberScreen";
 
 // create stack nav
 const Stack = createStackNavigator();
@@ -39,8 +40,7 @@ export default function CompanyScreen() {
 
             <Stack.Screen
                 name="AddMemberScreen"
-                // TODO: Change component to New Member Form
-                component={ManageTeamScreen}
+                component={NewMemberScreen}
                 options={{
                     headerTitle: "New Member",
                 }}
