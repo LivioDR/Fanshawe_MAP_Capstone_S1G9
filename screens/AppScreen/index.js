@@ -14,7 +14,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 // custom components
 import CompanyScreen from "../CompanyScreen";
-import TimeClockScreen from "../TimeClockScreen";
+import HomeScreen from "../HomeScreen";
 import UserBio from "../UserBioScreen/UserBio";
 
 // theme variables
@@ -71,7 +71,7 @@ export default function AppScreen({ logOut }) {
 
                 <Tab.Screen
                     name="Home"
-                    component={TimeClockScreen}
+                    component={HomeScreen}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialCommunityIcons
