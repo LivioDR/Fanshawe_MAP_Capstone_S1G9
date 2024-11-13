@@ -6,7 +6,8 @@
         "nav": {
             "company": "Company",
             "home": "Home",
-            "profile": "Profile"
+            "profile": "Profile",
+            "settings": "Settings"
         },
 
         "loading": "Loading...",

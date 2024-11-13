@@ -56,6 +56,9 @@ export default function HomeScreen({ logOut }) {
             <Stack.Screen
                 name="Settings"
                 component={SettingsScreen}
+                options={{
+                    headerTitle: t("common.nav.settings"),
+                }}
             />
         </Stack.Navigator>
     );
