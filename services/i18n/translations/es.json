@@ -4,6 +4,7 @@
 
         "logOut": "Cerrar sesión",
         "nav": {
+            "back": "Atrás",
             "company": "Empresa",
             "home": "Inicio",
             "profile": "Perfil",

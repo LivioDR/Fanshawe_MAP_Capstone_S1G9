@@ -4,6 +4,7 @@
 
         "logOut": "Log Out",
         "nav": {
+            "back": "Back",
             "company": "Company",
             "home": "Home",
             "profile": "Profile",

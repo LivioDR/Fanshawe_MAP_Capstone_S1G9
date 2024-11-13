@@ -22,6 +22,9 @@ export default function HomeScreen({ logOut }) {
     return (
         <Stack.Navigator
             initialRouteName="TimeClock"
+            screenOptions={{
+                headerBackTitle: t("common.nav.back"),
+            }}
         >
             <Stack.Screen 
                 name="TimeClock"

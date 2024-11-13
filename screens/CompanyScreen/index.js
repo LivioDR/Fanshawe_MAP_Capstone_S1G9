@@ -15,7 +15,12 @@ export default function CompanyScreen() {
     const { t } = useTranslation();
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            initialRouteName="CompanyOptions"
+            screenOptions={{
+                headerBackTitle: t("common.nav.back"),
+            }}
+        >
             <Stack.Screen
                 name="CompanyOptions"
                 component={CompanyOptions}
