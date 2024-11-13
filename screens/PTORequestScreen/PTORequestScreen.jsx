@@ -68,7 +68,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
     // If the request fails for any reason, it displays an alert
     // If it is requested successfully, displays a success message and closes the modal after a set time
     const requestTimeOff = async() => {
-        let category = requestInfo.category ? t("profile.pto.sick") : t("profile.pto.pto")
+        let category = requestInfo.category ? "Sick" : "PTO"
         
         const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
