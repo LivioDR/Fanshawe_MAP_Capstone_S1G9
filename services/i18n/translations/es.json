@@ -12,7 +12,9 @@
         "loading": "Cargando...",
         "save": "Guardar",
         "cancel": "Cancelar",
-        "saveSuccess": "Changes saved successfully!"
+        "close": "Cerrar",
+        "saveSuccess": "¡Cambios guardados correctamente!",
+        "notApplicable": "N/A"
     },
 
     "login": {
@@ -85,7 +87,10 @@
             "selectCategory": "Seleccionar categoría",
             "reason": "Razón",
 
-            "request": "Pedir"
+            "request": "Pedir",
+
+            "daysUpdateSuccess": "Días actualizado correctamente",
+            "requestSuccess": "Solicitud enviada correctamente"
         }
     },
 
@@ -94,11 +99,15 @@
         "memberDetails": "Perfil del miembro del equipo",
 
         "supervisors": "Supervisores",
-        "members": "Miembros del equipo"
+        "members": "Miembros del equipo",
+
+        "me": "yo"
     },
 
     "errors": {
         "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
+        "requestFailed": "Error en la solicitud de red.",
+        "unexpected": "Error inesperado encontrado.",
 
         "login": {
             "signOut": "Error al cerrar sesión.",
@@ -109,7 +118,13 @@
 
         "bio": {
             "invalidAddress": "Por favor ingrese un domicilio válido.",
-            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!"
+            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!",
+
+            "pto": {
+                "getAvailableFailed": "An error occurred while retrieving the available days data.",
+                "notEnoughDays": "Not enough available days. Available: {{availableDays}}. Requested: {{daysToAdd}}",
+                "requestNotFound": "Request with ID {{id}} not found."
+            }
         }
     }
 }

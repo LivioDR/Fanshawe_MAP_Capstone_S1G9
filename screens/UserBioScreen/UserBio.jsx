@@ -90,9 +90,9 @@ const UserBio = ({ userId, canEdit = true }) => {
             }
             else{
                 setSuperData({
-                    firstName: 'N/A',
+                    firstName: t("common.notApplicable"),
                     lastName: '',
-                    email: 'N/A',
+                    email: t("common.notApplicable"),
                 })
             }
 

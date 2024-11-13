@@ -215,7 +215,7 @@ export default function LoginScreen({ loginSuccess }) {
               type="CTA"
             />
 
-            <Button title="Close" onPress={handleModalToggle} />
+            <Button title={t("common.close")} onPress={handleModalToggle} />
           </View>
           <Toast />
         </Modal>

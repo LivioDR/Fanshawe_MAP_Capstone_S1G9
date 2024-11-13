@@ -12,7 +12,9 @@
         "loading": "Loading...",
         "save": "Save",
         "cancel": "Cancel",
-        "saveSuccess": "Changes saved successfully!"
+        "close": "Close",
+        "saveSuccess": "Changes saved successfully!",
+        "notApplicable": "N/A"
     },
 
     "login": {
@@ -85,7 +87,10 @@
             "selectCategory": "Select category",
             "reason": "Reason",
 
-            "request": "Request"
+            "request": "Request",
+
+            "daysUpdateSuccess": "Days updated correctly",
+            "requestSuccess": "Request sent successfully"
         }
     },
 
@@ -94,11 +99,15 @@
         "memberDetails": "Team Member Details",
 
         "supervisors": "Supervisors",
-        "members": "Team Members"
+        "members": "Team Members",
+
+        "me": "me"
     },
 
     "errors": {
         "generic": "Something went wrong, try again later.",
+        "requestFailed": "Network request failed.",
+        "unexpected": "Unexpected error encountered.",
 
         "login": {
             "signOut": "Error signing out.",
@@ -109,7 +118,13 @@
 
         "bio": {
             "invalidAddress": "Please enter a valid address.",
-            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!"
+            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!",
+
+            "pto": {
+                "getAvailableFailed": "An error occurred while retrieving the available days data.",
+                "notEnoughDays": "Not enough available days. Available: {{availableDays}}. Requested: {{daysToAdd}}",
+                "requestNotFound": "Request with ID {{id}} not found."
+            }
         }
     }
 }

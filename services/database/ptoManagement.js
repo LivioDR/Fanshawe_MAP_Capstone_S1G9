@@ -1,3 +1,4 @@
+import i18next from "i18next"
 import { firestore as db } from "../../config/firebase"
 import { doc, collection, getDoc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore"
 import { updateUserBioInfo } from "../state/userBioInfo"
@@ -47,14 +48,14 @@ const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
     else{
         return {
             errors: [...errors, ...requestAvailableDays.errors],
-            message: "An error occurred while retrieving the available days data"
+            message: i18next.t("errors.bio.pto.getAvailableFailed")
         }
     }
 
     if(availableDays + daysToAdd < 0){
         return {
-            errors: [`Not enough days. Available: ${availableDays}. Requested: ${-daysToAdd}`],
-            message: `Not enough available days. Available: ${availableDays}. Requested: ${-daysToAdd}`
+            errors: [i18next.t("errors.bio.pto.notEnoughDays", { availableDays, daysToAdd: -daysToAdd })],
+            message: i18next.t("errors.bio.pto.notEnoughDays", { availableDays, daysToAdd: -daysToAdd })
         }
     }
 
@@ -67,13 +68,13 @@ const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
     if(errors.length == 0){
         return {
             errors: errors,
-            message: `Days updated correctly`
+            message: i18next.t("profile.pto.daysUpdateSuccess")
         }
     }
     else{
         return {
             errors: errors,
-            message: `An error occurred`
+            message: i18next.t("errors.generic")
         }
     }
 }
@@ -110,20 +111,20 @@ const requestDays = async(userId, managerId, category, from, until, reason, bioS
     }
     catch(e){
         return {
-            message: "An error occurred. Please try again later.",
+            message: i18next.t("errors.generic"),
             errors: [e]
         }
     }
     if(result){
         return {
-            message: "Request sent succesfully",
+            message: i18next.t("profile.pto.requestSuccess"),
             errors: []
         }
     }
     else{
         return {
-            message: "An error occurred. Please try again later.",
-            errors: ["Unexpected error found"]
+            message: i18next.t("errors.generic"),
+            errors: [i18next.t("errors.unexpected")]
         }
     }
 }
@@ -171,7 +172,7 @@ const getRequestbyId = async(id) => {
             requestInfo = document.data()
         }
         else{
-            errors.push(`Request with id ${id} not found`)
+            errors.push(i18next.t("errors.pto.requestNotFound", { id }))
         }
     }
     catch(e){

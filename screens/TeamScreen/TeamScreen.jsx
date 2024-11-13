@@ -72,7 +72,7 @@ const TeamScreen = ({ uid }) => {
                     renderItem={user => (
                         <UserCard
                             id={user.item.uid}
-                            name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? " (me)" : ""}`}
+                            name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? ` (${t("team.me")})` : ""}`}
                             role={user.item.role}
                             email={user.item.email}
                             imgUrl={user.item.uri}
