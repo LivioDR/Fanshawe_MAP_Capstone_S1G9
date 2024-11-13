@@ -1,9 +1,6 @@
 // localization
 import { useTranslation } from "react-i18next";
 
-// RN elements
-import { Button } from "react-native";
-
 // navigation
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -39,14 +36,7 @@ export default function AppScreen({ logOut }) {
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    headerTitle: "",
-                    headerLeft: () => (
-                        <Button
-                            onPress={logOut}
-                            title={t("common.logOut")}
-                            color={accent}
-                        />
-                    ),
+                    headerShown: false,
                     tabBarActiveTintColor: accent,
                     tabBarStyle: {
                         backgroundColor: highlight,
@@ -57,7 +47,6 @@ export default function AppScreen({ logOut }) {
                     name="Company"
                     component={CompanyScreen}
                     options={{
-                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons
                                 name="apartment"
@@ -71,7 +60,6 @@ export default function AppScreen({ logOut }) {
 
                 <Tab.Screen
                     name="Home"
-                    component={HomeScreen}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialCommunityIcons
@@ -82,13 +70,14 @@ export default function AppScreen({ logOut }) {
                         ),
                         tabBarLabel: t("common.nav.home"),
                     }}
-                />
+                >
+                    {() => <HomeScreen logOut={logOut} />}
+                </Tab.Screen>
 
                 <Tab.Screen
                     name="Profile"
                     component={UserBio}
                     options={{
-                        headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => (
                             <MaterialIcons
                                 name={focused ? "person" : "person-outline"}
