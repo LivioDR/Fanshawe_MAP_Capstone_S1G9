@@ -29,6 +29,11 @@ const adminOptions = [
         destination: "ManageTeamScreen",
         icon: <MaterialIcons name="cases" size={30} color="black" />,
     },
+    {
+        caption: "Add members",
+        destination: "AddMemberScreen",
+        icon: <MaterialIcons name="group-add" size={30} color="black" />,
+    },
 ];
 
 export default function CompanyOptions() {

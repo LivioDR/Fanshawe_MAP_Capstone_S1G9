@@ -38,6 +38,15 @@ export default function CompanyScreen() {
             />
 
             <Stack.Screen
+                name="AddMemberScreen"
+                // TODO: Change component to New Member Form
+                component={ManageTeamScreen}
+                options={{
+                    headerTitle: "New Member",
+                }}
+            />
+
+            <Stack.Screen
                 name="TeamMemberDetails"
                 component={UserBio}
                 options={{
