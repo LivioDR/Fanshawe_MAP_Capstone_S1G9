@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -10,13 +11,15 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
 
     const [loading, setLoading] = useState(false)
 
+    const { t } = useTranslation()
+
     // Tutorial from https://medium.com/@sanchit0496/how-to-upload-files-from-device-in-react-native-6206b8cd7aff
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
                 const libraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (libraryStatus.status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+                alert(t("errors.bio.noCameraPerm"));
                 }
             }
         })();
@@ -42,7 +45,7 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
     if(loading){
         return(
             <View style={styles.wrapper}>
-                <Text>Loading...</Text>
+                <Text>{t("common.loading")}</Text>
             </View>
         )
     }
@@ -55,7 +58,7 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
                     onPress={pickImage}
                 >
                     <Text style={styles.label}>
-                        Upload new picture
+                        {t("profile.uploadPicture")}
                     </Text>
                     <Ionicons name="cloud-upload-outline" size={24} />
                 </Pressable>

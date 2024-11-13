@@ -3,12 +3,16 @@
         "copy": "Desarrollado por IndusTree 🌳 © derechos de autor 2024",
 
         "logOut": "Cerrar la sesión",
-
         "nav": {
             "company": "Empresa",
             "home": "Hogar",
             "profile": "Perfil"
-        }
+        },
+
+        "loading": "Cargando...",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "saveSuccess": "Changes saved successfully!"
     },
 
     "login": {
@@ -57,6 +61,34 @@
         }
     },
 
+    "profile": {
+        "companyEmail": "Email corporativo",
+        "address": "Domicilio",
+        "birthDate": "Fecha de nacimiento",
+        "team": "Equipo",
+        "supervisor": "Supervisor",
+        "supervisorEmail": "Email del supervisor",
+
+        "emergencyContacts": "Contactos de emergencia",
+
+        "uploadPicture": "Cargar nueva foto",
+
+        "pto": {
+            "pto": "PTO",
+            "sick": "Enfermedad",
+
+            "daysRemaining": "Días restantes",
+            "ptoRemaining": "Días de PTO restantes",
+            "sickRemaining": "Días de enfermedad restantes",
+            "from": "Del",
+            "to": "Hasta",
+            "selectCategory": "Seleccionar categoría",
+            "reason": "Razón",
+
+            "request": "Pedir"
+        }
+    },
+
     "team": {
         "myTeam": "Mi equipo",
         "memberDetails": "Perfil del miembro del equipo",
@@ -73,6 +105,11 @@
             "invalidEmail": "Por favor ingrese un email válido.",
             "noPassword": "Se requiere contraseña.",
             "invalidCredentials": "Nombre de usuario o contraseña no válidos."
+        },
+
+        "bio": {
+            "invalidAddress": "Por favor ingrese un domicilio válido.",
+            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!"
         }
     }
 }

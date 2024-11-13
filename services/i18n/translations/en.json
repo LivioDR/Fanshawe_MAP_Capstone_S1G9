@@ -3,12 +3,16 @@
         "copy": "Powered by IndusTree 🌳 © Copyright 2024",
 
         "logOut": "Log Out",
-
         "nav": {
             "company": "Company",
             "home": "Home",
             "profile": "Profile"
-        }
+        },
+
+        "loading": "Loading...",
+        "save": "Save",
+        "cancel": "Cancel",
+        "saveSuccess": "Changes saved successfully!"
     },
 
     "login": {
@@ -57,6 +61,34 @@
         }
     },
 
+    "profile": {
+        "companyEmail": "Corporate E-mail",
+        "address": "Address",
+        "birthDate": "Birth Date",
+        "team": "Team",
+        "supervisor": "Supervisor",
+        "supervisorEmail": "Supervisor E-mail",
+
+        "emergencyContacts": "Emergency Contacts",
+
+        "uploadPicture": "Upload new picture",
+
+        "pto": {
+            "pto": "PTO",
+            "sick": "Sick",
+
+            "daysRemaining": "Days remaining",
+            "ptoRemaining": "PTO days remaining",
+            "sickRemaining": "Sick days remaining",
+            "from": "From",
+            "to": "To",
+            "selectCategory": "Select category",
+            "reason": "Reason",
+
+            "request": "Request"
+        }
+    },
+
     "team": {
         "myTeam": "My Team",
         "memberDetails": "Team Member Details",
@@ -73,6 +105,11 @@
             "invalidEmail": "Please enter a valid email.",
             "noPassword": "Password is required.",
             "invalidCredentials": "Invalid username or password."
+        },
+
+        "bio": {
+            "invalidAddress": "Please enter a valid address.",
+            "noCameraPerm": "Sorry, we need camera roll permissions to make this work!"
         }
     }
 }

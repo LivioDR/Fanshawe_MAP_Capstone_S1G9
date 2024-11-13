@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
@@ -71,6 +72,8 @@ const UserBio = ({ userId, canEdit = true }) => {
 
     const bioInfoContext = useBioInfo()
     const timeLogContext = useTimeLog()
+
+    const { t } = useTranslation()
 
     useEffect(()=>{
         const getData = async(id) => {
@@ -161,20 +164,20 @@ const UserBio = ({ userId, canEdit = true }) => {
                 canEdit={userId === authUserId}  
             />
             <View style={bioStyles.body}>
-                <TextWithLabel label={'Corporate email'} textValue={userData.email} />
-                <TextWithLabel label={'Address'} textValue={userData.address} />
-                <TextWithLabel label={'Birth Date'} textValue={userData.birthday} />
+                <TextWithLabel label={t("profile.companyEmail")} textValue={userData.email} />
+                <TextWithLabel label={t("profile.address")} textValue={userData.address} />
+                <TextWithLabel label={t("profile.birthDate")} textValue={userData.birthday} />
 
-                <TextWithLabel label={'Team'} textValue={teamData.name} />
+                <TextWithLabel label={t("profile.team")} textValue={teamData.name} />
 
-                <TextWithLabel label={'Supervisor'} textValue={`${superData.firstName} ${superData.lastName}`} />
-                <TextWithLabel label={'Supervisor email'} textValue={superData.email} />
+                <TextWithLabel label={t("profile.supervisor")} textValue={`${superData.firstName} ${superData.lastName}`} />
+                <TextWithLabel label={t("profile.supervisorEmail")} textValue={superData.email} />
             </View>
             {userId === authUserId &&
-            <View style={bioStyles.buttonsWrapper}>
-                <UiButton label={"PTO"} type="default" funcToCall={showPto} customStyles={{ wrapper: bioStyles.button }}/>
-                <UiButton label={"Emergency contacts"} type="warning" customStyles={{ wrapper: bioStyles.button }}/>
-            </View>}
+                <View style={bioStyles.buttonsWrapper}>
+                    <UiButton label={t("profile.pto.pto")} type="default" funcToCall={showPto} customStyles={{ wrapper: bioStyles.button }}/>
+                    <UiButton label={t("profile.emergencyContacts")} type="warning" customStyles={{ wrapper: bioStyles.button }}/>
+                </View>}
         </SafeAreaView>
         </>
     )

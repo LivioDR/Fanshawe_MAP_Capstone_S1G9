@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import { View, Text, Modal } from "react-native";
 import styles from "./UserBioEditScreenStyles";
@@ -12,14 +13,16 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
     const [alert, setAlert] = useState(null)
     const bioInfoContext = useBioInfo()
 
+    const { t } = useTranslation()
+
     useEffect(()=>{
         setAddress(userData.address)
     },[])
 
     const clearAlert    = () => setAlert(null)
-    const errorAlert    = () => setAlert("An error occurred. Please try again later.")
-    const successAlert  = () => setAlert("Changes saved successfully!")
-    const emptyAlert    = () => setAlert("Please enter a valid address.")
+    const errorAlert    = () => setAlert(t("errors.generic"))
+    const successAlert  = () => setAlert(t("common.saveSuccess"))
+    const emptyAlert    = () => setAlert(t("errors.bio.invalidAddress"))
 
     const updateUserInfo = async() => {
         // saving the user info in Firestore
@@ -65,7 +68,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                 <ImageUploadField uid={uid} imgUrl={imgUrl} setImgUrl={setImgUrl} />
 
                 <InputField
-                    label={"Address"}
+                    label={t("profile.address")}
                     value={address}
                     setValue={setAddress}
                     autoComplete="address-line1"
@@ -73,7 +76,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
 
                 <View style={styles.btnContainer}>
                     <UiButton
-                        label={"Cancel"}
+                        label={t("common.cancel")}
                         funcToCall={()=>{
                             clearAlert()
                             setAddress(userData.address)
@@ -82,7 +85,7 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
                         customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
-                        label={"Save"}
+                        label={t("common.save")}
                         type="warning"
                         funcToCall={()=>{
                             // save data

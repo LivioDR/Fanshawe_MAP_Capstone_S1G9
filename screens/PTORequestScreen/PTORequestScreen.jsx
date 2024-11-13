@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { View, Text, Modal } from "react-native";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
@@ -9,7 +10,6 @@ import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDa
 import { requestDays } from "../../services/database/ptoManagement";
 import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
 
-
 const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) => {
 
     const [requestInfo, setRequestInfo] = useState({
@@ -20,6 +20,8 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         alert: " ",
     })
     const bioInfoContext = useBioInfo()
+
+    const { t } = useTranslation()
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
@@ -66,7 +68,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
     // If the request fails for any reason, it displays an alert
     // If it is requested successfully, displays a success message and closes the modal after a set time
     const requestTimeOff = async() => {
-        let category = requestInfo.category ? "Sick" : "PTO"
+        let category = requestInfo.category ? t("profile.pto.sick") : t("profile.pto.pto")
         
         const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
@@ -98,24 +100,24 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         >
             <View style={styles.container}>
                 <Text style={styles.nameLabel}>
-                    Days remaining
+                    {t("profile.pto.daysRemaining")}
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
 
                 <View style={styles.btnContainer}>
-                    <FromToDatePicker label={"From"} initialValue={requestInfo.from} setDate={setFromDate}/>
-                    <FromToDatePicker label={"To"} initialValue={requestInfo.until} setDate={setUntilDate}/>
+                    <FromToDatePicker label={t("profile.pto.from")} initialValue={requestInfo.from} setDate={setFromDate}/>
+                    <FromToDatePicker label={t("profile.pto.to")} initialValue={requestInfo.until} setDate={setUntilDate}/>
                 </View>
 
                 <Text style={styles.subtitle}>
-                    Select category
+                    {t("profile.pto.selectCategory")}
                 </Text>
 
                 <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
                 
                 <InputField
-                label={"Reason"}
+                label={t("profile.pto.reason")}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
@@ -123,13 +125,13 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
 
                 <View style={styles.btnContainer}>
                     <UiButton
-                    label={"Cancel"}
+                    label={t("common.cancel")}
                     funcToCall={clearAndClose}
                     type="default"
                     customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
-                    label={"Request"}
+                    label={t("profile.pto.request")}
                     funcToCall={requestTimeOff}
                     type="primary"
                     customStyles={{ wrapper: styles.button }}
