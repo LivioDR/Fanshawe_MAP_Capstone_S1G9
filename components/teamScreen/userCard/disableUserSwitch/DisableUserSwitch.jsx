@@ -3,7 +3,10 @@ import { View, Text, Switch, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     text: {
 
@@ -18,9 +21,9 @@ const DisableUserSwitch = ({isEnabled, setEnabled}) => {
 
 
     return(
-        <View>
-            <Text>
-                Enabled
+        <View style={styles.container}>
+            <Text style={styles.text}>
+                {isEnabled ? "Enabled" : "Disabled"}
             </Text>
             <Switch
                 value={isEnabled}
