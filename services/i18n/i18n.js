@@ -34,3 +34,8 @@ export function initI18next() {
             debug: true,
         });
 }
+
+export const supportedLanguages = {
+    "en": "English",
+    "es": "Español",
+};
