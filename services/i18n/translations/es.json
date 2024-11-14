@@ -65,6 +65,12 @@
         }
     },
 
+    "settings": {
+        "search": "Buscar...",
+
+        "language": "Idioma"
+    },
+
     "profile": {
         "companyEmail": "Email corporativo",
         "address": "Domicilio",

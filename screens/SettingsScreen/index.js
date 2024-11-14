@@ -32,7 +32,7 @@ export default function SettingsScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
-                <Text style={styles.heading}>Language</Text>
+                <Text style={styles.heading}>{t("settings.language")}</Text>
                 <Dropdown
                     style={styles.dropdown}
 
@@ -42,7 +42,7 @@ export default function SettingsScreen() {
 
                     search
                     searchField="label"
-                    searchPlaceholder="Search..."
+                    searchPlaceholder={t("settings.search")}
 
                     value={i18n.language}
                     onChange={onLanguageChange}

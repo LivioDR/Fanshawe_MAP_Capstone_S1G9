@@ -65,6 +65,12 @@
         }
     },
 
+    "settings": {
+        "search": "Search...",
+
+        "language": "Language"
+    },
+
     "profile": {
         "companyEmail": "Corporate Email",
         "address": "Address",
