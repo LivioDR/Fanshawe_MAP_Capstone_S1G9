@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCredentials } from "../../services/state/userCredentials";
 import { useBioInfo } from "../../services/state/userBioInfo";
 import UiButton from "../../components/common/UiButton/UiButton";
-import { createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
+import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
 import { setUserBioInfoById } from "../../services/database/userBioInfo";
 
 
@@ -134,9 +134,11 @@ const NewMemberScreen = () => {
 
         // Setting the data for this new user in the database
         const userInfoSettingResult = await setUserBioInfoById(userCreationResult.uid, userInfo)
+        // And adding the user to the team
+        const teamInfoSettingResult = await addUserToTeam(userCreationResult.uid, teamId)
 
         // Checking if the process went well
-        if(userInfoSettingResult){
+        if(userInfoSettingResult && teamInfoSettingResult){
 
             const recoveryResult = await sendRecoveryPassword(userInfo.email.trim())
             if(recoveryResult){
