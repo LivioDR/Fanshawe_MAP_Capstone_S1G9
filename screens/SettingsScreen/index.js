@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { currentLngKey, supportedLanguages } from "../../services/i18n/i18n";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ export default function SettingsScreen() {
             const lang = await AsyncStorage.getItem(currentLngKey);
             setStoredLanguage(lang);
         })();
-    });
+    }, []);
 
     const onLanguageChange = async ({ value }) => {
         i18n.changeLanguage(value);
@@ -36,6 +36,10 @@ export default function SettingsScreen() {
 
             {/* TODO: remove debug */}
             <Text>Stored language: {!!storedLanguage ? storedLanguage : "none"}</Text>
+            <Button title="Clear saved language" onPress={async () => {
+                await AsyncStorage.removeItem(currentLngKey);
+                setStoredLanguage(null);
+            }} />
         </View>
     );
 }
