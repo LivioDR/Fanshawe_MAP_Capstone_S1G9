@@ -17,14 +17,6 @@ const languageDetector = {
 };
 
 export function initI18next() {
-    // set initial fallback to English
-    let fallbackLng = "en";
-    // if we support the current device language, fallback to that instead
-    const deviceLng = getLocales()[0].languageCode
-    if (deviceLng in supportedLanguages) {
-        fallbackLng = deviceLng;
-    }
-
     // return the promise from init so we can wait until translations are loaded
     return i18next
         .use(languageDetector)
@@ -32,7 +24,8 @@ export function initI18next() {
         .init({
             compatibilityJSON: "v3",
 
-            fallbackLng,
+            // always use English as fallback, as all strings will be in English
+            fallbackLng: "en",
 
             resources: {
                 en: {
