@@ -13,9 +13,10 @@ import styles from "./styles";
 
 export default function SettingsScreen() {
     const [languages] = useState(getLanguagesList());
-    const [storedLanguage, setStoredLanguage] = useState(null);
+    const [storedLanguage, setStoredLanguage] = useState(null);     // TODO: remove debug
     const { t, i18n } = useTranslation();
 
+    // TODO: remove debug
     useEffect(() => {
         (async () => {
             const lang = await AsyncStorage.getItem(currentLngKey);
@@ -26,7 +27,7 @@ export default function SettingsScreen() {
     const onLanguageChange = async ({ value }) => {
         i18n.changeLanguage(value);
         await AsyncStorage.setItem(currentLngKey, value);
-        setStoredLanguage(value);
+        setStoredLanguage(value);   // TODO: remove debug
     };
 
     return (
