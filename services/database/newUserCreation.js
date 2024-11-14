@@ -1,7 +1,7 @@
 import { firestore as db } from "../../config/firebase";
 import { auth } from "../../config/firebase";
 import { createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { getTeamInfoById } from "./userBioInfo";
 
 // Checks the email validity and returns a boolean value
