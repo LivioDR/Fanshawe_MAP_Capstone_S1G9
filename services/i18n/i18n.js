@@ -39,3 +39,5 @@ export const supportedLanguages = {
     "en": "English",
     "es": "Español",
 };
+
+export const currentLngKey = "current-lang";
