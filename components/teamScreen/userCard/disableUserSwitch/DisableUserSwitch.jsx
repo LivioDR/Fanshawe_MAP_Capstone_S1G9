@@ -8,12 +8,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text: {
-
-    },
-    switch: {
-
-    },
 })
 
 
@@ -22,7 +16,7 @@ const DisableUserSwitch = ({isEnabled, setEnabled}) => {
 
     return(
         <View style={styles.container}>
-            <Text style={styles.text}>
+            <Text>
                 {isEnabled ? "Enabled" : "Disabled"}
             </Text>
             <Switch
