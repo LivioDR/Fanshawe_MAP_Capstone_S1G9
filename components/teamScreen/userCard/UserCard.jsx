@@ -6,12 +6,13 @@ import { highlight } from "../../../utilities/variables";
 import { useCredentials } from "../../../services/state/userCredentials";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
-import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
+import { useBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
 
 const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
+    const bioInfoContext = useBioInfo()
 
     const [enabled, setEnabled] = useState(isEnabled)
 
@@ -24,8 +25,8 @@ const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser =
         undefined
 
     // function to handle the toggle to enable/disable the user from logging in
-    const toggleUserStatus = (id) => {
-        updateUserBioInfoById(id, {isEnabled: !enabled})
+    const toggleUserStatus = async(id) => {
+        await updateUserBioInfo(id, {isEnabled: !enabled}, bioInfoContext)
         setEnabled(prev => !prev)
     }
 
