@@ -2,10 +2,9 @@ import { View, Text } from "react-native";
 import InputField from "../../components/common/InputField/InputField";
 import { useState } from "react";
 import { useCredentials } from "../../services/state/userCredentials";
-import { useBioInfo } from "../../services/state/userBioInfo";
+import { setUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
 import UiButton from "../../components/common/UiButton/UiButton";
 import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
-import { setUserBioInfoById } from "../../services/database/userBioInfo";
 
 
 
@@ -13,7 +12,8 @@ const NewMemberScreen = () => {
     
     // getting the userId and teamId for the supervisor who's creating the new team member
     const supervisorId = useCredentials().user.uid
-    const teamId = useBioInfo().bios[supervisorId].teamId
+    const bioState = useBioInfo()
+    const teamId = bioState.bios[supervisorId].teamId
     
     const defaultUserInfo = {
         onPTO: false,
@@ -132,8 +132,8 @@ const NewMemberScreen = () => {
             return
         }
 
-        // Setting the data for this new user in the database
-        const userInfoSettingResult = await setUserBioInfoById(userCreationResult.uid, userInfo)
+        // Setting the data for this new user in the database and in the state
+        const userInfoSettingResult = await setUserBioInfo(userCreationResult.uid, userInfo, bioState)
         // And adding the user to the team
         const teamInfoSettingResult = await addUserToTeam(userCreationResult.uid, teamId)
 
