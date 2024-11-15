@@ -5,6 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CompanyOptions from "../../components/companyOptions/CompanyOptions";
 import TeamScreen from "../TeamScreen/TeamScreen";
 import UserBio from "../UserBioScreen/UserBio";
+import ManageTeamScreen from "../ManageTeamScreen/ManageTeamScreen";
+import NewMemberScreen from "../NewMemberScreen/NewMemberScreen";
 
 // create stack nav
 const Stack = createStackNavigator();
@@ -25,6 +27,22 @@ export default function CompanyScreen() {
                 component={TeamScreen}
                 options={{
                     headerTitle: "My Team",
+                }}
+            />
+
+            <Stack.Screen
+                name="ManageTeamScreen"
+                component={ManageTeamScreen}
+                options={{
+                    headerTitle: "Manage Team",
+                }}
+            />
+
+            <Stack.Screen
+                name="AddMemberScreen"
+                component={NewMemberScreen}
+                options={{
+                    headerTitle: "New Member",
                 }}
             />
 

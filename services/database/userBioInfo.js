@@ -11,7 +11,6 @@ const getUserBioInfoById = async(id) => {
         const document = await getDoc(docRef)
         if (document.exists()) {
             userData = document.data()
-            // userData.birthday = new Date(userData.birthday.seconds*1000).toLocaleDateString()
         } 
         else {
             console.error("Document not found");
