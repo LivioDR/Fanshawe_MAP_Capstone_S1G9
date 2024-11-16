@@ -10,7 +10,6 @@ import { useBioInfo, getOrLoadUserBioInfo, getTeamMemberIds, getOrLoadProfileIma
 const ManageTeamScreen = ({ uid }) => {
 
     const [teamMembers, setTeamMembers] = useState(undefined)
-    const [teamSupervisors, setTeamSupervisors] = useState(undefined)
     const [loading, setLoading] = useState(true)
 
     const route = useRoute()
@@ -31,19 +30,15 @@ const ManageTeamScreen = ({ uid }) => {
             const myInfo = await getOrLoadUserBioInfo(uid, bioInfoContext)
             const myTeam = await getTeamMemberIds(myInfo.teamId, bioInfoContext)
             const myTeamDetails = []
-            const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
                 const detail = await getOrLoadUserBioInfo(myTeam[i], bioInfoContext)
                 const imgPath = await getOrLoadProfileImage(myTeam[i], bioInfoContext)
                 const userDetail = {...detail, uri: imgPath, uid: myTeam[i]}
-                if (detail.isSupervisor) {
-                    myTeamSupervisorDetails.push(userDetail)
-                } else {
+                if (!detail.isSupervisor) {
                     myTeamDetails.push(userDetail)
                 }
             }
             setTeamMembers(myTeamDetails)
-            setTeamSupervisors(myTeamSupervisorDetails)
             setLoading(false)
         })()
     },[])
