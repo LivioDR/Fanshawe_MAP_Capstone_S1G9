@@ -16,7 +16,7 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 import { Timestamp } from "firebase/firestore";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
-import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } from "../../services/state/timeClock";
+import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
 
 // styles
 import styles from "./styles";
@@ -35,13 +35,10 @@ export default function HomeScreen() {
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
 
-    // and for time logs
-    const timeLogContext = useTimeLog();
-
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
         (async () => {
-            const curTimeLog = await getOrLoadOpenTimeLog(userId, timeLogContext).catch((err) => console.error(err));
+            const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
 
             if (curTimeLog) {
                 setTimeLog(curTimeLog);
@@ -102,9 +99,9 @@ export default function HomeScreen() {
         setTimeLog(newTimeLog);
 
         // make update in Firebase and global state
-        const success = await updateTimeLog(userId, newTimeLog, timeLogContext);
+        const success = await updateTimeLog(newTimeLog);
 
-        // if we fail, revert state
+        // if we fail, revert stateß
         if (!success) {
             setTimeLog(oldTimeLog);
         }
@@ -115,7 +112,7 @@ export default function HomeScreen() {
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
-            const newTimeLog = await clockIn(userId, Timestamp.now(), timeLogContext);
+            const newTimeLog = await createTimeLog(userId, Timestamp.now());
             if (newTimeLog) {
                 setTimeLog(newTimeLog);
                 setClockedIn(true);
@@ -150,7 +147,7 @@ export default function HomeScreen() {
             setTimeLog(null);
 
             // make update in Firebase and global state
-            const success = await clockOut(userId, newTimeLog, timeLogContext);
+            const success = await updateTimeLog(newTimeLog);
 
             // if we fail, revert state
             if (!success) {

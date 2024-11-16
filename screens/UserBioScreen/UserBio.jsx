@@ -12,7 +12,7 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
-import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
+import { getOpenTimeLog } from "../../services/database/timeClock";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 
@@ -70,8 +70,6 @@ const UserBio = ({ userId, canEdit = true }) => {
         })()
     }, [needsRefresh])
 
-    const timeLogContext = useTimeLog()
-
     useEffect(()=>{
         const getData = async(id) => {
             // get user data
@@ -104,7 +102,7 @@ const UserBio = ({ userId, canEdit = true }) => {
 
             // time clock data, only load if this is not the logged in user
             if (id !== authUserId) {
-                const timeLog = await getOrLoadOpenTimeLog(id, timeLogContext)
+                const timeLog = await getOpenTimeLog(id)
                 if (timeLog) {
                     const newClockStatus = {
                         clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
