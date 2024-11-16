@@ -22,7 +22,7 @@ const ProfileImage = ({url, imgSize = 96, placeholderSize = 48, customStyles = {
     }
     else{
         return(
-            <View style={ProfileImageStyles.container}>
+            <View style={{...ProfileImageStyles.container, width: imgSize+4, height: imgSize+4,}}>
                 <Ionicons name="person" size={placeholderSize} color="blue" />
             </View>
         )

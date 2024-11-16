@@ -8,6 +8,7 @@ import {
     signInWithEmailAndPassword,
     signOut,
 } from "firebase/auth";
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
@@ -98,9 +99,18 @@ export default function LoginScreen({ loginSuccess }) {
   */
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, pwd)
-      .then((userCredential) => {
-        // Signed in
-        loginSuccess(userCredential);
+      .then(async (userCredential) => {
+        // Signed in correctly
+        const user = userCredential.user;
+        // But we check is the user is enabled before continuing
+        const userInfo = await getUserBioInfoById(user.uid)
+        if(userInfo.isEnabled){
+          loginSuccess(userCredential);
+        }
+        else{
+          showErrorToast("User disabled. Please contact your administrator")
+          await signOut(auth)
+        }
       })
       .catch(() => {
         showErrorToast(t("errors.login.invalidCredentials"));

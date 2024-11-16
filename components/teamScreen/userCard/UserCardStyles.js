@@ -11,6 +11,9 @@ export default UserCardStyles = StyleSheet.create({
     textWrapper: {
         width: '70%',
     },
+    textWithSwitchWrapper: {
+        width: '60%',
+    },
     name: {
         fontSize: 18,
     },
