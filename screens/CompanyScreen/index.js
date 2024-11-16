@@ -43,7 +43,7 @@ export default function CompanyScreen() {
                 name="ManageTeamScreen"
                 component={ManageTeamScreen}
                 options={{
-                    headerTitle: "Manage Team",
+                    headerTitle: t("team.manageTeam"),
                 }}
             />
 
@@ -51,7 +51,7 @@ export default function CompanyScreen() {
                 name="AddMemberScreen"
                 component={NewMemberScreen}
                 options={{
-                    headerTitle: "New Member",
+                    headerTitle: t("team.addMember"),
                 }}
             />
 

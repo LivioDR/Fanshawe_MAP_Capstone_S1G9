@@ -26,12 +26,12 @@ export default function CompanyOptions() {
 
     const adminOptions = [
         {
-            caption: "Manage Team",
+            caption: t("team.manageTeam"),
             destination: "ManageTeamScreen",
             icon: <MaterialIcons name="cases" size={30} color="black" />,
         },
         {
-            caption: "Add members",
+            caption: t("team.addMember"),
             destination: "AddMemberScreen",
             icon: <MaterialIcons name="group-add" size={30} color="black" />,
         },

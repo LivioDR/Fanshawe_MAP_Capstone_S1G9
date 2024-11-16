@@ -109,7 +109,10 @@
         "supervisors": "Supervisores",
         "members": "Miembros del equipo",
 
-        "me": "yo"
+        "me": "yo",
+
+        "manageTeam": "Administrar equipo",
+        "addMember": "Añadir miembro del equipo"
     },
 
     "errors": {
