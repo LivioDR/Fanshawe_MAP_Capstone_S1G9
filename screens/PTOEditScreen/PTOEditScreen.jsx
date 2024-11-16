@@ -29,6 +29,27 @@ This id uses similar logic to the UserBio component to get other data for
 the PTO screen
 
 Need to get the userId, supervisorId, isShown, dismiss, pto, sick for this screen to work
+
+
+TODO: Functionality list
+
+- Add PTO days [X]
+- Add sick days [X]
+- Remove PTO days [X]
+- Remove sick days [X]
+
+Sanity checking (Feedback through errormsgbox)
+
+- Added days cannot exceed x amount? - Nope, company specific so no cap (can always be changed by admin)
+
+- Cannot remove more days than they have for that PTO category
+
+
+UI
+-Make sure after days added/removed that the teamPTOScreen refreshes to show updated data
+-Fix loading implementation for UI
+
+
 */
 
 const PTOEditScreen = ({userId}) => {
@@ -213,6 +234,17 @@ const PTOEditScreen = ({userId}) => {
 
         //Value is a String, so convert to int
         setDaysToChange(parseInt(value));
+
+        //If remove toggled, make daysToChange a negative
+        if(ptoToBeRemoved){
+
+            setDaysToChange(parseInt(value * -1));
+
+        }
+
+
+
+
 
         if (value.length === 0) {
         setDaysIsValid(false);
