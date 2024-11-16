@@ -108,7 +108,7 @@ export default function LoginScreen({ loginSuccess }) {
           loginSuccess(userCredential);
         }
         else{
-          showErrorToast("User disabled. Please contact your administrator")
+          showErrorToast(t("errors.login.userDisabled"))
           await signOut(auth)
         }
       })

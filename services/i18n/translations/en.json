@@ -133,7 +133,8 @@
             "signOut": "Error signing out.",
             "invalidEmail": "Please enter a valid email.",
             "noPassword": "Password is required.",
-            "invalidCredentials": "Invalid email or password."
+            "invalidCredentials": "Invalid email or password.",
+            "userDisabled": "Account disabled. Please contact your administrator."
         },
 
         "bio": {

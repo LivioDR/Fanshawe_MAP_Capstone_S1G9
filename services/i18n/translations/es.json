@@ -133,7 +133,8 @@
             "signOut": "Error al cerrar sesión.",
             "invalidEmail": "Por favor, ingrese una dirección de correo válida.",
             "noPassword": "Se requiere contraseña.",
-            "invalidCredentials": "Correo electrónico o contraseña no válidos."
+            "invalidCredentials": "Correo electrónico o contraseña no válidos.",
+            "userDisabled": "Cuenta deshabilitada. Por favor contacte a tu administrador."
         },
 
         "bio": {
