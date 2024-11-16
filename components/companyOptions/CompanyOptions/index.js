@@ -30,6 +30,11 @@ const adminOptions = [
         icon: <MaterialIcons name="cases" size={30} color="black" />,
     },
     {
+        caption: "Manage Team PTO",
+        destination: "PTOTeamScreen",
+        icon: <MaterialIcons name="edit-calendar" size={30} color="black" />,
+    },
+    {
         caption: "Add members",
         destination: "AddMemberScreen",
         icon: <MaterialIcons name="group-add" size={30} color="black" />,
