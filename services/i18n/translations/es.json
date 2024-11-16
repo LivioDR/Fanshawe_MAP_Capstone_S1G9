@@ -119,7 +119,9 @@
 
         "manageTeam": "Administrar equipo",
         "addMemberTitle": "Añadir miembro del equipo",
-        "addMember": "Añadir miembro"
+        "addMember": "Añadir miembro",
+
+        "addSuccess": "¡Usuario creado correctamente!"
     },
 
     "errors": {
@@ -143,6 +145,15 @@
                 "notEnoughDays": "No posee suficientes días disponibles. Disponible: {{availableDays}}. Solicitado: {{daysToAdd}}",
                 "requestNotFound": "Solicitud con ID {{id}} no encontrada."
             }
+        },
+
+        "newMember": {
+            "noName": "Se requiere nombre.",
+            "noAddress": "Se requiere domicilio.",
+            "invalidBirthDate": "Fecha de nacimiento debe coincidir con el formato YYYY-MM-DD.",
+            "noRole": "Se requiere rol.",
+            "recoveryFailed": "Se produjo un error al enviar el correo electrónico de recuperación al nuevo usuario.",
+            "saveFailed": "Se produjo un error al guardar el nuevo usuario."
         }
     }
 }

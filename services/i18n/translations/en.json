@@ -119,7 +119,9 @@
 
         "manageTeam": "Manage Team",
         "addMemberTitle": "Add Team Member",
-        "addMember": "Add Member"
+        "addMember": "Add Member",
+
+        "addSuccess": "User created successfully!"
     },
 
     "errors": {
@@ -143,6 +145,15 @@
                 "notEnoughDays": "Not enough available days. Available: {{availableDays}}. Requested: {{daysToAdd}}",
                 "requestNotFound": "Request with ID {{id}} not found."
             }
+        },
+
+        "newMember": {
+            "noName": "Name is required.",
+            "noAddress": "Address is required.",
+            "invalidBirthDate": "Birth date must match the format YYYY-MM-DD.",
+            "noRole": "Role is required.",
+            "recoveryFailed": "An error occurred while sending the recovery email to the new user.",
+            "saveFailed": "An error occurred while saving the new user."
         }
     }
 }
