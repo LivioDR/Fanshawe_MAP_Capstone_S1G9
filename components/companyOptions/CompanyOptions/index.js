@@ -26,11 +26,6 @@ export default function CompanyOptions() {
 
     const adminOptions = [
         {
-            caption: "My Team",
-            destination: "MyTeamScreen",
-            icon: <MaterialIcons name="people" size={30} color="black" />,
-        },
-        {
             caption: "Manage Team",
             destination: "ManageTeamScreen",
             icon: <MaterialIcons name="cases" size={30} color="black" />,
@@ -47,7 +42,7 @@ export default function CompanyOptions() {
     return (
         <View style={styles.container}>
             <FlatList
-                data={isUserAdmin? adminOptions : options}
+                data={isUserAdmin? [...options, ...adminOptions] : options}
                 renderItem={(item) => <CompanyOptionSelector {...item.item} />}
                 contentContainerStyle={styles.listContainer}
             />
