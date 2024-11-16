@@ -35,6 +35,8 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
     const navToEditPTO = !!navigation && id !== authUserId ?
         () => {
             updatePTOAdmin({ showEditPtoModal: true, currentIdForPtoEdit: id })
+
+            console.log("BioInfoContext in UserCard ", bioInfoContext)
         } :
         undefined
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, View, Text, Modal } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 
 // UI imports
 import styles from "./PTOEditScreenStyles";
@@ -36,6 +36,8 @@ const PTOEditScreen = ({userId}) => {
     //Getting global show from the state:
     const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
 
+    const bioInfoContext = useBioInfo()
+    const timeLogContext = useTimeLog()
     const bioState = useBioInfo()
 
     /*
@@ -52,7 +54,7 @@ const PTOEditScreen = ({userId}) => {
     const [canEditOthers, setCanEditOthers] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(true)
-    const [needsRefresh, setNeedsRefresh] = useState(false)
+    const [needsRefresh, setNeedsRefresh] = useState(true) //change to true, as need refresh whenever loading
 
     //For new Switch
     const [ptoToBeRemoved, setPTOToBeRemoved] = useState(false)
@@ -63,7 +65,11 @@ const PTOEditScreen = ({userId}) => {
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
 
-    const showPto = () => {setShowPtoModal(true)}
+    const showPto = () => {
+        setShowPtoModal(true) 
+        setNeedsRefresh(true)
+    }
+
     const hidePto = () => {
         setShowPtoModal(false)
         // flag that we need to refresh the user data from state when PTO modal is closed
@@ -98,21 +104,29 @@ const PTOEditScreen = ({userId}) => {
                 const data = await getOrLoadUserBioInfo(userId, bioInfoContext)
                 setUserData(data)
                 setNeedsRefresh(false)
+
+                //TODO: Bug - after editing PTO, the only data that shows when entering the modal
+                //again is the remaining pto days
+                //When logging data here, the only attribute is the remaining pto days
+                //for unedited users, all attributes show
+                console.log("Data in Refresh UseEffect: ", data)
             }
         })()
     }, [needsRefresh])
-
-    const bioInfoContext = useBioInfo()
-    const timeLogContext = useTimeLog()
 
 
     useEffect(()=>{
         const getData = async(id) => {
          
-            let data = await getOrLoadUserBioInfo(id, bioInfoContext)
+            let data = await getOrLoadUserBioInfo(userId, bioInfoContext)
             setUserData(data)
+            
             //Whenever this screen is entered we know we want to show the modal
             setShowPtoModal(true)
+
+            console.log("Data in getData useEffect: ", data)
+            console.log("BioInfoContext ", bioInfoContext)
+            console.log("BioState: ", bioState)
 
             if(data.isSupervisor){
                 setCanEditOthers(true)
@@ -134,13 +148,14 @@ const PTOEditScreen = ({userId}) => {
             }
 
             // team data
-            const teamId = data.teamId
-            const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
-            setTeamData(teamInfo)
+            //TODO: Is this required?
+            // const teamId = data.teamId
+            // const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
+            // setTeamData(teamInfo)
 
             // set profle picture
-            const img = await getOrLoadProfileImage(id, bioInfoContext)
-            setImgUrl(img)
+            // const img = await getOrLoadProfileImage(id, bioInfoContext)
+            // setImgUrl(img)
 
             // time clock data, only load if this is not the logged in user
             if (id !== authUserId) {
@@ -157,6 +172,9 @@ const PTOEditScreen = ({userId}) => {
 
             // show the data
             setLoading(false)
+
+            //TODO - Fixed bug
+            setNeedsRefresh(true)
         }
         getData(userId)
         
@@ -169,6 +187,8 @@ const PTOEditScreen = ({userId}) => {
     const dismiss = hidePto
     const pto = userData.remainingPTODays
     const sick = userData.remainingSickDays
+
+    console.log("SICK: ", sick)
 
     /*
     Start of logic contained in the PTOModal / PTORequestScreen
@@ -193,7 +213,6 @@ const PTOEditScreen = ({userId}) => {
 
         //Value is a String, so convert to int
         setDaysToChange(parseInt(value));
-
 
         if (value.length === 0) {
         setDaysIsValid(false);
@@ -259,6 +278,8 @@ const PTOEditScreen = ({userId}) => {
                 // clears the alert before closing the modal
                 clearAndClose()
             }, 2500)
+
+            //setNeedsRefresh(true)
         }
         else{
             updateAlert(result.errors[0])
@@ -283,22 +304,23 @@ const PTOEditScreen = ({userId}) => {
         
        // const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
-       //RequestedById is just the currently logged in Admin
-       //
-       const result = await updateAvailableDays(userId, category, daysToChange, bioState)
+       //RequestedById (first parameter) is just the currently logged in Admin
+       const result = await updateAvailableDays(userId, category, daysToChange, bioInfoContext)
 
 
-        // if(result.errors.length == 0){
-        //     updateAlert(result.message)
+       console.log("RESULT: ", result)
+
+        if(result.errors.length == 0){
+            updateAlert(result.message)
     
-        //     setTimeout(()=>{
-        //         // clears the alert before closing the modal
-        //         clearAndClose()
-        //     }, 2500)
-        // }
-        // else{
-        //     updateAlert(result.errors[0])
-        // }
+            setTimeout(()=>{
+                // clears the alert before closing the modal
+                clearAndClose()
+            }, 2500)
+        }
+        else{
+            updateAlert(result.errors[0])
+        }
     }
 
     const clearAndClose = () => {
