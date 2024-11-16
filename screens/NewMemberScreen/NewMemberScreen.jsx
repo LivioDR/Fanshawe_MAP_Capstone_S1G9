@@ -157,17 +157,28 @@ const NewMemberScreen = () => {
         }
     }
 
-
     // UI to be rendered by this component
     return(
-        <View style={{flex: 1, height: '100%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center',}}>
+        <View style={{flex: 1, alignItems: 'center'}}>
             {
                 fields.map(field => <InputField key={field.name} label={field.label} value={userInfo[field.name]} setValue={(e)=>{setField(e, field.name)}} />)
             }
             <Text>{errors}</Text>
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: '100%',}}>
-                <UiButton label={t("common.clear")} type={"warning"} disabled={isBtnDisabled} funcToCall={clearAllFields} />
-                <UiButton label={t("team.addMember")} type={"primary"} disabled={isBtnDisabled} funcToCall={sendRequest} />
+            <View style={{flexDirection: 'row', gap: 20, paddingHorizontal: "5%"}}>
+                <UiButton
+                    label={t("common.clear")}
+                    type={"warning"}
+                    disabled={isBtnDisabled}
+                    funcToCall={clearAllFields}
+                    customStyles={{wrapper: { flex: 1 }}}
+                />
+                <UiButton
+                    label={t("team.addMember")}
+                    type={"primary"}
+                    disabled={isBtnDisabled}
+                    funcToCall={sendRequest}
+                    customStyles={{wrapper: { flex: 1 }}}
+                />
             </View>
         </View>
     )
