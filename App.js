@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
 import { UserBioInfoProvider } from './services/state/userBioInfo';
 import { TimeLogProvider } from './services/state/timeClock';
+import { PTOAdminProvider } from './services/state/ptoAdmin';
 
 // custom components
 import LoginScreen from './screens/LoginScreen';
@@ -32,6 +33,7 @@ export default function App() {
     const shownScreen = loginCredential ? <HomeScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
 
     return (
+        <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
         <UserBioInfoProvider>
         <TimeLogProvider>
@@ -42,5 +44,6 @@ export default function App() {
         </TimeLogProvider>
         </UserBioInfoProvider>
         </CredentialProvider>
+        </PTOAdminProvider>
     );
 }
