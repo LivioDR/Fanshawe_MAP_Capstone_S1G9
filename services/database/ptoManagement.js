@@ -1,6 +1,6 @@
 import { firestore as db } from "../../config/firebase"
 import { doc, collection, getDoc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore"
-import { updateUserBioInfo } from "../state/userBioInfo"
+import { updateUserBioInfoById } from "./userBioInfo"
 
 const usersColName = "usersInfo"
 const ptoColName = "daysOffRequests"
@@ -34,7 +34,7 @@ const checkAvailableDays = async(userId, category) => {
 
 // Add or subtracts the number of days passed to the daysToAdd variable for a user in the set category
 // To add days pass a positive value, to subtract, pass a negative value
-const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
+const updateAvailableDays = async(userId, category, daysToAdd) => {
     const dbCategory = `remaining${category.trim()}Days` // PTO || Sick
     let availableDays = 0
     let errors = []
@@ -59,7 +59,7 @@ const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
     }
 
     try{
-        await updateUserBioInfo(userId, {[dbCategory]: availableDays + daysToAdd}, bioState)
+        await updateUserBioInfoById(userId, {[dbCategory]: availableDays + daysToAdd})
     }
     catch(e){
         errors.push(e)
@@ -80,14 +80,14 @@ const updateAvailableDays = async(userId, category, daysToAdd, bioState) => {
 
 
 // Creates a new request in the database - QA OK
-const requestDays = async(userId, managerId, category, from, until, reason, bioState) => {
+const requestDays = async(userId, managerId, category, from, until, reason) => {
     let result = false
     
     const requestedDays = Math.round(Math.abs((new Date(until).getTime() - new Date(from).getTime())) / (1000 * 60 * 60 * 24)) + 1 // the range is inclusive of both the first and last day
     
     try{
         // updating the available days for the requesting user, by passing a negative value to the updateAvailableDays function
-        const updateReq = await updateAvailableDays(userId, category, -requestedDays, bioState)
+        const updateReq = await updateAvailableDays(userId, category, -requestedDays)
         // then creating a request in the database
         if(updateReq.errors.length == 0){
             const colRef = collection(db, ptoColName)

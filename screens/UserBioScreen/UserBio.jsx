@@ -12,8 +12,9 @@ import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
 import { useCredentials } from "../../services/state/userCredentials";
-import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
+import { getOpenTimeLog } from "../../services/database/timeClock";
+import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getImageForUserId } from "../../services/database/profileImage";
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -62,26 +63,23 @@ const UserBio = ({ userId, canEdit = true }) => {
     useEffect(() => {
         (async () => {
             if (needsRefresh) {
-                const data = await getOrLoadUserBioInfo(userId, bioInfoContext)
+                const data = await getUserBioInfoById(userId)
                 setUserData(data)
                 setNeedsRefresh(false)
             }
         })()
     }, [needsRefresh])
 
-    const bioInfoContext = useBioInfo()
-    const timeLogContext = useTimeLog()
-
     useEffect(()=>{
         const getData = async(id) => {
             // get user data
-            let data = await getOrLoadUserBioInfo(id, bioInfoContext)
+            let data = await getUserBioInfoById(id)
             setUserData(data)
 
             // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                const supervisorData = await getOrLoadUserBioInfo(superId, bioInfoContext)
+                const supervisorData = await getUserBioInfoById(superId)
                 // get supervisor data
                 setSuperData(supervisorData)
             }
@@ -95,16 +93,16 @@ const UserBio = ({ userId, canEdit = true }) => {
 
             // team data
             const teamId = data.teamId
-            const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
+            const teamInfo = await getTeamInfoById(teamId)
             setTeamData(teamInfo)
 
             // set profle picture
-            const img = await getOrLoadProfileImage(id, bioInfoContext)
+            const img = await getImageForUserId(id)
             setImgUrl(img)
 
             // time clock data, only load if this is not the logged in user
             if (id !== authUserId) {
-                const timeLog = await getOrLoadOpenTimeLog(id, timeLogContext)
+                const timeLog = await getOpenTimeLog(id)
                 if (timeLog) {
                     const newClockStatus = {
                         clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,

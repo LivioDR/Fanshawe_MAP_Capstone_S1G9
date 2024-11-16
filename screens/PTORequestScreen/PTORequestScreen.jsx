@@ -7,8 +7,6 @@ import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 import { requestDays } from "../../services/database/ptoManagement";
-import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
-
 
 const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) => {
 
@@ -19,7 +17,6 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         until: new Date(),
         alert: " ",
     })
-    const bioInfoContext = useBioInfo()
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
@@ -68,7 +65,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
     const requestTimeOff = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
         
-        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
+        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason)
 
         if(result.errors.length == 0){
             updateAlert(result.message)

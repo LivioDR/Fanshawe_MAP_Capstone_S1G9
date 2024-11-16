@@ -1,19 +1,18 @@
 import { View, Text } from "react-native";
 import InputField from "../../components/common/InputField/InputField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCredentials } from "../../services/state/userCredentials";
-import { setUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
 import UiButton from "../../components/common/UiButton/UiButton";
+import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
-
-
+import { getUserBioInfoById, setUserBioInfoById } from "../../services/database/userBioInfo";
 
 const NewMemberScreen = () => {
     
     // getting the userId and teamId for the supervisor who's creating the new team member
     const supervisorId = useCredentials().user.uid
-    const bioState = useBioInfo()
-    const teamId = bioState.bios[supervisorId].teamId
+    const [loading, setLoading] = useState(true);
+    const [teamId, setTeamId] = useState("");
     
     const defaultUserInfo = {
         onPTO: false,
@@ -23,13 +22,21 @@ const NewMemberScreen = () => {
         isEnabled: true,
         isSupervisor: false,
         salaried: false,
-        teamId: teamId,
     }
 
     // Defining the state variables
     const [userInfo, setUserInfo] = useState(defaultUserInfo)
     const [errors, setErrors] = useState("")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
+
+    useEffect(() => {
+        (async () => {
+            const userInfo = await getUserBioInfoById(supervisorId);
+            setTeamId(userInfo.teamId);
+            defaultUserInfo.teamId = userInfo.teamId;
+            setLoading(false);
+        })()
+    }, [])
 
     // And the fields to be completed
     const fields = [
@@ -58,7 +65,6 @@ const NewMemberScreen = () => {
             label: 'Role',
         },
     ]
-
 
     // Function to handle the fields values and modify the state variable
     const setField = (e, fieldName) => {
@@ -133,7 +139,7 @@ const NewMemberScreen = () => {
         }
 
         // Setting the data for this new user in the database and in the state
-        const userInfoSettingResult = await setUserBioInfo(userCreationResult.uid, userInfo, bioState)
+        const userInfoSettingResult = await setUserBioInfoById(userCreationResult.uid, userInfo)
         // And adding the user to the team
         const teamInfoSettingResult = await addUserToTeam(userCreationResult.uid, teamId)
 
@@ -156,6 +162,7 @@ const NewMemberScreen = () => {
         }
     }
 
+    if (loading) return <LoadingIndicator />
 
     // UI to be rendered by this component
     return(
