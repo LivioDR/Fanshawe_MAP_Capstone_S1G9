@@ -14,7 +14,8 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
-import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getImageForUserId } from "../../services/database/profileImage";
 import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } from "../../services/state/timeClock";
 
 // styles
@@ -34,8 +35,6 @@ export default function HomeScreen() {
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
 
-    // get context for user bio
-    const bioInfoContext = useBioInfo();
     // and for time logs
     const timeLogContext = useTimeLog();
 
@@ -62,13 +61,13 @@ export default function HomeScreen() {
             }
 
             // get or load user bio info
-            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
+            const userInfo = await getUserBioInfoById(userId);
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
                 setIsSalaried(userInfo.salaried);
             }
 
-            const userImageURL = await getOrLoadProfileImage(userId, bioInfoContext);
+            const userImageURL = await getImageForUserId(userId);
             if (userImageURL) {
                 setUserProfileImage(userImageURL);
             }
