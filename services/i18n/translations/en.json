@@ -16,7 +16,9 @@
         "cancel": "Cancel",
         "close": "Close",
         "saveSuccess": "Changes saved successfully!",
-        "notApplicable": "N/A"
+        "notApplicable": "N/A",
+        "enabled": "Enabled",
+        "disabled": "Disabled"
     },
 
     "login": {

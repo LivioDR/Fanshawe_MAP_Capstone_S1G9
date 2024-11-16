@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
@@ -24,6 +25,8 @@ const ManageTeamScreen = ({ uid }) => {
 
     }
     const bioInfoContext = useBioInfo()
+
+    const { t } = useTranslation()
 
     useEffect(()=>{
         (async()=>{
@@ -94,7 +97,7 @@ const ManageTeamScreen = ({ uid }) => {
                 style={styles.scroll.outer}
                 contentContainerStyle={styles.scroll.inner}
             >
-                {createUserCards("Team Members", teamMembers)}
+                {createUserCards(t("team.members"), teamMembers)}
             </ScrollView>
         </SafeAreaView>
     )
