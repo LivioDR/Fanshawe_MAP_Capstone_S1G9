@@ -17,7 +17,7 @@ import { requestDays } from "../../services/database/ptoManagement";
 import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
 import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 import { useCredentials } from "../../services/state/userCredentials";
-import { usePT0Admin } from "../../services/state/ptoAdmin";
+import { usePTOAdmin } from "../../services/state/ptoAdmin";
 
 
 /*
@@ -33,7 +33,7 @@ Ignore this line (creating test commit)
 const PTOEditScreen = ({userId}) => {
 
     //Getting global show from the state:
-    const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePT0Admin
+    const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
 
     /*
     Using logic from UserBio.jsx to convert the userId into data suitable for the screen

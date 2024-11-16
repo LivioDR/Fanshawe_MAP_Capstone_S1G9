@@ -10,7 +10,7 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 // Business logic imports
 import { useCredentials } from "../../services/state/userCredentials";
 import { useBioInfo, getOrLoadUserBioInfo, getTeamMemberIds, getOrLoadProfileImage } from "../../services/state/userBioInfo";
-import { usePT0Admin } from "../../services/state/ptoAdmin";
+import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 
 /*
@@ -22,7 +22,7 @@ triggered when a UserCard is pressed
 const PTOTeamScreen = ({ uid }) => {
 
     //getting globals from state
-    const { inAdminMode, updateEditMode, showEditPtoModal, currentIdForPtoEdit } = usePT0Admin
+    const { inAdminMode, updateEditMode, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)

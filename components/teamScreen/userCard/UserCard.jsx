@@ -7,7 +7,7 @@ import { useCredentials } from "../../../services/state/userCredentials";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { useBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
-import { usePT0Admin } from "../../../services/state/ptoAdmin";
+import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 
 const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
@@ -16,7 +16,7 @@ const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser =
     const bioInfoContext = useBioInfo()
    
     const [enabled, setEnabled] = useState(isEnabled)
-    const { inAdminMode, updatePTOAdmin } = usePT0Admin
+    const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
 
     // just in case we aren't able to navigate, don't add a click handler
     // also don't add it for the current user, since they have a profile tab

@@ -11,12 +11,12 @@ import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
-import { usePT0Admin } from "../../services/state/ptoAdmin";
+import { usePTOAdmin } from "../../services/state/ptoAdmin";
 
 export default function LoginScreen({ loginSuccess }) {
 
   /* Getting state from the usePTOAdmin */
-  const { updatePTOAdmin } = usePT0Admin();
+  const { updatePTOAdmin } = usePTOAdmin();
 
   /* States */
   const [email, setEmail] = useState("");

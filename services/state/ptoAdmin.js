@@ -39,7 +39,7 @@ export function PTOAdminProvider({ children }) {
     );
 }
 
-export function usePT0Admin() {
+export function usePTOAdmin() {
     return useContext(PTOAdminContext);
 }
 
