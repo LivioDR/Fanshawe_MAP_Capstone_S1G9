@@ -31,7 +31,7 @@ export default function CompanyOptions() {
             icon: <MaterialIcons name="cases" size={30} color="black" />,
         },
         {
-            caption: t("team.addMember"),
+            caption: t("team.addMemberTitle"),
             destination: "AddMemberScreen",
             icon: <MaterialIcons name="group-add" size={30} color="black" />,
         },

@@ -51,7 +51,7 @@ export default function CompanyScreen() {
                 name="AddMemberScreen"
                 component={NewMemberScreen}
                 options={{
-                    headerTitle: t("team.addMember"),
+                    headerTitle: t("team.addMemberTitle"),
                 }}
             />
 

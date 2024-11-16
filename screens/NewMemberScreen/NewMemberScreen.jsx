@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { View, Text } from "react-native";
 import InputField from "../../components/common/InputField/InputField";
 import { useState } from "react";
@@ -5,8 +6,6 @@ import { useCredentials } from "../../services/state/userCredentials";
 import { setUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
 import UiButton from "../../components/common/UiButton/UiButton";
 import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
-
-
 
 const NewMemberScreen = () => {
     
@@ -31,31 +30,33 @@ const NewMemberScreen = () => {
     const [errors, setErrors] = useState("")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
 
+    const { t } = useTranslation()
+
     // And the fields to be completed
     const fields = [
         {
             name: 'firstName',
-            label: 'First Name',
+            label: t("profile.firstName"),
         },
         {
             name: 'lastName',
-            label: "Last Name",
+            label: t("profile.lastName"),
         },
         {
             name: 'address',
-            label: 'Address',
+            label: t("profile.address"),
         },
         {
             name: 'email',
-            label: 'Email',
+            label: t("profile.companyEmail"),
         },
         {
             name: 'birthday',
-            label: 'Birth Date (YYYY-MM-DD)',
+            label: `${t("profile.birthDate")} (YYYY-MM-DD)`,
         },
         {
             name: 'role',
-            label: 'Role',
+            label: t("profile.role"),
         },
     ]
 
@@ -165,8 +166,8 @@ const NewMemberScreen = () => {
             }
             <Text>{errors}</Text>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: '100%',}}>
-                <UiButton label={"Clear"} type={"warning"} disabled={isBtnDisabled} funcToCall={clearAllFields} />
-                <UiButton label={"Add member"} type={"primary"} disabled={isBtnDisabled} funcToCall={sendRequest} />
+                <UiButton label={t("common.clear")} type={"warning"} disabled={isBtnDisabled} funcToCall={clearAllFields} />
+                <UiButton label={t("team.addMember")} type={"primary"} disabled={isBtnDisabled} funcToCall={sendRequest} />
             </View>
         </View>
     )

@@ -14,6 +14,7 @@
         "loading": "Loading...",
         "save": "Save",
         "cancel": "Cancel",
+        "clear": "Clear",
         "close": "Close",
         "saveSuccess": "Changes saved successfully!",
         "notApplicable": "N/A",
@@ -74,9 +75,12 @@
     },
 
     "profile": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
         "companyEmail": "Corporate Email",
         "address": "Address",
         "birthDate": "Birth Date",
+        "role": "Role",
         "team": "Team",
         "supervisor": "Supervisor",
         "supervisorEmail": "Supervisor Email",
@@ -114,7 +118,8 @@
         "me": "me",
 
         "manageTeam": "Manage Team",
-        "addMember": "Add Team Member"
+        "addMemberTitle": "Add Team Member",
+        "addMember": "Add Member"
     },
 
     "errors": {
