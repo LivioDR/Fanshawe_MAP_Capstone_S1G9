@@ -20,6 +20,7 @@ import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileIm
 import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 import { useCredentials } from "../../services/state/userCredentials";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
+import { updateAvailableDays } from "../../services/database/ptoManagement";
 
 
 /*
@@ -28,14 +29,14 @@ This id uses similar logic to the UserBio component to get other data for
 the PTO screen
 
 Need to get the userId, supervisorId, isShown, dismiss, pto, sick for this screen to work
-
-Ignore this line (creating test commit)
 */
 
 const PTOEditScreen = ({userId}) => {
 
     //Getting global show from the state:
     const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
+
+    const bioState = useBioInfo()
 
     /*
     Using logic from UserBio.jsx to convert the userId into data suitable for the screen
@@ -188,8 +189,11 @@ const PTOEditScreen = ({userId}) => {
         setPTOToBeRemoved(!ptoToBeRemoved)
     }
 
-    const handlePwdChange = (value) => {
-        setDaysToChange(value);
+    const handleDaysChange = (value) => {
+
+        //Value is a String, so convert to int
+        setDaysToChange(parseInt(value));
+
 
         if (value.length === 0) {
         setDaysIsValid(false);
@@ -262,8 +266,8 @@ const PTOEditScreen = ({userId}) => {
     }
 
 
-
-    //Show confirm alert
+    // Show confirm alert, if okay pressed make changes
+    // By this point, all sanity checking should be complete
     const showConfirmAlert = () =>
         Alert.alert('Confirm changes', `${userData.firstName}`, [
           {
@@ -271,25 +275,30 @@ const PTOEditScreen = ({userId}) => {
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => confirmPTOChange()},
         ]);
 
     const confirmPTOChange = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
         
-        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
+       // const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
-        if(result.errors.length == 0){
-            updateAlert(result.message)
+       //RequestedById is just the currently logged in Admin
+       //
+       const result = await updateAvailableDays(userId, category, daysToChange, bioState)
+
+
+        // if(result.errors.length == 0){
+        //     updateAlert(result.message)
     
-            setTimeout(()=>{
-                // clears the alert before closing the modal
-                clearAndClose()
-            }, 2500)
-        }
-        else{
-            updateAlert(result.errors[0])
-        }
+        //     setTimeout(()=>{
+        //         // clears the alert before closing the modal
+        //         clearAndClose()
+        //     }, 2500)
+        // }
+        // else{
+        //     updateAlert(result.errors[0])
+        // }
     }
 
     const clearAndClose = () => {
@@ -344,7 +353,7 @@ const PTOEditScreen = ({userId}) => {
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
-                onChangeText={handlePwdChange}
+                onChangeText={handleDaysChange}
                 keyboardType={"numeric"}
                 />
 
