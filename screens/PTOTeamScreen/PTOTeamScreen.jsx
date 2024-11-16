@@ -90,6 +90,8 @@ const PTOTeamScreen = ({ uid }) => {
                             role={user.item.role}
                             email={user.item.email}
                             imgUrl={user.item.uri}
+                            remainingPTODays={user.item.remainingPTODays}
+                            remainingSickDays={user.item.remainingSickDays}
                         />
                     )}
                     keyExtractor={user => user.uid}

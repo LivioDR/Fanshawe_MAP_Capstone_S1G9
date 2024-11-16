@@ -9,7 +9,7 @@ import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { useBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
 import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 
-const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
+const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
@@ -60,10 +60,10 @@ const UserCard = ({id, name, role, email, imgUrl, isEnabled = true, toggleUser =
                             {name}
                         </Text>
                         <Text style={styles.role}>
-                            {role}
+                            {inAdminMode ? `PTO days remaining: ${remainingPTODays}` : role}
                         </Text>
                         <Text style={styles.email}>
-                            {email}
+                            {inAdminMode ? `Sick days remaining: ${remainingSickDays}` : email}
                         </Text>
                     </View>
                 </>
