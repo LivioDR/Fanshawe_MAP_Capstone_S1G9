@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, Text, Modal } from "react-native";
+import { Alert, View, Text, Modal } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 // UI imports
 import styles from "./PTOEditScreenStyles";
 import bioStyles from "../UserBioScreen/UserBioStyles";
 import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCategorySwitch";
+import PTOAddRemoveSwitch from "../../components/userBio/PTOAddRemoveSwitch/PTOAddRemoveSwitch";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
@@ -50,6 +51,9 @@ const PTOEditScreen = ({userId}) => {
     const [showEditModal, setShowEditModal] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(true)
     const [needsRefresh, setNeedsRefresh] = useState(false)
+
+    //For new Switch
+    const [ptoToBeRemoved, setPTOToBeRemoved] = useState(false)
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
@@ -175,6 +179,11 @@ const PTOEditScreen = ({userId}) => {
 
 
     // STATE MANAGEMENT FUNCTIONS START HERE
+    const toggleAddRemoveSwitch = () => {
+
+        setPTOToBeRemoved(!ptoToBeRemoved)
+    }
+
     const toggleSwitch = () => {
         setRequestInfo(prev => {
             const newRequestInfo = {...prev}
@@ -236,6 +245,42 @@ const PTOEditScreen = ({userId}) => {
         }
     }
 
+
+
+    //Show confirm alert
+    const showConfirmAlert = () =>
+        Alert.alert('Confirm changes', `${userData.firstName}`, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+
+
+
+
+
+
+    const confirmPTOChange = async() => {
+        let category = requestInfo.category ? "Sick" : "PTO"
+        
+        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
+
+        if(result.errors.length == 0){
+            updateAlert(result.message)
+    
+            setTimeout(()=>{
+                // clears the alert before closing the modal
+                clearAndClose()
+            }, 2500)
+        }
+        else{
+            updateAlert(result.errors[0])
+        }
+    }
+
     const clearAndClose = () => {
         updateReason("")
         updateAlert(" ")
@@ -259,7 +304,7 @@ const PTOEditScreen = ({userId}) => {
         >
             <View style={styles.container}>
                 <Text style={styles.nameLabel}>
-                    Days remaining
+                    Editing PTO for {userData.firstName} {userData.lastName}
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
@@ -274,9 +319,25 @@ const PTOEditScreen = ({userId}) => {
                 </Text>
 
                 <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
+
+                <Text style={styles.subtitle}>
+                    Select add or remove
+                </Text>
+
+
+                <PTOAddRemoveSwitch initialValue={ptoToBeRemoved} toggle={toggleAddRemoveSwitch} />
                 
-                <InputField
+
+                {/* <InputField
                 label={"Reason"}
+                value={requestInfo.reason}
+                setValue={updateReason}
+                autoCapitalize="sentences"
+                /> */}
+                
+
+                <InputField
+                label={ ptoToBeRemoved ? "Days to remove" : "Days to add"}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
@@ -289,8 +350,8 @@ const PTOEditScreen = ({userId}) => {
                     type="default"
                     />
                     <UiButton
-                    label={"Request"}
-                    funcToCall={requestTimeOff}
+                    label={"Confirm"}
+                    funcToCall={showConfirmAlert}
                     type="primary"
                     />
                 </View>
