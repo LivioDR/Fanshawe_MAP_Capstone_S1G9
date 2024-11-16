@@ -9,6 +9,7 @@ import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCat
 import PTOAddRemoveSwitch from "../../components/userBio/PTOAddRemoveSwitch/PTOAddRemoveSwitch";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
+import InputMsgBox from "../../components/InputMsgBox";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
@@ -54,6 +55,9 @@ const PTOEditScreen = ({userId}) => {
 
     //For new Switch
     const [ptoToBeRemoved, setPTOToBeRemoved] = useState(false)
+    const [daysToChange, setDaysToChange] = useState(0);
+    const [daysIsValid, setDaysIsValid] = useState(false)
+    const [daysErrTxt, setDaysErrTxt] = useState("")
 
     const showModal = () => {setShowEditModal(true)}
     const hideModal = () => {setShowEditModal(false)}
@@ -184,6 +188,18 @@ const PTOEditScreen = ({userId}) => {
         setPTOToBeRemoved(!ptoToBeRemoved)
     }
 
+    const handlePwdChange = (value) => {
+        setDaysToChange(value);
+
+        if (value.length === 0) {
+        setDaysIsValid(false);
+        setDaysErrTxt("Please enter a value");
+        } else {
+        setDaysIsValid(true);
+        setDaysErrTxt("");
+        }
+    };
+
     const toggleSwitch = () => {
         setRequestInfo(prev => {
             const newRequestInfo = {...prev}
@@ -258,11 +274,6 @@ const PTOEditScreen = ({userId}) => {
           {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
 
-
-
-
-
-
     const confirmPTOChange = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
         
@@ -326,22 +337,18 @@ const PTOEditScreen = ({userId}) => {
 
 
                 <PTOAddRemoveSwitch initialValue={ptoToBeRemoved} toggle={toggleAddRemoveSwitch} />
-                
-
-                {/* <InputField
-                label={"Reason"}
-                value={requestInfo.reason}
-                setValue={updateReason}
-                autoCapitalize="sentences"
-                /> */}
-                
-
+            
+                {/* TODO: Keyboard covers input box */}
                 <InputField
                 label={ ptoToBeRemoved ? "Days to remove" : "Days to add"}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
+                onChangeText={handlePwdChange}
+                keyboardType={"numeric"}
                 />
+
+                <InputMsgBox text={daysErrTxt}></InputMsgBox>
 
                 <View style={styles.btnContainer}>
                     <UiButton
