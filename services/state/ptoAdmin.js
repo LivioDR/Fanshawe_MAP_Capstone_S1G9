@@ -28,12 +28,12 @@ const PTOAdminContext = createContext(defaultState);
 export function PTOAdminProvider({ children }) {
     const [state, setState] = useState(defaultState);
 
-    const updatePtoAdmin = (newState) => {
+    const updatePTOAdmin = (newState) => {
         setState({ ...state, ...newState });
     };
 
     return (
-        <PTOAdminContext.Provider value={{ ...state, updatePtoAdmin }}>
+        <PTOAdminContext.Provider value={{ ...state, updatePTOAdmin }}>
             {children}
         </PTOAdminContext.Provider>
     );

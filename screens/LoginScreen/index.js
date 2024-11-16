@@ -11,8 +11,13 @@ import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
+import { usePT0Admin } from "../../services/state/ptoAdmin";
 
 export default function LoginScreen({ loginSuccess }) {
+
+  /* Getting state from the usePTOAdmin */
+  const { updatePTOAdmin } = usePT0Admin();
+
   /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -105,6 +110,13 @@ export default function LoginScreen({ loginSuccess }) {
         if(userInfo.isEnabled){
           showSuccessToast("Login successful");
           loginSuccess(userCredential);
+
+          // Get info of logged in user to determine if they're an admin
+          // for the Admin's PTO functionality
+          if(userInfo.isSupervisor){
+            updatePTOAdmin({ inAdminMode: true });
+          }
+
         }
         else{
           showErrorToast("User disabled. Please contact your administrator")
