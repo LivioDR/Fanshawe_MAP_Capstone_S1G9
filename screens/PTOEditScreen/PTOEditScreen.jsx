@@ -41,8 +41,8 @@ import { useCredentials } from "../../services/state/userCredentials";
 Current Methods and their DB equivalent
 ---------------------------
 useBioInfo - 
-getOrLoadUserBioInfo - getUserBioInfoById(userId)
-getOrLoadOpenTimeLog
+getOrLoadUserBioInfo - getUserBioInfoById(userId) [X]
+getOrLoadOpenTimeLog - do we need this?
 useTimeLog
 useCredentials 
 
@@ -165,19 +165,6 @@ const PTOEditScreen = ({userId}) => {
                     lastName: '',
                     email: 'N/A',
                 })
-            }
-
-            // time clock data, only load if this is not the logged in user
-            if (id !== authUserId) {
-                const timeLog = await getOrLoadOpenTimeLog(id, timeLogContext)
-                if (timeLog) {
-                    const newClockStatus = {
-                        clockedIn: timeLog.clockInTime && !timeLog.clockOutTime,
-                        onLunch: timeLog.onLunchTime && !timeLog.offLunchTime,
-                        timeLog,
-                    }
-                    setClockStatus(newClockStatus)
-                }
             }
 
             // show the data
@@ -427,11 +414,6 @@ const PTOEditScreen = ({userId}) => {
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
-
-                {/* <View style={styles.btnContainer}>
-                    <FromToDatePicker label={"From"} initialValue={requestInfo.from} setDate={setFromDate}/>
-                    <FromToDatePicker label={"To"} initialValue={requestInfo.until} setDate={setUntilDate}/>
-                </View> */}
 
                 <Text style={styles.subtitle}>
                     Select category
