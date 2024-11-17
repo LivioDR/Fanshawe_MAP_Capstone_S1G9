@@ -25,7 +25,7 @@ export default function LoginScreen({ loginSuccess }) {
   const [emailIsValid, setEmailIsValid] = useState(false);
   const [pwdIsValid, setPwdIsValid] = useState(false);
 
-    /* Hooks */
+/* Hooks */
 
   /*
   Ensures that there are no active users signed in when the login page is entered
