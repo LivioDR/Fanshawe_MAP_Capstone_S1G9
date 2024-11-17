@@ -78,7 +78,7 @@ const PTOEditScreen = ({userId}) => {
     const [needsRefresh, setNeedsRefresh] = useState(true) //change to true, as need refresh whenever loading
 
     //For new Switch
-    const [ptoToBeRemoved, setPTOToBeRemoved] = useState(false)
+    const [daysToBeRemoved, setDaysToBeRemoved] = useState(false)
     const [daysToChange, setDaysToChange] = useState(0);
     const [daysIsValid, setDaysIsValid] = useState(false)
     const [daysErrTxt, setDaysErrTxt] = useState("")
@@ -227,32 +227,88 @@ const PTOEditScreen = ({userId}) => {
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleAddRemoveSwitch = () => {
 
-        setPTOToBeRemoved(!ptoToBeRemoved)
+        setDaysToBeRemoved(!daysToBeRemoved)
     }
 
     const handleDaysChange = (value) => {
 
+        const valueAsInt = parseInt(value);
+
+        console.log("Val as int ", valueAsInt);
+        console.log("PTO ", pto);
+        console.log("Days to be removed ", daysToBeRemoved);
+
         //Value is a String, so convert to int
         setDaysToChange(parseInt(value));
 
-        //If remove toggled, make daysToChange a negative
-        if(ptoToBeRemoved){
+        //If remove toggled, make daysToChange a Snegative
+        if(daysToBeRemoved){
 
             setDaysToChange(parseInt(value * -1));
 
         }
 
+        /*
+        Logic
+
+        Get current state from both toggles, if entered number breaks
+        logic log error and disable button
+
+        */
 
 
+        //Getting state from toggles
 
+        /*
+        Value to adjust
+        Whether days added or removed
+        Whether sick days or pto days
+
+        Adding days has no limit, so no checks needed here
+
+        Condition 1 - No input - fail
+        Condition 2 - NaN input - fail - Note: Need to convert value to an int first as input returns a screen
+        Condition 3 - Removing days for PTO - If input number bigger than PTO number - fail
+        Condition 4 - Removing days for sick - If input number bigger than sick number - fail
+
+        Else input is valid
+
+        */
+        daysToChange
+        daysToBeRemoved
+        const category = requestInfo.category ? "Sick" : "PTO"
+
+        console.log("Category ", category);
 
         if (value.length === 0) {
+
         setDaysIsValid(false);
-        setDaysErrTxt("Please enter a value");
-        } else {
-        setDaysIsValid(true);
-        setDaysErrTxt("");
+        setDaysErrTxt("Please enter a number");
+
+        }else if(isNaN(valueAsInt)){
+
+        setDaysIsValid(false);
+        setDaysErrTxt("Please enter a number");
+
+        }else if(daysToBeRemoved && category === "PTO" && valueAsInt > pto){
+
+        setDaysIsValid(false);
+        setDaysErrTxt("Cannot remove more PTO days than a user has");
+
+        }else if(daysToBeRemoved && category === "Sick" && valueAsInt > sick){
+
+            setDaysIsValid(false);
+            setDaysErrTxt("Cannot remove more sick days than a user has");
+    
+        }else {
+
+            setDaysIsValid(true);
+            setDaysErrTxt("");
         }
+
+        //Finally disable button if input is not valid
+
+
     };
 
     const toggleSwitch = () => {
@@ -399,11 +455,11 @@ const PTOEditScreen = ({userId}) => {
                 </Text>
 
 
-                <PTOAddRemoveSwitch initialValue={ptoToBeRemoved} toggle={toggleAddRemoveSwitch} />
+                <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
             
                 {/* TODO: Keyboard covers input box */}
                 <InputField
-                label={ ptoToBeRemoved ? "Days to remove" : "Days to add"}
+                label={ daysToBeRemoved ? "Days to remove" : "Days to add"}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
@@ -423,6 +479,7 @@ const PTOEditScreen = ({userId}) => {
                     label={"Confirm"}
                     funcToCall={showConfirmAlert}
                     type="primary"
+                    disabled={!daysIsValid}
                     />
                 </View>
                 <Text>
