@@ -4,91 +4,46 @@ import { useRoute } from "@react-navigation/native";
 
 // UI imports
 import styles from "./PTOEditScreenStyles";
-import bioStyles from "../UserBioScreen/UserBioStyles";
 import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCategorySwitch";
 import PTOAddRemoveSwitch from "../../components/userBio/PTOAddRemoveSwitch/PTOAddRemoveSwitch";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import InputMsgBox from "../../components/InputMsgBox";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
-import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
-
 /*
-Getting the ID from the pressed card
-This id uses similar logic to the UserBio component to get other data for 
-the PTO screen
+The PTOEditScreen (Presented as a modal)
 
-Migration from Context to DB functions (PTOAdmin is okay as reserved for this)
+- Enables an admin to add or remove either PTO or Sick days from any user
+- Receives the ID from the pressed UserCard as a prop
+- Uses this ID to call database functions directly  
+- Sanity checking to ensure the user enters an integer, and that if removing
+    days from user PTO or Sick days, that it cannot exceed the days a user has,
+    preventing sending an unfeasible request to the database and handling the error there
+- By design, no restriction on the amount of days that can be added
 
-Context wrappers used: 
-import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
-import { useCredentials } from "../../services/state/userCredentials";
-
-Current Methods and their DB equivalent
----------------------------
-useBioInfo - 
-getOrLoadUserBioInfo - getUserBioInfoById(userId) [X]
-getOrLoadOpenTimeLog - Not needed
-useTimeLog - Not needed
-useCredentials - Not needed, as passing in userId as a prop from the pressed UserCard
-
-Methods to change
----------------------------
-
-useBioInfo / bioInfoContext - userBioInfo in context - 
-getOrLoadUserBioInfo  === getUserBioInfoById(userId)
-
-
-Get the UserBioInfo here and set it in the PTOAdminglobal state?
-
-
-UI
--Make sure after days added/removed that the teamPTOScreen refreshes to show updated data
--Fix loading implementation for UI
-
+Global state specific for this functionality is used here (usePTOAdmin)
 */
-
 const PTOEditScreen = ({userId}) => {
 
-    //Getting global show from the state:
     const { updatePTOAdmin, showEditPtoModal } = usePTOAdmin()
-
-    /*
-    Using this instead of bioState and bioInfoContext
-    */
-    async function fetchAndPrintBio(userId) {
-        try {
-            const myBio = await getUserBioInfoById(userId);
-            console.log("MyBio: ", myBio);
-            console.log("Userdata: ", userData)
-            //Todo: save this Bio to a local state? - mybio and userdata returning the same data
-            //Use userdata instead of bio?
-        } catch (error) {
-            console.error("Error fetching bio: ", error);
-        }
-    }
-    fetchAndPrintBio(userId)
 
     /*
     Using logic from UserBio.jsx to convert the userId into data suitable for the screen
     Returns: userId, userData.supervisorId, showPtoModal, hidePto, 
     */
-
-    const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
     const [canEditOthers, setCanEditOthers] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(true)
-    const [needsRefresh, setNeedsRefresh] = useState(true) //change to true, as need refresh whenever loading
+    const [needsRefresh, setNeedsRefresh] = useState(true) 
 
-    //For new Switch
+    //States for the PTOAddRemoveSwitch and User input
     const [daysToBeRemoved, setDaysToBeRemoved] = useState(false)
     const [daysToChange, setDaysToChange] = useState(0);
     const [daysIsValid, setDaysIsValid] = useState(false)
@@ -123,7 +78,6 @@ const PTOEditScreen = ({userId}) => {
          
             let data = await getUserBioInfoById(userId)
             setUserData(data)
-            //Whenever this screen is entered we know we want to show the modal
             setShowPtoModal(true)
 
             if(data.isSupervisor){
@@ -142,10 +96,6 @@ const PTOEditScreen = ({userId}) => {
                     email: 'N/A',
                 })
             }
-            // show the data
-            setLoading(false)
-
-            //TODO - Fixed bug
             setNeedsRefresh(true)
         }
         getData(userId)
@@ -157,12 +107,11 @@ const PTOEditScreen = ({userId}) => {
     const pto = userData.remainingPTODays
     const sick = userData.remainingSickDays
 
-
     /*
     Start of logic contained in the PTOModal / PTORequestScreen
     */
 
-    //Reuqestinfo is needed to get the correct category
+    //Reques info is needed to get the correct category
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
         reason: "",
@@ -170,7 +119,6 @@ const PTOEditScreen = ({userId}) => {
         until: new Date(),
         alert: " ",
     })
-
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleAddRemoveSwitch = () => {
@@ -197,28 +145,14 @@ const PTOEditScreen = ({userId}) => {
         }
 
         /*
-        Logic
-
-        Get current state from both toggles, if entered number breaks
-        logic log error and disable button
-        */
-
-        //Getting state from toggles
-
-        /*
-        Value to adjust
-        Whether days added or removed
-        Whether sick days or pto days
+        Input validation
 
         Adding days has no limit, so no checks needed here
-
         Condition 1 - No input - fail
         Condition 2 - NaN input - fail - Note: Need to convert value to an int first as input returns a screen
         Condition 3 - Removing days for PTO - If input number bigger than PTO number - fail
         Condition 4 - Removing days for sick - If input number bigger than sick number - fail
-
         Else input is valid
-
         */
         daysToChange
         daysToBeRemoved
@@ -277,14 +211,10 @@ const PTOEditScreen = ({userId}) => {
     }
     // END OF STATE MANAGEMENT FUNCTIONS
 
-
-    // Show confirm alert, if okay pressed make changes
-    // By this point, all sanity checking should be complete
     const showConfirmAlert = () =>
         Alert.alert('Confirm changes', `${userData.firstName}`, [
           {
             text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
           {text: 'OK', onPress: () => confirmPTOChange()},
@@ -300,9 +230,8 @@ const PTOEditScreen = ({userId}) => {
             updateAlert(result.message)
     
             setTimeout(()=>{
-                // clears the alert before closing the modal
                 clearAndClose()
-            }, 2500)
+            }, 500)
         }
         else{
             updateAlert(result.errors[0])
@@ -315,17 +244,8 @@ const PTOEditScreen = ({userId}) => {
         dismiss()
     }
 
-    if(loading){
-        return(
-            <View style={bioStyles.loading}>
-                <LoadingIndicator/>
-            </View>
-        )
-    }
-
     return(
         <Modal
-        //visible={isShown}
         visible={showEditPtoModal}
         transparent={false}
         animationType="bottom"
@@ -346,7 +266,6 @@ const PTOEditScreen = ({userId}) => {
                 <Text style={styles.subtitle}>
                     Select add or remove
                 </Text>
-
 
                 <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
             

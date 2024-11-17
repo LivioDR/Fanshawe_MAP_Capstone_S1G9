@@ -16,25 +16,36 @@ import { getImageForUserId } from "../../services/database/profileImage";
 import { useFocusEffect } from "@react-navigation/native";
 
 /*
+The PTOTeamScreen
+
 This component just renders the user cards for editing the PTO
+
 The PTO edit screen is nested here due to being a modal which is 
-triggered when a UserCard is pressed
+triggered when a UserCard is pressed, passing the pressed user's id
+as a prop to the modal
+
+This component is based off the TeamScreen component
+Global state specific for this functionality is used here (usePTOAdmin)
 */
 
 const PTOTeamScreen = ({ uid }) => {
 
-    //getting globals from state
-    const { inAdminMode, showEditPtoModal, currentIdForPtoEdit, updatePTOAdmin } = usePTOAdmin()
+    const { showEditPtoModal, currentIdForPtoEdit, updatePTOAdmin } = usePTOAdmin()
 
-    //Set inAdmin mode whenever screen is navigated to to give the cards
-    //the correct onpress functionality
-    //Without useCallback infinite renders
+    /*
+    Set inAdmin mode whenever screen is navigated to (focused) to give the cards
+    PTO specific UI and the correct onPress functionality which opens the modal.
+
+    When unfocused, this is changed back to false so that the cards maintain
+    the correct UI and onPress functionality in different parts of the app
+
+    Note: If useCallback is not used here, it causes infinite re-renders
+    */
     useFocusEffect(
         React.useCallback(() => {
 
             updatePTOAdmin({ inAdminMode: true })
 
-       
             //Sets it back to false when screen unfocused
             return () => {
                 updatePTOAdmin({ inAdminMode: false })
@@ -42,11 +53,9 @@ const PTOTeamScreen = ({ uid }) => {
         }, [])
     );
 
-
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
     const [loading, setLoading] = useState(true)
-
 
     const route = useRoute()
     if (route && route.params?.id) {
