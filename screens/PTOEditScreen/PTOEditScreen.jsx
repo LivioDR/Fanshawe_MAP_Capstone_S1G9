@@ -17,7 +17,6 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 // Business logic imports
 import { requestDays } from "../../services/database/ptoManagement";
 import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 import { useCredentials } from "../../services/state/userCredentials";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
@@ -42,9 +41,9 @@ Current Methods and their DB equivalent
 ---------------------------
 useBioInfo - 
 getOrLoadUserBioInfo - getUserBioInfoById(userId) [X]
-getOrLoadOpenTimeLog - do we need this?
-useTimeLog
-useCredentials 
+getOrLoadOpenTimeLog - Not needed
+useTimeLog - Not needed
+useCredentials - Not needed, as passing in userId as a prop from the pressed UserCard
 
 Methods to change
 ---------------------------
@@ -68,7 +67,6 @@ const PTOEditScreen = ({userId}) => {
     const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
 
     const bioInfoContext = useBioInfo()
-    const timeLogContext = useTimeLog()
     const bioState = useBioInfo()
 
     /*
@@ -104,11 +102,12 @@ const PTOEditScreen = ({userId}) => {
         userId = route.params.id
     }
 
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
-    if (!userId) {
-        userId = authUserId
-    }
+    //TODO: Is this needed as directly passing in the userId from the pressed card
+    // const userCreds = useCredentials()
+    // const authUserId = userCreds.user.uid
+    // if (!userId) {
+    //     userId = authUserId
+    // }
 
 
     // set an effect that refreshes the current user's bio data if it's needed
