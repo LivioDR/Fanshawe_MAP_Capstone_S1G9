@@ -7,6 +7,7 @@ import { useCredentials } from "../../../services/state/userCredentials";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
+import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
@@ -34,7 +35,6 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
         () => {
             updatePTOAdmin({ showEditPtoModal: true, currentIdForPtoEdit: id })
 
-            console.log("BioInfoContext in UserCard ", bioInfoContext)
         } :
         undefined
 
@@ -44,7 +44,6 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
         await updateUserBioInfoById(id, {isEnabled: !enabled})
         setEnabled(prev => !prev)
     }
-
 
     if(interactive){
         return(

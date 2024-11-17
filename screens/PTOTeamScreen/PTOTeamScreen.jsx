@@ -9,9 +9,10 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
 import { useCredentials } from "../../services/state/userCredentials";
-import { useBioInfo, getOrLoadUserBioInfo, getTeamMemberIds, getOrLoadProfileImage } from "../../services/state/userBioInfo";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
+import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getImageForUserId } from "../../services/database/profileImage";
 
 /*
 This component just renders the user cards for editing the PTO
@@ -22,7 +23,7 @@ triggered when a UserCard is pressed
 const PTOTeamScreen = ({ uid }) => {
 
     //getting globals from state
-    const { inAdminMode, updateEditMode, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
+    const { showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
@@ -40,17 +41,17 @@ const PTOTeamScreen = ({ uid }) => {
         uid = authUserId
 
     }
-    const bioInfoContext = useBioInfo()
 
     useEffect(()=>{
         (async()=>{
-            const myInfo = await getOrLoadUserBioInfo(uid, bioInfoContext)
-            const myTeam = await getTeamMemberIds(myInfo.teamId, bioInfoContext)
+            const myInfo = await getUserBioInfoById(uid)
+            const myTeamInfo = await getTeamInfoById(myInfo.teamId)
+            const myTeam = myTeamInfo.employees
             const myTeamDetails = []
             const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
-                const detail = await getOrLoadUserBioInfo(myTeam[i], bioInfoContext)
-                const imgPath = await getOrLoadProfileImage(myTeam[i], bioInfoContext)
+                const detail = await getUserBioInfoById(myTeam[i])
+                const imgPath = await getImageForUserId(myTeam[i])
                 const userDetail = {...detail, uri: imgPath, uid: myTeam[i]}
                 if (detail.isSupervisor) {
                     myTeamSupervisorDetails.push(userDetail)
@@ -115,7 +116,6 @@ const PTOTeamScreen = ({ uid }) => {
             {showEditPtoModal && (
             <PTOEditScreen
                 userId={currentIdForPtoEdit}
-                //showPtoEditModal={showEditPtoModal}
             />
             )}
 

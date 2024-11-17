@@ -14,11 +14,8 @@ import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
-import { useBioInfo } from "../../services/state/userBioInfo";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
-
-//Updated methods
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
 
@@ -62,13 +59,6 @@ const PTOEditScreen = ({userId}) => {
 
     //Getting global show from the state:
     const { updatePTOAdmin, showEditPtoModal } = usePTOAdmin()
-
-    const bioInfoContext = useBioInfo()
-    const bioState = useBioInfo()
-
-    //BiostateReplacement
-
-
 
     /*
     Using this instead of bioState and bioInfoContext
@@ -136,10 +126,6 @@ const PTOEditScreen = ({userId}) => {
             //Whenever this screen is entered we know we want to show the modal
             setShowPtoModal(true)
 
-            console.log("Data in getData useEffect: ", data)
-            console.log("BioInfoContext ", bioInfoContext)
-            console.log("BioState: ", bioState)
-
             if(data.isSupervisor){
                 setCanEditOthers(true)
             }
@@ -167,8 +153,6 @@ const PTOEditScreen = ({userId}) => {
     },[])
 
     //Parameters that are usually passed to PTOModal from logic above
-    const supervisorId = userData.supervisorId
-    const isShown = showPtoModal
     const dismiss = hidePto
     const pto = userData.remainingPTODays
     const sick = userData.remainingSickDays
@@ -308,14 +292,9 @@ const PTOEditScreen = ({userId}) => {
 
     const confirmPTOChange = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
-        
-       // const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
-
-       console.log("Bio Info Context: ", bioInfoContext)
-       console.log("User Data: ", userData)
 
        //RequestedById (first parameter) is just the currently logged in Admin
-       const result = await updateAvailableDays(userId, category, daysToChange, bioInfoContext)
+       const result = await updateAvailableDays(userId, category, daysToChange)
 
         if(result.errors.length == 0){
             updateAlert(result.message)
