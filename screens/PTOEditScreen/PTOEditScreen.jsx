@@ -81,7 +81,7 @@ const PTOEditScreen = ({userId}) => {
     Start of logic contained in the PTOModal / PTORequestScreen
     */
 
-    //Reques info is needed to get the correct category
+    //Request info is needed to get the correct category
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
         reason: "",
