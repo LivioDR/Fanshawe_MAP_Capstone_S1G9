@@ -13,21 +13,11 @@ import styles from "./styles";
 
 export default function SettingsScreen() {
     const [languages] = useState(getLanguagesList());
-    const [storedLanguage, setStoredLanguage] = useState(null);     // TODO: remove debug
     const { t, i18n } = useTranslation();
-
-    // TODO: remove debug
-    useEffect(() => {
-        (async () => {
-            const lang = await AsyncStorage.getItem(currentLngKey);
-            setStoredLanguage(lang);
-        })();
-    }, []);
 
     const onLanguageChange = async ({ value }) => {
         i18n.changeLanguage(value);
         await AsyncStorage.setItem(currentLngKey, value);
-        setStoredLanguage(value);   // TODO: remove debug
     };
 
     return (
@@ -48,15 +38,6 @@ export default function SettingsScreen() {
                     value={i18n.language}
                     onChange={onLanguageChange}
                 />
-            </View>
-
-            {/* TODO: remove debug */}
-            <View style={styles.settingContainer}>
-                <Text>Stored language: {!!storedLanguage ? storedLanguage : "none"}</Text>
-                <Button title="Clear saved language" onPress={async () => {
-                    await AsyncStorage.removeItem(currentLngKey);
-                    setStoredLanguage(null);
-                }} />
             </View>
         </View>
     );
