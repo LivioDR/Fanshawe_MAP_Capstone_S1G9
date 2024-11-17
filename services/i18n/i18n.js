@@ -35,9 +35,6 @@ export function initI18next() {
                     translation: stringsES,
                 },
             },
-
-            // TODO: turn off debug
-            debug: true,
         });
 }
 

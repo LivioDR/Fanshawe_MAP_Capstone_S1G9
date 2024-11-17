@@ -93,7 +93,6 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
             </View>
 
             <View style={styles.picker.container}>
-                {/* TODO: fix auto popup on Android */}
                 <Text style={styles.picker.label}>{t("timeClock.workingHours.start")}</Text>
                 <TimePicker initialValue={startTime} onChange={updateStartTime} />
             </View>
