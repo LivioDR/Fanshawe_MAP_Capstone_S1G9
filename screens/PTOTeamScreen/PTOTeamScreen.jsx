@@ -151,7 +151,6 @@ const PTOTeamScreen = ({ uid }) => {
                 style={styles.scroll.outer}
                 contentContainerStyle={styles.scroll.inner}
             >
-                {createUserCards("Supervisors", teamSupervisors)}
                 {createUserCards("Team Members", teamMembers)}
             </ScrollView>
         </SafeAreaView>
