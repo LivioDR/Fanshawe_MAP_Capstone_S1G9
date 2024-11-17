@@ -6,10 +6,10 @@ import { Modal, View, Text, TouchableHighlight, Pressable } from "react-native";
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
+import { getUserBioInfoById, updateUserBioInfoById } from "../../../services/database/userBioInfo";
+
 import TimePicker from "../../common/TimePicker";
 import LoadingIndicator from "../../common/LoadingIndicator";
-
-import { useBioInfo, getOrLoadUserBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
 
 import styles from "./styles";
 
@@ -17,14 +17,13 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
     const [endTime, setEndTime] = useState(new Date(2024, 9, 4, 17));
     const [loading, setLoading] = useState(true);
-    const bioInfoContext = useBioInfo();
 
     const { t } = useTranslation();
 
     // async effect to load user working hours data
     useEffect(() => {
         (async () => {
-            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
+            const userInfo = await getUserBioInfoById(userId);
             if (userInfo) {
                 if ("workStartTime" in userInfo) {
                     const savedStartTime = userInfo.workStartTime.split(":");
@@ -53,10 +52,9 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setStartTime(newStartTime);
 
         // make DB update
-        const success = updateUserBioInfo(
+        const success = await updateUserBioInfoById(
             userId,
-            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
-            bioInfoContext
+            { workStartTime: newStartTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
         );
 
         // revert state if necessary
@@ -75,10 +73,9 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         setEndTime(newEndTime);
 
         // make DB update
-        const success = updateUserBioInfo(
+        const success = await updateUserBioInfoById(
             userId,
-            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) },
-            bioInfoContext
+            { workEndTime: newEndTime.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }) }
         );
 
         // revert state if necessary

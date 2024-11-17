@@ -10,8 +10,6 @@ import { View } from 'react-native';
 // hooks and providers
 import { useEffect, useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
-import { UserBioInfoProvider } from './services/state/userBioInfo';
-import { TimeLogProvider } from './services/state/timeClock';
 
 // custom components
 import LoadingIndicator from './components/common/LoadingIndicator';
@@ -54,14 +52,10 @@ export default function App() {
 
     return (
         <CredentialProvider userCreds={loginCredential}>
-        <UserBioInfoProvider>
-        <TimeLogProvider>
 
             <StatusBar style="auto" />
             {shownScreen}
 
-        </TimeLogProvider>
-        </UserBioInfoProvider>
         </CredentialProvider>
     );
 }

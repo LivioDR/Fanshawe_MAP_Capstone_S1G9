@@ -17,8 +17,9 @@ import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
 // database and state
 import { Timestamp } from "firebase/firestore";
-import { getOrLoadProfileImage, getOrLoadUserBioInfo, useBioInfo } from "../../services/state/userBioInfo";
-import { getOrLoadOpenTimeLog, useTimeLog, updateTimeLog, clockIn, clockOut } from "../../services/state/timeClock";
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getImageForUserId } from "../../services/database/profileImage";
+import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/database/timeClock";
 
 // styles
 import styles from "./styles";
@@ -36,19 +37,14 @@ export default function TimeClockScreen() {
 
     const userCreds = useCredentials();
     const userId = userCreds.user.uid;
-
-    // get context for user bio
-    const bioInfoContext = useBioInfo();
-    // and for time logs
-    const timeLogContext = useTimeLog();
-
+    
     // localization
     const { t } = useTranslation();
-
+    
     // async effect to load the user's profile info and current time log, if one exists
     useEffect(() => {
         (async () => {
-            const curTimeLog = await getOrLoadOpenTimeLog(userId, timeLogContext).catch((err) => console.error(err));
+            const curTimeLog = await getOpenTimeLog(userId).catch((err) => console.error(err));
 
             if (curTimeLog) {
                 setTimeLog(curTimeLog);
@@ -68,13 +64,13 @@ export default function TimeClockScreen() {
             }
 
             // get or load user bio info
-            const userInfo = await getOrLoadUserBioInfo(userId, bioInfoContext);
+            const userInfo = await getUserBioInfoById(userId);
             if (userInfo) {
                 setUserName(`${userInfo.firstName} ${userInfo.lastName}`);
                 setIsSalaried(userInfo.salaried);
             }
 
-            const userImageURL = await getOrLoadProfileImage(userId, bioInfoContext);
+            const userImageURL = await getImageForUserId(userId);
             if (userImageURL) {
                 setUserProfileImage(userImageURL);
             }
@@ -109,9 +105,9 @@ export default function TimeClockScreen() {
         setTimeLog(newTimeLog);
 
         // make update in Firebase and global state
-        const success = await updateTimeLog(userId, newTimeLog, timeLogContext);
+        const success = await updateTimeLog(newTimeLog);
 
-        // if we fail, revert state
+        // if we fail, revert stateß
         if (!success) {
             setTimeLog(oldTimeLog);
         }
@@ -122,7 +118,7 @@ export default function TimeClockScreen() {
     // action functions for the clock buttons
     const buttonActions = {
         clockIn: async () => {
-            const newTimeLog = await clockIn(userId, Timestamp.now(), timeLogContext);
+            const newTimeLog = await createTimeLog(userId, Timestamp.now());
             if (newTimeLog) {
                 setTimeLog(newTimeLog);
                 setClockedIn(true);
@@ -157,7 +153,7 @@ export default function TimeClockScreen() {
             setTimeLog(null);
 
             // make update in Firebase and global state
-            const success = await clockOut(userId, newTimeLog, timeLogContext);
+            const success = await updateTimeLog(newTimeLog);
 
             // if we fail, revert state
             if (!success) {
