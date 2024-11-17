@@ -66,6 +66,10 @@ const PTOEditScreen = ({userId}) => {
     const bioInfoContext = useBioInfo()
     const bioState = useBioInfo()
 
+    //BiostateReplacement
+
+
+
     /*
     Using this instead of bioState and bioInfoContext
     */
@@ -307,6 +311,9 @@ const PTOEditScreen = ({userId}) => {
         
        // const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
 
+       console.log("Bio Info Context: ", bioInfoContext)
+       console.log("User Data: ", userData)
+
        //RequestedById (first parameter) is just the currently logged in Admin
        const result = await updateAvailableDays(userId, category, daysToChange, bioInfoContext)
 
@@ -364,7 +371,6 @@ const PTOEditScreen = ({userId}) => {
 
                 <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
             
-                {/* TODO: Keyboard covers input box */}
                 <InputField
                 label={ daysToBeRemoved ? "Days to remove" : "Days to add"}
                 value={requestInfo.reason}

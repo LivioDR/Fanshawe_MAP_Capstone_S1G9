@@ -30,7 +30,7 @@ export function useBioInfo() {
 }
 
 /**
- * Retrieve from state or load bio info for the specified user.
+ * Retrieve from state or load bio info for the specified user. 
  * @param {object} bioState current bio state from useBioInfo
  * @returns user bio info, or undefined if not found
  */
