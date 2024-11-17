@@ -6,15 +6,13 @@ import { highlight } from "../../../utilities/variables";
 import { useCredentials } from "../../../services/state/userCredentials";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
-import { useBioInfo, updateUserBioInfo } from "../../../services/state/userBioInfo";
-import { usePTOAdmin } from "../../../services/state/ptoAdmin";
+import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
-    const bioInfoContext = useBioInfo()
-   
+
     const [enabled, setEnabled] = useState(isEnabled)
     const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
 
@@ -43,7 +41,7 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
 
     // function to handle the toggle to enable/disable the user from logging in
     const toggleUserStatus = async(id) => {
-        await updateUserBioInfo(id, {isEnabled: !enabled}, bioInfoContext)
+        await updateUserBioInfoById(id, {isEnabled: !enabled})
         setEnabled(prev => !prev)
     }
 

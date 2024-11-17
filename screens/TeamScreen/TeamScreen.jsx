@@ -4,8 +4,9 @@ import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { useCredentials } from "../../services/state/userCredentials";
+import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
+import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./TeamScreenStyles";
-import { useBioInfo, getOrLoadUserBioInfo, getTeamMemberIds, getOrLoadProfileImage } from "../../services/state/userBioInfo";
 
 const TeamScreen = ({ uid }) => {
 
@@ -24,17 +25,17 @@ const TeamScreen = ({ uid }) => {
         uid = authUserId
 
     }
-    const bioInfoContext = useBioInfo()
 
     useEffect(()=>{
         (async()=>{
-            const myInfo = await getOrLoadUserBioInfo(uid, bioInfoContext)
-            const myTeam = await getTeamMemberIds(myInfo.teamId, bioInfoContext)
+            const myInfo = await getUserBioInfoById(uid)
+            const myTeamInfo = await getTeamInfoById(myInfo.teamId)
+            const myTeam = myTeamInfo.employees
             const myTeamDetails = []
             const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
-                const detail = await getOrLoadUserBioInfo(myTeam[i], bioInfoContext)
-                const imgPath = await getOrLoadProfileImage(myTeam[i], bioInfoContext)
+                const detail = await getUserBioInfoById(myTeam[i])
+                const imgPath = await getImageForUserId(myTeam[i])
                 const userDetail = {...detail, uri: imgPath, uid: myTeam[i]}
                 if (detail.isSupervisor) {
                     myTeamSupervisorDetails.push(userDetail)

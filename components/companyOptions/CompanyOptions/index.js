@@ -1,13 +1,16 @@
+import { useEffect, useState } from "react";
+
 import { View, FlatList } from "react-native";
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import { useCredentials } from "../../../services/state/userCredentials";
+import { getUserBioInfoById } from "../../../services/database/userBioInfo";
+
+import LoadingIndicator from "../../common/LoadingIndicator";
 import CompanyOptionSelector from "./CompanyOptionSelector";
 
 import styles from "./styles";
-
-import { useCredentials } from "../../../services/state/userCredentials";
-import { useBioInfo } from "../../../services/state/userBioInfo";
 
 
 const options = [
@@ -19,11 +22,6 @@ const options = [
 ];
 
 const adminOptions = [
-    {
-        caption: "My Team",
-        destination: "MyTeamScreen",
-        icon: <MaterialIcons name="people" size={30} color="black" />,
-    },
     {
         caption: "Manage Team",
         destination: "ManageTeamScreen",
@@ -42,16 +40,30 @@ const adminOptions = [
 ];
 
 export default function CompanyOptions() {
-    
     const userCredentials = useCredentials()
-    const userBios = useBioInfo()
+    const [loading, setLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    let isUserAdmin = userBios.bios[userCredentials.user.uid].isSupervisor
+    useEffect(() => {
+        (async () => {
+            const userBio = await getUserBioInfoById(userCredentials.user.uid);
+            if (userBio) {
+                setIsAdmin(userBio.isSupervisor);
+            }
+            setLoading(false);
+        })();
+    }, []);
+
+    if (loading) return (
+        <View style={styles.container}>
+            <LoadingIndicator />
+        </View>
+    );
 
     return (
         <View style={styles.container}>
             <FlatList
-                data={isUserAdmin? adminOptions : options}
+                data={isAdmin ? [...options, ...adminOptions] : options}
                 renderItem={(item) => <CompanyOptionSelector {...item.item} />}
                 contentContainerStyle={styles.listContainer}
             />

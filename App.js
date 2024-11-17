@@ -35,14 +35,10 @@ export default function App() {
     return (
         <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
-        <UserBioInfoProvider>
-        <TimeLogProvider>
 
             <StatusBar style="auto" />
             {shownScreen}
 
-        </TimeLogProvider>
-        </UserBioInfoProvider>
         </CredentialProvider>
         </PTOAdminProvider>
     );
