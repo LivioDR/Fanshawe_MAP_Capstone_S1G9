@@ -19,7 +19,9 @@
         "saveSuccess": "Changes saved successfully!",
         "notApplicable": "N/A",
         "enabled": "Enabled",
-        "disabled": "Disabled"
+        "disabled": "Disabled",
+        "add": "Add",
+        "remove": "Remove"
     },
 
     "login": {
@@ -118,6 +120,8 @@
         "me": "me",
 
         "manageTeam": "Manage Team",
+        "managePTO": "Manage Team PTO",
+        "managePTOTitle": "Manage Team PTO",
         "addMemberTitle": "Add Team Member",
         "addMember": "Add Member",
 

@@ -69,16 +69,13 @@ export default function CompanyScreen() {
                 name="PTOTeamScreen"
                 component={PTOTeamScreen}
                 options={{
-                    headerTitle: "Manage Team PTO",
+                    headerTitle: t("team.managePTOTitle"),
                 }}
             />
 
             <Stack.Screen
                 name="PTOEditScreen"
                 component={PTOEditScreen}
-                options={{
-                    headerTitle: "Edit PTO",
-                }}
             />
         </Stack.Navigator>
     );

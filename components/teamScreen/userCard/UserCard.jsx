@@ -8,6 +8,7 @@ import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
 import { usePTOAdmin } from "../../../services/state/ptoAdmin";
+import { useTranslation } from "react-i18next";
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
@@ -16,6 +17,8 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
 
     const [enabled, setEnabled] = useState(isEnabled)
     const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
+
+    const { t } = useTranslation()
 
     // just in case we aren't able to navigate, don't add a click handler
     // also don't add it for the current user, since they have a profile tab
@@ -59,10 +62,10 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
                             {name}
                         </Text>
                         <Text style={styles.role}>
-                            {inAdminMode ? `PTO days remaining: ${remainingPTODays}` : role}
+                            {inAdminMode ? `${t("profile.pto.ptoRemaining")}: ${remainingPTODays}` : role}
                         </Text>
                         <Text style={styles.email}>
-                            {inAdminMode ? `Sick days remaining: ${remainingSickDays}` : email}
+                            {inAdminMode ? `${t("profile.pto.sickRemaining")}: ${remainingSickDays}` : email}
                         </Text>
                     </View>
                 </>

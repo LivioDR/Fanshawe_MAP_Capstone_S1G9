@@ -19,7 +19,9 @@
         "saveSuccess": "¡Cambios guardados correctamente!",
         "notApplicable": "N/A",
         "enabled": "Activado",
-        "disabled": "Desactivado"
+        "disabled": "Desactivado",
+        "add": "Añadir",
+        "remove": "Eliminar"
     },
 
     "login": {
@@ -118,6 +120,8 @@
         "me": "yo",
 
         "manageTeam": "Administrar equipo",
+        "managePTO": "Administrar licencia del equipo",
+        "managePTOTitle": "Administrar licencia",
         "addMemberTitle": "Añadir miembro al equipo",
         "addMember": "Añadir miembro",
 
