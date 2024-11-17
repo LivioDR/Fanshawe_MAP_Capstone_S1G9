@@ -52,7 +52,7 @@ const NewMemberScreen = () => {
         },
         {
             name: 'birthday',
-            label: `${t("profile.birthDate")} (YYYY-MM-DD)`,
+            label: t("profile.birthDate"),
         },
         {
             name: 'role',

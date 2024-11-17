@@ -1,6 +1,6 @@
 {
     "common": {
-        "copy": "Desarrollado por IndusTree 🌳 © derechos de autor 2024",
+        "copy": "Desarrollado por IndusTree 🌳 © Derechos de autor 2024",
 
         "logOut": "Cerrar sesión",
         "nav": {
@@ -14,12 +14,12 @@
         "loading": "Cargando...",
         "save": "Guardar",
         "cancel": "Cancelar",
-        "clear": "Vaciar",
+        "clear": "Borrar",
         "close": "Cerrar",
         "saveSuccess": "¡Cambios guardados correctamente!",
         "notApplicable": "N/A",
-        "enabled": "Permitido",
-        "disabled": "Deshabilitado"
+        "enabled": "Activado",
+        "disabled": "Desactivado"
     },
 
     "login": {
@@ -49,7 +49,7 @@
             "other": {
                 "clockedOut": "{{name}} no está registrado.",
                 "clockedIn": "{{name}} ha estado registrado desde las {{clockInTime}}",
-                "onLunch": "{{name}} ha estado almorzando desdes las {{lunchTime}}"
+                "onLunch": "{{name}} ha estado almorzando desde las {{lunchTime}}"
             }
         },
 
@@ -75,11 +75,11 @@
     },
 
     "profile": {
-        "firstName": "Nombre de pila",
+        "firstName": "Nombre",
         "lastName": "Apellido",
         "companyEmail": "Email corporativo",
         "address": "Domicilio",
-        "birthDate": "Fecha de nacimiento",
+        "birthDate": "Fecha de nacimiento (AAAA-MM-DD)",
         "role": "Rol",
         "team": "Equipo",
         "supervisor": "Supervisor",
@@ -118,7 +118,7 @@
         "me": "yo",
 
         "manageTeam": "Administrar equipo",
-        "addMemberTitle": "Añadir miembro del equipo",
+        "addMemberTitle": "Añadir miembro al equipo",
         "addMember": "Añadir miembro",
 
         "addSuccess": "¡Usuario creado correctamente!"
@@ -134,7 +134,7 @@
             "invalidEmail": "Por favor, ingrese una dirección de correo válida.",
             "noPassword": "Se requiere contraseña.",
             "invalidCredentials": "Correo electrónico o contraseña no válidos.",
-            "userDisabled": "Cuenta deshabilitada. Por favor contacte a tu administrador."
+            "userDisabled": "Cuenta deshabilitada. Por favor contacta a tu administrador."
         },
 
         "bio": {
@@ -149,9 +149,9 @@
         },
 
         "newMember": {
-            "noName": "Se requiere nombre.",
+            "noName": "Se requiere nombre y apellido.",
             "noAddress": "Se requiere domicilio.",
-            "invalidBirthDate": "Fecha de nacimiento debe coincidir con el formato YYYY-MM-DD.",
+            "invalidBirthDate": "Fecha de nacimiento debe coincidir con el formato AAAA-MM-DD.",
             "noRole": "Se requiere rol.",
             "recoveryFailed": "Se produjo un error al enviar el correo electrónico de recuperación al nuevo usuario.",
             "saveFailed": "Se produjo un error al guardar el nuevo usuario."

@@ -79,7 +79,7 @@
         "lastName": "Last Name",
         "companyEmail": "Corporate Email",
         "address": "Address",
-        "birthDate": "Birth Date",
+        "birthDate": "Birth Date (YYYY-MM-DD)",
         "role": "Role",
         "team": "Team",
         "supervisor": "Supervisor",
