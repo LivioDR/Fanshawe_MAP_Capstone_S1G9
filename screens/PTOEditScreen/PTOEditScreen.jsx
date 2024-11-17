@@ -122,21 +122,16 @@ const PTOEditScreen = ({userId}) => {
     const toggleAddRemoveSwitch = () => {
 
         setDaysToBeRemoved(!daysToBeRemoved)
+
     }
 
     const handleDaysChange = (value) => {
 
+        // Value is a String, so convert to int
+        // Only care about the absolute value here, as the polarity
+        // is determined when the user clicks confim by the value of daysToBeRemoved
         const valueAsInt = parseInt(value);
-
-        //Value is a String, so convert to int
-        setDaysToChange(parseInt(value));
-
-        //If remove toggled, make daysToChange a Snegative
-        if(daysToBeRemoved){
-
-            setDaysToChange(parseInt(value * -1));
-
-        }
+        setDaysToChange(valueAsInt);
 
         /*
         Input validation
@@ -218,8 +213,11 @@ const PTOEditScreen = ({userId}) => {
     const confirmPTOChange = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
 
-       //RequestedById (first parameter) is just the currently logged in Admin
-       const result = await updateAvailableDays(userId, category, daysToChange)
+        // To fix bug identified in PR (wrong polarity when toggling add/remove after input)
+        const valToChange = daysToBeRemoved ? -Math.abs(daysToChange) : Math.abs(daysToChange)
+
+        //RequestedById (first parameter) is just the currently logged in Admin
+        const result = await updateAvailableDays(userId, category, valToChange)
 
         if(result.errors.length == 0){
             updateAlert(result.message)
@@ -274,9 +272,8 @@ const PTOEditScreen = ({userId}) => {
             
                 <InputField
                 label={ `${requestInfo.category ? "Sick" : "PTO"} day(s) ${daysToBeRemoved ? "to remove" : "to add"}`}
-                value={requestInfo.reason}
-                setValue={updateReason}
-                autoCapitalize="sentences"
+                value={daysToChange}
+                setValue={setDaysToChange}
                 onChangeText={handleDaysChange}
                 keyboardType={"numeric"}
                 />

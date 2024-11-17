@@ -4,8 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 // hooks and providers
 import { useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
-import { UserBioInfoProvider } from './services/state/userBioInfo';
-import { TimeLogProvider } from './services/state/timeClock';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
 
 // custom components
