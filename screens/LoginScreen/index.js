@@ -24,22 +24,12 @@ export default function LoginScreen({ loginSuccess }) {
   const [emailIsValid, setEmailIsValid] = useState(false);
   const [pwdIsValid, setPwdIsValid] = useState(false);
 
-  /* Hooks */
+ 
+    /* Hooks */
 
   /*
   Ensures that there are no active users signed in when the login page is entered
   */
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -40,34 +38,27 @@ export default function LoginScreen({ loginSuccess }) {
-  
   useEffect(() => {
     (async () => {
         await signOut(auth).catch(() => showErrorToast("Error signing users out"));
@@ -80,18 +70,7 @@ export default function LoginScreen({ loginSuccess }) {
 
     if (emailRegexTest == false) {
       setEmailIsValid(false);
-      setEmailErrTxt("Please enter a valid email");
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -78,11 +69,9 @@ export default function LoginScreen({ loginSuccess }) {
-  
+      setEmailErrTxt("Please enter a valid email");  
       setPasswordResetBtnDisabled(true);
     } else {
       setEmailIsValid(true);
@@ -107,17 +86,6 @@ export default function LoginScreen({ loginSuccess }) {
     if (value.length === 0) {
       setPwdIsValid(false);
       setPwdErrTxt("Please enter a password");
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -91,7 +80,6 @@ export default function LoginScreen({ loginSuccess }) {
-  
     } else {
       setPwdIsValid(true);
       setPwdErrTxt("");
@@ -127,17 +95,6 @@ export default function LoginScreen({ loginSuccess }) {
   /*
   Attempts to sign user in to db
   */
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -108,129 +96,3 @@ export default function LoginScreen({ loginSuccess }) {
-  
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, pwd)
       .then(async (userCredential) => {
