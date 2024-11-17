@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, View, Text, Modal } from "react-native";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 // UI imports
 import styles from "./PTOEditScreenStyles";
@@ -10,14 +10,11 @@ import PTOAddRemoveSwitch from "../../components/userBio/PTOAddRemoveSwitch/PTOA
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
 import InputMsgBox from "../../components/InputMsgBox";
-import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
-import { requestDays } from "../../services/database/ptoManagement";
-import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
-import { useCredentials } from "../../services/state/userCredentials";
+import { useBioInfo } from "../../services/state/userBioInfo";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
 
@@ -49,25 +46,41 @@ Methods to change
 ---------------------------
 
 useBioInfo / bioInfoContext - userBioInfo in context - 
-
 getOrLoadUserBioInfo  === getUserBioInfoById(userId)
 
+
+Get the UserBioInfo here and set it in the PTOAdminglobal state?
 
 
 UI
 -Make sure after days added/removed that the teamPTOScreen refreshes to show updated data
 -Fix loading implementation for UI
 
-
 */
 
 const PTOEditScreen = ({userId}) => {
 
     //Getting global show from the state:
-    const { inAdminMode, updatePTOAdmin, showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
+    const { updatePTOAdmin, showEditPtoModal } = usePTOAdmin()
 
     const bioInfoContext = useBioInfo()
     const bioState = useBioInfo()
+
+    /*
+    Using this instead of bioState and bioInfoContext
+    */
+    async function fetchAndPrintBio(userId) {
+        try {
+            const myBio = await getUserBioInfoById(userId);
+            console.log("MyBio: ", myBio);
+            console.log("Userdata: ", userData)
+            //Todo: save this Bio to a local state? - mybio and userdata returning the same data
+            //Use userdata instead of bio?
+        } catch (error) {
+            console.error("Error fetching bio: ", error);
+        }
+    }
+    fetchAndPrintBio(userId)
 
     /*
     Using logic from UserBio.jsx to convert the userId into data suitable for the screen
@@ -77,7 +90,6 @@ const PTOEditScreen = ({userId}) => {
     const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
-    const [clockStatus, setClockStatus] = useState({})
     const [canEditOthers, setCanEditOthers] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(true)
     const [needsRefresh, setNeedsRefresh] = useState(true) //change to true, as need refresh whenever loading
@@ -90,9 +102,6 @@ const PTOEditScreen = ({userId}) => {
 
     const hidePto = () => {
         setShowPtoModal(false)
-        // flag that we need to refresh the user data from state when PTO modal is closed
-        // possible TODO: use global state directly in this screen instead of duplicating state,
-        // which would allow circumventing this
         updatePTOAdmin({ showEditPtoModal: false })
         setNeedsRefresh(true)
     }
@@ -102,32 +111,13 @@ const PTOEditScreen = ({userId}) => {
         userId = route.params.id
     }
 
-    //TODO: Is this needed as directly passing in the userId from the pressed card
-    // const userCreds = useCredentials()
-    // const authUserId = userCreds.user.uid
-    // if (!userId) {
-    //     userId = authUserId
-    // }
-
-
     // set an effect that refreshes the current user's bio data if it's needed
-    // normally, updating a dependent state var in an effect isn't a good idea because
-    // it can cause infinite loops, but this case is safe because we have a conditional
-    // it will run once when the screen opens and do nothing,
-    // once when the PTO modal is closed because needsRefresh = true,
-    // then run once more after changing needsRefresh to false and do nothing
-    // not the most elegant solution, but it's quick and dirty and it works without a huge overhaul of state in the app
     useEffect(() => {
         (async () => {
             if (needsRefresh) {
                 const data = await getUserBioInfoById(userId)
                 setUserData(data)
                 setNeedsRefresh(false)
-
-                //TODO: Bug - after editing PTO, the only data that shows when entering the modal
-                //again is the remaining pto days
-                //When logging data here, the only attribute is the remaining pto days
-                //for unedited users, all attributes show
                 console.log("Data in Refresh UseEffect: ", data)
             }
         })()
@@ -139,7 +129,6 @@ const PTOEditScreen = ({userId}) => {
          
             let data = await getUserBioInfoById(userId)
             setUserData(data)
-            
             //Whenever this screen is entered we know we want to show the modal
             setShowPtoModal(true)
 
@@ -151,11 +140,9 @@ const PTOEditScreen = ({userId}) => {
                 setCanEditOthers(true)
             }
             
-            // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
                 const supervisorData = await getUserBioInfoById(superId)
-                // get supervisor data
                 setSuperData(supervisorData)
             }
             else{
@@ -165,7 +152,6 @@ const PTOEditScreen = ({userId}) => {
                     email: 'N/A',
                 })
             }
-
             // show the data
             setLoading(false)
 
@@ -177,19 +163,18 @@ const PTOEditScreen = ({userId}) => {
     },[])
 
     //Parameters that are usually passed to PTOModal from logic above
-
     const supervisorId = userData.supervisorId
     const isShown = showPtoModal
     const dismiss = hidePto
     const pto = userData.remainingPTODays
     const sick = userData.remainingSickDays
 
-    console.log("SICK: ", sick)
 
     /*
     Start of logic contained in the PTOModal / PTORequestScreen
     */
 
+    //Reuqestinfo is needed to get the correct category
     const [requestInfo, setRequestInfo] = useState({
         category: false, // PTO = false, Sick = true
         reason: "",
@@ -228,9 +213,7 @@ const PTOEditScreen = ({userId}) => {
 
         Get current state from both toggles, if entered number breaks
         logic log error and disable button
-
         */
-
 
         //Getting state from toggles
 
@@ -257,18 +240,18 @@ const PTOEditScreen = ({userId}) => {
 
         if (value.length === 0) {
 
-        setDaysIsValid(false);
-        setDaysErrTxt("Please enter a number");
+            setDaysIsValid(false);
+            setDaysErrTxt("Please enter a number");
 
         }else if(isNaN(valueAsInt)){
 
-        setDaysIsValid(false);
-        setDaysErrTxt("Please enter a number");
+            setDaysIsValid(false);
+            setDaysErrTxt("Please enter a number");
 
         }else if(daysToBeRemoved && category === "PTO" && valueAsInt > pto){
 
-        setDaysIsValid(false);
-        setDaysErrTxt("Cannot remove more PTO days than a user has");
+            setDaysIsValid(false);
+            setDaysErrTxt("Cannot remove more PTO days than a user has");
 
         }else if(daysToBeRemoved && category === "Sick" && valueAsInt > sick){
 
@@ -280,10 +263,6 @@ const PTOEditScreen = ({userId}) => {
             setDaysIsValid(true);
             setDaysErrTxt("");
         }
-
-        //Finally disable button if input is not valid
-
-
     };
 
     const toggleSwitch = () => {
@@ -301,22 +280,6 @@ const PTOEditScreen = ({userId}) => {
         })
     }
 
-    const setFromDate = (date) => {
-        setRequestInfo(prev => {
-            const newRequestInfo = {...prev}
-            newRequestInfo.from = date 
-            return newRequestInfo
-        })
-    }
-
-    const setUntilDate = (date) => {
-        setRequestInfo(prev => {
-            const newRequestInfo = {...prev}
-            newRequestInfo.until = date 
-            return newRequestInfo
-        })
-    }
-
     const updateAlert = (msg) => {
         setRequestInfo(prev => {
             const newRequestInfo = {...prev}
@@ -325,29 +288,6 @@ const PTOEditScreen = ({userId}) => {
         })
     }
     // END OF STATE MANAGEMENT FUNCTIONS
-
-    // This function takes the data entered by the user and creates a request in the system
-    // If the request fails for any reason, it displays an alert
-    // If it is requested successfully, displays a success message and closes the modal after a set time
-    const requestTimeOff = async() => {
-        let category = requestInfo.category ? "Sick" : "PTO"
-        
-        const result = await requestDays(userId, supervisorId, category, requestInfo.from, requestInfo.until, requestInfo.reason, bioInfoContext)
-
-        if(result.errors.length == 0){
-            updateAlert(result.message)
-    
-            setTimeout(()=>{
-                // clears the alert before closing the modal
-                clearAndClose()
-            }, 2500)
-
-            //setNeedsRefresh(true)
-        }
-        else{
-            updateAlert(result.errors[0])
-        }
-    }
 
 
     // Show confirm alert, if okay pressed make changes
@@ -369,9 +309,6 @@ const PTOEditScreen = ({userId}) => {
 
        //RequestedById (first parameter) is just the currently logged in Admin
        const result = await updateAvailableDays(userId, category, daysToChange, bioInfoContext)
-
-
-       console.log("RESULT: ", result)
 
         if(result.errors.length == 0){
             updateAlert(result.message)
