@@ -11,7 +11,8 @@ export default PTOAddRemoveSwitchStyles = StyleSheet.create({
     label: {
         fontSize: 24,
     },
-    switch: {
-
+    labelContainer: {
+        flex: 1, 
+        alignItems: 'center', 
     },
 })

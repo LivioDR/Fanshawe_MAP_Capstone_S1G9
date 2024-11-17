@@ -8,7 +8,6 @@ import PTOCategorySwitch from "../../components/userBio/PTOCategorySwitch/PTOCat
 import PTOAddRemoveSwitch from "../../components/userBio/PTOAddRemoveSwitch/PTOAddRemoveSwitch";
 import UiButton from "../../components/common/UiButton/UiButton";
 import InputField from "../../components/common/InputField/InputField";
-import InputMsgBox from "../../components/InputMsgBox";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
 
 // Business logic imports
@@ -47,7 +46,7 @@ const PTOEditScreen = ({userId}) => {
     const [daysToBeRemoved, setDaysToBeRemoved] = useState(false)
     const [daysToChange, setDaysToChange] = useState(0);
     const [daysIsValid, setDaysIsValid] = useState(false)
-    const [daysErrTxt, setDaysErrTxt] = useState("")
+    const [daysErrTxt, setDaysErrTxt] = useState(" ")
 
     const hidePto = () => {
         setShowPtoModal(false)
@@ -67,7 +66,6 @@ const PTOEditScreen = ({userId}) => {
                 const data = await getUserBioInfoById(userId)
                 setUserData(data)
                 setNeedsRefresh(false)
-                console.log("Data in Refresh UseEffect: ", data)
             }
         })()
     }, [needsRefresh])
@@ -212,7 +210,8 @@ const PTOEditScreen = ({userId}) => {
     // END OF STATE MANAGEMENT FUNCTIONS
 
     const showConfirmAlert = () =>
-        Alert.alert('Confirm changes', `${userData.firstName}`, [
+        Alert.alert('Confirm changes', `Do you want to ${daysToBeRemoved ? "remove" : "add"} ${daysToChange}
+        ${requestInfo.category ? "Sick" : "PTO"} day(s) for ${userData.firstName} ${userData.lastName}?`, [
           {
             text: 'Cancel',
             style: 'cancel',
@@ -257,28 +256,39 @@ const PTOEditScreen = ({userId}) => {
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
 
-                <Text style={styles.subtitle}>
-                    Select category
-                </Text>
+                <View style={styles.switchContainer}>
 
-                <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
+                    <Text style={styles.subtitle}>
+                        Select category
+                    </Text>
 
-                <Text style={styles.subtitle}>
-                    Select add or remove
-                </Text>
+                    <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
 
-                <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
+                </View>
+
+                <View style={styles.switchContainer}>
+
+                    <Text style={styles.subtitle}>
+                        Select add or remove
+                    </Text>
+
+                    <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
+
+                </View>
             
                 <InputField
-                label={ daysToBeRemoved ? "Days to remove" : "Days to add"}
+                label={ `${requestInfo.category ? "Sick" : "PTO"} day(s) ${daysToBeRemoved ? "to remove" : "to add"}`}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
                 onChangeText={handleDaysChange}
                 keyboardType={"numeric"}
                 />
-
-                <InputMsgBox text={daysErrTxt}></InputMsgBox>
+                <View style={styles.errorTextContainer}>
+                    <Text style={styles.errorText}>
+                        {daysErrTxt}
+                    </Text>
+                </View>
 
                 <View style={styles.btnContainer}>
                     <UiButton

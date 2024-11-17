@@ -44,7 +44,7 @@ const PTOTeamScreen = ({ uid }) => {
     useFocusEffect(
         React.useCallback(() => {
 
-            updatePTOAdmin({ inAdminMode: true })
+            updatePTOAdmin({ inAdminMode: true, showEditPtoModal: false })
 
             //Sets it back to false when screen unfocused
             return () => {

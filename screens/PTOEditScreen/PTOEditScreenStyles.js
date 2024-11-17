@@ -6,6 +6,13 @@ export default PTORequestScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    switchContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between', 
+        width: '100%', 
+        marginVertical: 4,
+    },
     nameLabel: {
         fontSize: 24,
     },
@@ -20,4 +27,10 @@ export default PTORequestScreenStyles = StyleSheet.create({
         padding: '5%',
         justifyContent: 'space-between'
     },
+    errorTextContainer:{
+        height: '3%',
+    },
+    errorText:{
+        color: "#FF2321"
+    }
 })
