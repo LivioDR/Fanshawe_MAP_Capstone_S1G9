@@ -122,8 +122,8 @@
         "me": "yo",
 
         "manageTeam": "Administrar equipo",
-        "managePTO": "Administrar licencia del equipo",
-        "managePTOTitle": "Administrar licencia",
+        "managePTO": "Administrar licencias del equipo",
+        "managePTOTitle": "Administrar licencias",
         "addMemberTitle": "Añadir miembro al equipo",
         "addMember": "Añadir miembro",
 
@@ -134,15 +134,15 @@
 
             "selectAction": "Seleccionar acción",
 
-            "removeSick": "Días de enfermedad para eliminar",
-            "removePTO": "Días de licencia para eliminar",
-            "addSick": "Días de enfermedad para añadir",
-            "addPTO": "Días de licencia para añadir",
+            "removeSick": "Días de enfermedad a restar",
+            "removePTO": "Días de licencia a restar",
+            "addSick": "Días de enfermedad a añadir",
+            "addPTO": "Días de licencia a añadir",
 
-            "removeSickConfirm": "¿Quieres eliminar {{num}} días de enfermedad para {{name}}?",
-            "removePTOConfirm": "¿Quieres eliminar {{num}} días de licencia para {{name}}?",
-            "addSickConfirm": "¿Quieres añadir {{num}} días de enfermedad para {{name}}?",
-            "addPTOConfirm": "¿Quieres añadir {{num}} días de licencia para {{name}}?"
+            "removeSickConfirm": "¿Quieres restar {{num}} días de enfermedad a {{name}}?",
+            "removePTOConfirm": "¿Quieres restar {{num}} días de licencia a {{name}}?",
+            "addSickConfirm": "¿Quieres añadir {{num}} días de enfermedad a {{name}}?",
+            "addPTOConfirm": "¿Quieres añadir {{num}} días de licencia a {{name}}?"
         }
     },
 
@@ -166,9 +166,9 @@
             "pto": {
                 "getAvailableFailed": "Ha ocurrido un error al intentar recuperar los datos de días disponibles.",
                 "notEnoughDays": "No posee suficientes días disponibles. Disponible: {{availableDays}}. Solicitado: {{daysToAdd}}",
-                "notEnoughRemove": "No se pueden eliminar más días de los que están disponibles actualmente.",
+                "notEnoughRemove": "No se pueden restar más días de los que están disponibles.",
                 "requestNotFound": "Solicitud con ID {{id}} no encontrada.",
-                "noNumber": "Se requiere el número de días."
+                "noNumber": "Se requiere ingresar el número de días."
             }
         },
 
