@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 // hooks and providers
 import { useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
+import { PTOAdminProvider } from './services/state/ptoAdmin';
 
 // custom components
 import LoginScreen from './screens/LoginScreen';
@@ -30,11 +31,13 @@ export default function App() {
     const shownScreen = loginCredential ? <HomeScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
 
     return (
+        <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
 
             <StatusBar style="auto" />
             {shownScreen}
 
         </CredentialProvider>
+        </PTOAdminProvider>
     );
 }
