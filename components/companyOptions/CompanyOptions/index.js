@@ -32,6 +32,11 @@ export default function CompanyOptions() {
             icon: <MaterialIcons name="cases" size={30} color="black" />,
         },
         {
+            caption: "Manage Team PTO",
+            destination: "PTOTeamScreen",
+            icon: <MaterialIcons name="edit-calendar" size={30} color="black" />,
+        },
+        {
             caption: t("team.addMemberTitle"),
             destination: "AddMemberScreen",
             icon: <MaterialIcons name="group-add" size={30} color="black" />,

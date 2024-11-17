@@ -246,4 +246,4 @@ const reviewRequest = async(reqId, approval, bioState) => {
     }
 }
 
-export { checkAvailableDays, requestDays, getAllRequests, reviewRequest }
+export { checkAvailableDays, requestDays, getAllRequests, reviewRequest, updateAvailableDays }

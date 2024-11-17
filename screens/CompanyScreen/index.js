@@ -9,6 +9,8 @@ import TeamScreen from "../TeamScreen/TeamScreen";
 import UserBio from "../UserBioScreen/UserBio";
 import ManageTeamScreen from "../ManageTeamScreen/ManageTeamScreen";
 import NewMemberScreen from "../NewMemberScreen/NewMemberScreen";
+import PTOTeamScreen from "../PTOTeamScreen/PTOTeamScreen";
+import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 
 // create stack nav
 const Stack = createStackNavigator();
@@ -60,6 +62,22 @@ export default function CompanyScreen() {
                 component={UserBio}
                 options={{
                     headerTitle: t("team.memberDetails"),
+                }}
+            />
+
+            <Stack.Screen
+                name="PTOTeamScreen"
+                component={PTOTeamScreen}
+                options={{
+                    headerTitle: "Manage Team PTO",
+                }}
+            />
+
+            <Stack.Screen
+                name="PTOEditScreen"
+                component={PTOEditScreen}
+                options={{
+                    headerTitle: "Edit PTO",
                 }}
             />
         </Stack.Navigator>

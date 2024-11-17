@@ -10,6 +10,7 @@ import { View } from 'react-native';
 // hooks and providers
 import { useEffect, useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
+import { PTOAdminProvider } from './services/state/ptoAdmin';
 
 // custom components
 import LoadingIndicator from './components/common/LoadingIndicator';
@@ -51,11 +52,13 @@ export default function App() {
     }
 
     return (
+        <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
 
             <StatusBar style="auto" />
             {shownScreen}
 
         </CredentialProvider>
+        </PTOAdminProvider>
     );
 }
