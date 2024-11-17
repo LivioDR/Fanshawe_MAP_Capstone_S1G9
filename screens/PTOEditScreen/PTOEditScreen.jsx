@@ -16,11 +16,14 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
 import { requestDays } from "../../services/database/ptoManagement";
-import { useBioInfo, getOrLoadUserBioInfo, getOrLoadTeamInfo, getOrLoadProfileImage } from "../../services/state/userBioInfo";
+import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
 import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
 import { useCredentials } from "../../services/state/userCredentials";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
+
+//Updated methods
+import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
 
 /*
@@ -28,21 +31,28 @@ Getting the ID from the pressed card
 This id uses similar logic to the UserBio component to get other data for 
 the PTO screen
 
-Need to get the userId, supervisorId, isShown, dismiss, pto, sick for this screen to work
+Migration from Context to DB functions (PTOAdmin is okay as reserved for this)
 
+Context wrappers used: 
+import { useBioInfo, getOrLoadUserBioInfo } from "../../services/state/userBioInfo";
+import { getOrLoadOpenTimeLog, useTimeLog } from "../../services/state/timeClock";
+import { useCredentials } from "../../services/state/userCredentials";
 
-TODO: Functionality list
+Current Methods and their DB equivalent
+---------------------------
+useBioInfo - 
+getOrLoadUserBioInfo - getUserBioInfoById(userId)
+getOrLoadOpenTimeLog
+useTimeLog
+useCredentials 
 
-- Add PTO days [X]
-- Add sick days [X]
-- Remove PTO days [X]
-- Remove sick days [X]
+Methods to change
+---------------------------
 
-Sanity checking (Feedback through errormsgbox)
+useBioInfo / bioInfoContext - userBioInfo in context - 
 
-- Added days cannot exceed x amount? - Nope, company specific so no cap (can always be changed by admin)
+getOrLoadUserBioInfo  === getUserBioInfoById(userId)
 
-- Cannot remove more days than they have for that PTO category
 
 
 UI
@@ -67,13 +77,10 @@ const PTOEditScreen = ({userId}) => {
     */
 
     const [loading, setLoading] = useState(true)
-    const [imgUrl, setImgUrl] = useState(undefined)
     const [userData, setUserData] = useState({})
     const [superData, setSuperData] = useState({})
-    const [teamData, setTeamData] = useState({})
     const [clockStatus, setClockStatus] = useState({})
     const [canEditOthers, setCanEditOthers] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
     const [showPtoModal, setShowPtoModal] = useState(true)
     const [needsRefresh, setNeedsRefresh] = useState(true) //change to true, as need refresh whenever loading
 
@@ -82,14 +89,6 @@ const PTOEditScreen = ({userId}) => {
     const [daysToChange, setDaysToChange] = useState(0);
     const [daysIsValid, setDaysIsValid] = useState(false)
     const [daysErrTxt, setDaysErrTxt] = useState("")
-
-    const showModal = () => {setShowEditModal(true)}
-    const hideModal = () => {setShowEditModal(false)}
-
-    const showPto = () => {
-        setShowPtoModal(true) 
-        setNeedsRefresh(true)
-    }
 
     const hidePto = () => {
         setShowPtoModal(false)
@@ -122,7 +121,7 @@ const PTOEditScreen = ({userId}) => {
     useEffect(() => {
         (async () => {
             if (needsRefresh) {
-                const data = await getOrLoadUserBioInfo(userId, bioInfoContext)
+                const data = await getUserBioInfoById(userId)
                 setUserData(data)
                 setNeedsRefresh(false)
 
@@ -139,7 +138,7 @@ const PTOEditScreen = ({userId}) => {
     useEffect(()=>{
         const getData = async(id) => {
          
-            let data = await getOrLoadUserBioInfo(userId, bioInfoContext)
+            let data = await getUserBioInfoById(userId)
             setUserData(data)
             
             //Whenever this screen is entered we know we want to show the modal
@@ -156,7 +155,7 @@ const PTOEditScreen = ({userId}) => {
             // supervisor data
             const superId = data.supervisorId
             if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                const supervisorData = await getOrLoadUserBioInfo(superId, bioInfoContext)
+                const supervisorData = await getUserBioInfoById(superId)
                 // get supervisor data
                 setSuperData(supervisorData)
             }
@@ -167,16 +166,6 @@ const PTOEditScreen = ({userId}) => {
                     email: 'N/A',
                 })
             }
-
-            // team data
-            //TODO: Is this required?
-            // const teamId = data.teamId
-            // const teamInfo = await getOrLoadTeamInfo(teamId, bioInfoContext)
-            // setTeamData(teamInfo)
-
-            // set profle picture
-            // const img = await getOrLoadProfileImage(id, bioInfoContext)
-            // setImgUrl(img)
 
             // time clock data, only load if this is not the logged in user
             if (id !== authUserId) {
@@ -439,10 +428,10 @@ const PTOEditScreen = ({userId}) => {
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
 
-                <View style={styles.btnContainer}>
+                {/* <View style={styles.btnContainer}>
                     <FromToDatePicker label={"From"} initialValue={requestInfo.from} setDate={setFromDate}/>
                     <FromToDatePicker label={"To"} initialValue={requestInfo.until} setDate={setUntilDate}/>
-                </View>
+                </View> */}
 
                 <Text style={styles.subtitle}>
                     Select category
