@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Alert, View, Text, Modal } from "react-native";
-import { useRoute } from "@react-navigation/native";
 
 // UI imports
 import styles from "./PTOEditScreenStyles";
@@ -46,14 +45,8 @@ const PTOEditScreen = ({userId}) => {
     const [daysErrTxt, setDaysErrTxt] = useState(" ")
 
     const hidePto = () => {
-        setShowPtoModal(false)
         updatePTOAdmin({ showEditPtoModal: false })
         setNeedsRefresh(true)
-    }
-    
-    const route = useRoute()
-    if (route && route.params?.id) {
-        userId = route.params.id
     }
 
     // set an effect that refreshes the current user's bio data if it's needed
@@ -73,24 +66,6 @@ const PTOEditScreen = ({userId}) => {
          
             let data = await getUserBioInfoById(userId)
             setUserData(data)
-            setShowPtoModal(true)
-
-            if(data.isSupervisor){
-                setCanEditOthers(true)
-            }
-            
-            const superId = data.supervisorId
-            if(superId){ // the id can be null in the database if the user has no manager/supervisor
-                const supervisorData = await getUserBioInfoById(superId)
-                setSuperData(supervisorData)
-            }
-            else{
-                setSuperData({
-                    firstName: 'N/A',
-                    lastName: '',
-                    email: 'N/A',
-                })
-            }
             setNeedsRefresh(true)
         }
         getData(userId)
@@ -119,59 +94,72 @@ const PTOEditScreen = ({userId}) => {
     const toggleAddRemoveSwitch = () => {
 
         setDaysToBeRemoved(!daysToBeRemoved)
-
     }
 
+    /*
+    This useEffect ensures that input is validated whenever:
+    - Input changes
+    - The add / remove toggle value changes
+    - The category toggle value changes
+    */
+    useEffect(() => {
+
+        const category = requestInfo.category ? "Sick" : "PTO"
+        const valueAsInt = parseInt(daysToChange)
+        validateDays(valueAsInt, category)
+        
+    }, [daysToChange, daysToBeRemoved, requestInfo.category]);
+
+    /*
+    Value is a String, so convert to int
+    Only care about the absolute value here, as the polarity
+    is determined when the user clicks confim by the value of daysToBeRemoved
+    */
     const handleDaysChange = (value) => {
 
-        // Value is a String, so convert to int
-        // Only care about the absolute value here, as the polarity
-        // is determined when the user clicks confim by the value of daysToBeRemoved
-        const valueAsInt = parseInt(value);
-        setDaysToChange(valueAsInt);
+        const valueAsInt = parseInt(value)
+        setDaysToChange(valueAsInt)
+        setNeedsRefresh(true)
+    };
 
-        /*
-        Input validation
+    /*
+    Input validation
 
-        Adding days has no limit, so no checks needed here
-        Condition 1 - No input - fail
-        Condition 2 - NaN input - fail - Note: Need to convert value to an int first as input returns a screen
-        Condition 3 - Removing days for PTO - If input number bigger than PTO number - fail
-        Condition 4 - Removing days for sick - If input number bigger than sick number - fail
-        Else input is valid
-        */
-        daysToChange
-        daysToBeRemoved
-        const category = requestInfo.category ? "Sick" : "PTO"
-
-        console.log("Category ", category);
+    Adding days has no limit, so no checks needed here
+    Condition 1 - No input - fail
+    Condition 2 - NaN input - fail - Note: Need to convert value to an int first as input returns a screen
+    Condition 3 - Removing days for PTO - If input number bigger than PTO number - fail
+    Condition 4 - Removing days for sick - If input number bigger than sick number - fail
+    Else input is valid
+    */
+    const validateDays = (value, category) => {
 
         if (value.length === 0) {
 
-            setDaysIsValid(false);
+            setDaysIsValid(false)
             setDaysErrTxt("Please enter a number");
 
-        }else if(isNaN(valueAsInt)){
+        }else if(isNaN(value)){
 
-            setDaysIsValid(false);
+            setDaysIsValid(false)
             setDaysErrTxt("Please enter a number");
 
-        }else if(daysToBeRemoved && category === "PTO" && valueAsInt > pto){
+        }else if(daysToBeRemoved && category === "PTO" && value > pto){
 
-            setDaysIsValid(false);
+            setDaysIsValid(false)
             setDaysErrTxt("Cannot remove more PTO days than a user has");
 
-        }else if(daysToBeRemoved && category === "Sick" && valueAsInt > sick){
+        }else if(daysToBeRemoved && category === "Sick" && value > sick){
 
-            setDaysIsValid(false);
+            setDaysIsValid(false)
             setDaysErrTxt("Cannot remove more sick days than a user has");
     
         }else {
 
-            setDaysIsValid(true);
-            setDaysErrTxt("");
+            setDaysIsValid(true)
+            setDaysErrTxt("")
         }
-    };
+    }
 
     const toggleSwitch = () => {
         setRequestInfo(prev => {
@@ -179,14 +167,6 @@ const PTOEditScreen = ({userId}) => {
             newRequestInfo.category = !prev.category
             return newRequestInfo 
     })}
-
-    const updateReason = (e) => {
-        setRequestInfo(prev => {
-            const newRequestInfo = {...prev}
-            newRequestInfo.reason = e 
-            return newRequestInfo
-        })
-    }
 
     const updateAlert = (msg) => {
         setRequestInfo(prev => {
@@ -229,7 +209,6 @@ const PTOEditScreen = ({userId}) => {
     }
 
     const clearAndClose = () => {
-        updateReason("")
         updateAlert(" ")
         dismiss()
     }
