@@ -1,0 +1,184 @@
+{
+    "common": {
+        "copy": "Desarrollado por IndusTree 🌳 © Derechos de autor 2024",
+
+        "logOut": "Cerrar sesión",
+        "nav": {
+            "back": "Atrás",
+            "company": "Empresa",
+            "home": "Inicio",
+            "profile": "Perfil",
+            "settings": "Configuración"
+        },
+
+        "loading": "Cargando...",
+        "save": "Guardar",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "clear": "Borrar",
+        "close": "Cerrar",
+        "saveSuccess": "¡Cambios guardados correctamente!",
+        "notApplicable": "N/A",
+        "enabled": "Activado",
+        "disabled": "Desactivado",
+        "add": "Añadir",
+        "remove": "Eliminar",
+        "confirmChanges": "Confirmar cambios"
+    },
+
+    "login": {
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+
+        "login": "Iniciar sesión",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+
+        "success": "Éxito {{icon}}",
+        "error": "Error {{icon}}",
+
+        "sendPasswordReset": "Restablecer la contraseña",
+        "passwordResetSuccess": "¡Email de recuperación enviado!"
+    },
+    
+    "timeClock": {
+        "welcome": "Bienvenido/a, {{name}}.",
+        "setOfficeHours": "Setear un horario de oficina regular",
+
+        "status": {
+            "user": {
+                "clockedOut": "No estás registrado.",
+                "clockedIn": "Has estado registrado desde las {{clockInTime}}",
+                "onLunch": "Has estado almorzando desde las {{lunchTime}}"
+            },
+            "other": {
+                "clockedOut": "{{name}} no está registrado.",
+                "clockedIn": "{{name}} ha estado registrado desde las {{clockInTime}}",
+                "onLunch": "{{name}} ha estado almorzando desde las {{lunchTime}}"
+            }
+        },
+
+        "buttons": {
+            "clockIn": "Fichar entrada",
+            "clockOut": "Fichar salida",
+            "startLunch": "Empezar el almuerzo",
+            "endLunch": "Terminar del almuerzo"
+        },
+
+        "workingHours": {
+            "title": "Setear horas de trabajo",
+            "description": "Utiliza los selectores para setear las horas en las que trabajas en un día típico.",
+            "start": "Hora de inicio",
+            "end": "Hora de fin"
+        }
+    },
+
+    "settings": {
+        "search": "Buscar...",
+
+        "language": "Idioma"
+    },
+
+    "profile": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "companyEmail": "Email corporativo",
+        "address": "Domicilio",
+        "birthDate": "Fecha de nacimiento (AAAA-MM-DD)",
+        "role": "Rol",
+        "team": "Equipo",
+        "supervisor": "Supervisor",
+        "supervisorEmail": "Email del supervisor",
+
+        "emergencyContacts": "Contactos de emergencia",
+
+        "uploadPicture": "Cargar nueva foto",
+
+        "pto": {
+            "pto": "Licencia",
+            "sick": "Enfermedad",
+
+            "daysRemaining": "Días restantes",
+            "ptoRemaining": "Días de licencia restantes",
+            "sickRemaining": "Días de enfermedad restantes",
+            "from": "Desde",
+            "to": "Hasta",
+            "selectCategory": "Seleccionar categoría",
+            "reason": "Motivo",
+
+            "request": "Solicitar",
+
+            "daysUpdateSuccess": "Días actualizado correctamente",
+            "requestSuccess": "Solicitud enviada correctamente"
+        }
+    },
+
+    "team": {
+        "myTeam": "Mi equipo",
+        "memberDetails": "Perfil del miembro del equipo",
+
+        "supervisors": "Supervisores",
+        "members": "Miembros del equipo",
+
+        "me": "yo",
+
+        "manageTeam": "Administrar equipo",
+        "managePTO": "Administrar licencias del equipo",
+        "managePTOTitle": "Administrar licencias",
+        "addMemberTitle": "Añadir miembro al equipo",
+        "addMember": "Añadir miembro",
+
+        "addSuccess": "¡Usuario creado correctamente!",
+
+        "ptoEdit": {
+            "header": "Administrar licencia para {{name}}",
+
+            "selectAction": "Seleccionar acción",
+
+            "removeSick": "Días de enfermedad a restar",
+            "removePTO": "Días de licencia a restar",
+            "addSick": "Días de enfermedad a añadir",
+            "addPTO": "Días de licencia a añadir",
+
+            "removeSickConfirm": "¿Quieres restar {{num}} días de enfermedad a {{name}}?",
+            "removePTOConfirm": "¿Quieres restar {{num}} días de licencia a {{name}}?",
+            "addSickConfirm": "¿Quieres añadir {{num}} días de enfermedad a {{name}}?",
+            "addPTOConfirm": "¿Quieres añadir {{num}} días de licencia a {{name}}?"
+        }
+    },
+
+    "errors": {
+        "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
+        "requestFailed": "Error en la solicitud de red.",
+        "unexpected": "Se encontró un error inesperado.",
+
+        "login": {
+            "signOut": "Error al cerrar sesión.",
+            "invalidEmail": "Por favor, ingrese una dirección de correo válida.",
+            "noPassword": "Se requiere contraseña.",
+            "invalidCredentials": "Correo electrónico o contraseña no válidos.",
+            "userDisabled": "Cuenta deshabilitada. Por favor contacta a tu administrador."
+        },
+
+        "bio": {
+            "invalidAddress": "Por favor, ingrese un domicilio válido.",
+            "noCameraPerm": "Lo siento, necesitamos acceso a la galería para habilitar esta función!",
+
+            "pto": {
+                "getAvailableFailed": "Ha ocurrido un error al intentar recuperar los datos de días disponibles.",
+                "notEnoughDays": "No posee suficientes días disponibles. Disponible: {{availableDays}}. Solicitado: {{daysToAdd}}",
+                "notEnoughRemove": "No se pueden restar más días de los que están disponibles.",
+                "requestNotFound": "Solicitud con ID {{id}} no encontrada.",
+                "noNumber": "Se requiere ingresar el número de días."
+            }
+        },
+
+        "newMember": {
+            "noName": "Se requiere nombre y apellido.",
+            "noAddress": "Se requiere domicilio.",
+            "invalidBirthDate": "Fecha de nacimiento debe coincidir con el formato AAAA-MM-DD.",
+            "noRole": "Se requiere rol.",
+            "recoveryFailed": "Se produjo un error al enviar el correo electrónico de recuperación al nuevo usuario.",
+            "saveFailed": "Se produjo un error al guardar el nuevo usuario."
+        }
+    }
+}

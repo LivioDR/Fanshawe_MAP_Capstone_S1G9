@@ -39,9 +39,12 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: "absolute",
-    paddingBottom: 20,
+    padding: 20,
     bottom: 40,
     zIndex: -2,  //Needed so that outer toast shows above footer
+  },
+  footerText: {
+    textAlign: "center",
   },
 });
 

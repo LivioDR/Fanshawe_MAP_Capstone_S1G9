@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./styles";
 import { useEffect, useState } from "react";
 import { Button, Modal, Text, TextInput, View } from "react-native";
@@ -26,13 +27,14 @@ export default function LoginScreen({ loginSuccess }) {
   const [pwdIsValid, setPwdIsValid] = useState(false);
 
   /* Hooks */
+  const { t } = useTranslation();
 
   /*
   Ensures that there are no active users signed in when the login page is entered
   */
   useEffect(() => {
     (async () => {
-        await signOut(auth).catch(() => showErrorToast("Error signing users out"));
+        await signOut(auth).catch(() => showErrorToast(t("errors.login.signOut")));
         if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
             const [debugEmail, debugPassword] = process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
             const debugCredential = await signInWithEmailAndPassword(auth, debugEmail, debugPassword);
@@ -70,7 +72,7 @@ export default function LoginScreen({ loginSuccess }) {
 
     if (emailRegexTest == false) {
       setEmailIsValid(false);
-      setEmailErrTxt("Please enter a valid email");
+      setEmailErrTxt(t("errors.login.invalidEmail"));
       setPasswordResetBtnDisabled(true);
     } else {
       setEmailIsValid(true);
@@ -85,7 +87,7 @@ export default function LoginScreen({ loginSuccess }) {
 
     if (value.length === 0) {
       setPwdIsValid(false);
-      setPwdErrTxt("Please enter a password");
+      setPwdErrTxt(t("errors.login.noPassword"));
     } else {
       setPwdIsValid(true);
       setPwdErrTxt("");
@@ -103,16 +105,15 @@ export default function LoginScreen({ loginSuccess }) {
         // But we check is the user is enabled before continuing
         const userInfo = await getUserBioInfoById(user.uid)
         if(userInfo.isEnabled){
-          showSuccessToast("Login successful");
           loginSuccess(userCredential);
         }
         else{
-          showErrorToast("User disabled. Please contact your administrator")
+          showErrorToast(t("errors.login.userDisabled"))
           await signOut(auth)
         }
       })
       .catch(() => {
-        showErrorToast("Incorrect username or password");
+        showErrorToast(t("errors.login.invalidCredentials"));
         handlePwdChange("");
       });
   };
@@ -125,12 +126,10 @@ export default function LoginScreen({ loginSuccess }) {
   const handleSendPasswordResetLink = () => {
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        showSuccessToast("Password reset via email requested");
+        showSuccessToast(t("login.passwordResetSuccess"));
       })
       .catch(() => {
-        showErrorToast(
-          "There was an error, sending the link, please try again"
-        );
+        showErrorToast(t("errors.generic"));
       });
   };
 
@@ -150,7 +149,7 @@ export default function LoginScreen({ loginSuccess }) {
   const showSuccessToast = (msg) => {
     Toast.show({
       type: "success",
-      text1: "Success ✅",
+      text1: t("login.success", { icon: "✅" }),
       text2: msg,
       position: "bottom",
     });
@@ -159,7 +158,7 @@ export default function LoginScreen({ loginSuccess }) {
   const showErrorToast = (errMsg) => {
     Toast.show({
       type: "error",
-      text1: "Error 🛑",
+      text1: t("login.error", { icon: "🛑" }),
       text2: errMsg,
       visibilityTime: 2200,
       position: "bottom",
@@ -172,61 +171,61 @@ export default function LoginScreen({ loginSuccess }) {
         <Toast />
         <TextInput
           style={styles.textInputContainer}
-          placeholder="Email Address"
+          placeholder={t("login.email")}
           onChangeText={handleEmailChange}
           keyboardType={"email"}
           autoCapitalize="none"
         />
 
-        <InputMsgBox text={emailErrTxt}></InputMsgBox>
+        <InputMsgBox text={emailErrTxt} />
 
         <TextInput
           style={styles.textInputContainer}
-          placeholder="Password"
+          placeholder={t("login.password")}
           onChangeText={handlePwdChange}
           secureTextEntry={true}
           value={pwd}
         />
 
-        <InputMsgBox text={pwdErrTxt}></InputMsgBox>
+        <InputMsgBox text={pwdErrTxt} />
 
         <UiButton
-          label="Login"
+          label={t("login.login")}
           funcToCall={handleLoginPress}
           disabled={loginBtnDisabled}
           type="CTA"
-        ></UiButton>
+        />
 
         <Button
-          title="Forgotten Password?"
+          title={t("login.forgotPassword")}
           onPress={handleForgotPasswordPress}
-        ></Button>
+        />
 
         <View style={styles.footer}>
-          <Text>Powered by IndusTree 🌳 © Copyright 2024</Text>
+          <Text style={styles.footerText}>{t("common.copy")}</Text>
         </View>
 
         <Modal animationType="slide" visible={showModal}>
           <View style={styles.modalView}>
             <TextInput
               style={styles.textInputContainer}
-              placeholder="Email Address"
+              placeholder={t("login.email")}
               onChangeText={handleEmailChange}
               value={email} 
               keyboardType={"email"}
               autoCapitalize="none"
             />
 
-            <InputMsgBox text={emailErrTxt}></InputMsgBox>
+            <InputMsgBox text={emailErrTxt} />
 
             <UiButton
-              label="Send Password Reset Link"
+              label={t("login.sendPasswordReset")}
               funcToCall={handleSendPasswordResetLink}
               disabled={passwordResetBtnDisabled}
               type="CTA"
-            ></UiButton>
+            />
 
-            <Button title="Close" onPress={handleModalToggle}></Button>
+            <Button title={t("common.close")} onPress={handleModalToggle} />
           </View>
           <Toast />
         </Modal>

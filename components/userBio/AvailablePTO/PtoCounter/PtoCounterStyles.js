@@ -17,6 +17,7 @@ export default PtoCounterStyles = StyleSheet.create({
         padding: 2,
     },
     value: {
+        flexGrow: 1,
         textAlign: 'center',
         fontSize: 52,
         backgroundColor: '#F0F0F0',

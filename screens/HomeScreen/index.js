@@ -1,97 +1,68 @@
-// RN elements
-import { Button } from "react-native";
+import { useTranslation } from "react-i18next";
 
-// navigation
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { TouchableHighlight, Text } from "react-native";
 
-// icons
+import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-// custom components
-import CompanyScreen from "../CompanyScreen";
 import TimeClockScreen from "../TimeClockScreen";
-import UserBio from "../UserBioScreen/UserBio";
+import SettingsScreen from "../SettingsScreen";
 
-// theme variables
-import { accent, highlight } from "../../utilities/variables";
+import { highlight, accent } from "../../utilities/variables";
+import styles from "./styles";
 
-// create bottom tab navigator elements
-const Tab = createBottomTabNavigator();
-
-const NavTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        background: "#FFF",
-    }
-};
+const Stack = createStackNavigator();
 
 export default function HomeScreen({ logOut }) {
+    const nav = useNavigation();
+    const { t } = useTranslation();
+
     return (
-        <NavigationContainer theme={NavTheme}>
-            <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={{
+        <Stack.Navigator
+            initialRouteName="TimeClock"
+            screenOptions={{
+                headerBackTitle: t("common.nav.back"),
+            }}
+        >
+            <Stack.Screen 
+                name="TimeClock"
+                component={TimeClockScreen}
+                options={{
                     headerTitle: "",
                     headerLeft: () => (
-                        <Button
+                        <TouchableHighlight
                             onPress={logOut}
-                            title="Log Out"
-                            color={accent}
-                        />
+                            style={[styles.barButton, styles.btnLeft]}
+                            underlayColor={highlight}
+                        >
+                            <Text style={styles.btnText}>{t("common.logOut")}</Text>
+                        </TouchableHighlight>
                     ),
-                    tabBarActiveTintColor: accent,
-                    tabBarStyle: {
-                        backgroundColor: highlight,
-                    },
+                    headerRight: () => (
+                        <TouchableHighlight
+                            onPress={() => nav.navigate("Settings")}
+                            style={[styles.barButton, styles.btnRight]}
+                            underlayColor={highlight}
+                        >
+                            <MaterialIcons
+                                name="settings"
+                                size={24}
+                                color={accent}
+                            />
+                        </TouchableHighlight>
+                    ),
                 }}
-            >
-                <Tab.Screen
-                    name="Company"
-                    component={CompanyScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialIcons
-                                name="apartment"
-                                size={size}
-                                color={color}
-                            />
-                        ),
-                    }}
-                />
+            />
 
-                <Tab.Screen
-                    name="Home"
-                    component={TimeClockScreen}
-                    options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                            <MaterialCommunityIcons
-                                name={focused ? "home-variant" : "home-variant-outline"}
-                                size={size}
-                                color={color}
-                            />
-                        ),
-                    }}
-                />
-
-                <Tab.Screen
-                    name="Profile"
-                    component={UserBio}
-                    options={{
-                        headerShown: false,
-                        tabBarIcon: ({ focused, color, size }) => (
-                            <MaterialIcons
-                                name={focused ? "person" : "person-outline"}
-                                size={size}
-                                color={color}
-                            />
-                        ),
-                    }}
-                />
-            </Tab.Navigator>
-        </NavigationContainer>
+            <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                    headerTitle: t("common.nav.settings"),
+                }}
+            />
+        </Stack.Navigator>
     );
 }

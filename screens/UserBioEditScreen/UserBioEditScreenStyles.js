@@ -10,10 +10,12 @@ export default UserBioEditScreenStyles = StyleSheet.create({
         fontSize: 24,
     },
     btnContainer: {
-        display: 'flex',
         flexDirection: 'row',
         width: '100%',
         padding: '5%',
-        justifyContent: 'space-between'
+        gap: 20,
+    },
+    button: {
+        flex: 1,
     },
 })

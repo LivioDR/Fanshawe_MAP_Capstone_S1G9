@@ -1,23 +1,21 @@
+import { useTranslation } from "react-i18next";
 import { View, Text, Switch, StyleSheet } from "react-native";
-
 
 const styles = StyleSheet.create({
     container: {
-        display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
 })
 
-
 const DisableUserSwitch = ({isEnabled, setEnabled}) => {
-
+    const { t } = useTranslation()
 
     return(
         <View style={styles.container}>
             <Text>
-                {isEnabled ? "Enabled" : "Disabled"}
+                {isEnabled ? t("common.enabled") : t("common.disabled")}
             </Text>
             <Switch
                 value={isEnabled}

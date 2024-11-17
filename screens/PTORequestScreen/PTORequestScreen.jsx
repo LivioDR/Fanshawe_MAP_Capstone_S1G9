@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { View, Text, Modal } from "react-native";
 import AvailablePTO from "../../components/userBio/AvailablePTO/AvailablePTO";
@@ -17,6 +18,8 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         until: new Date(),
         alert: " ",
     })
+
+    const { t } = useTranslation()
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
@@ -95,24 +98,24 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         >
             <View style={styles.container}>
                 <Text style={styles.nameLabel}>
-                    Days remaining
+                    {t("profile.pto.daysRemaining")}
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
 
                 <View style={styles.btnContainer}>
-                    <FromToDatePicker label={"From"} initialValue={requestInfo.from} setDate={setFromDate}/>
-                    <FromToDatePicker label={"To"} initialValue={requestInfo.until} setDate={setUntilDate}/>
+                    <FromToDatePicker label={t("profile.pto.from")} initialValue={requestInfo.from} setDate={setFromDate}/>
+                    <FromToDatePicker label={t("profile.pto.to")} initialValue={requestInfo.until} setDate={setUntilDate}/>
                 </View>
 
                 <Text style={styles.subtitle}>
-                    Select category
+                    {t("profile.pto.selectCategory")}
                 </Text>
 
                 <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
                 
                 <InputField
-                label={"Reason"}
+                label={t("profile.pto.reason")}
                 value={requestInfo.reason}
                 setValue={updateReason}
                 autoCapitalize="sentences"
@@ -120,14 +123,16 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
 
                 <View style={styles.btnContainer}>
                     <UiButton
-                    label={"Cancel"}
+                    label={t("common.cancel")}
                     funcToCall={clearAndClose}
                     type="default"
+                    customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
-                    label={"Request"}
+                    label={t("profile.pto.request")}
                     funcToCall={requestTimeOff}
                     type="primary"
+                    customStyles={{ wrapper: styles.button }}
                     />
                 </View>
                 <Text>

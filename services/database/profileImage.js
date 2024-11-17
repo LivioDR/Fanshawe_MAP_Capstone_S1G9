@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import { storage } from "../../config/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
@@ -29,7 +30,7 @@ const setImageForUserId = async(id, uri, setLoading) => {
             resolve(xhr.response);
           };
           xhr.onerror = function (e) {
-            reject(new TypeError("Network request failed"));
+            reject(new TypeError(i18next.t("errors.requestFailed")));
           };
           xhr.responseType = "blob";
           xhr.open("GET", uri, true);

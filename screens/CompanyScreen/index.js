@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -14,8 +16,15 @@ import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 const Stack = createStackNavigator();
 
 export default function CompanyScreen() {
+    const { t } = useTranslation();
+
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            initialRouteName="CompanyOptions"
+            screenOptions={{
+                headerBackTitle: t("common.nav.back"),
+            }}
+        >
             <Stack.Screen
                 name="CompanyOptions"
                 component={CompanyOptions}
@@ -28,7 +37,7 @@ export default function CompanyScreen() {
                 name="MyTeamScreen"
                 component={TeamScreen}
                 options={{
-                    headerTitle: "My Team",
+                    headerTitle: t("team.myTeam"),
                 }}
             />
 
@@ -36,7 +45,7 @@ export default function CompanyScreen() {
                 name="ManageTeamScreen"
                 component={ManageTeamScreen}
                 options={{
-                    headerTitle: "Manage Team",
+                    headerTitle: t("team.manageTeam"),
                 }}
             />
 
@@ -44,7 +53,7 @@ export default function CompanyScreen() {
                 name="AddMemberScreen"
                 component={NewMemberScreen}
                 options={{
-                    headerTitle: "New Member",
+                    headerTitle: t("team.addMemberTitle"),
                 }}
             />
 
@@ -52,7 +61,7 @@ export default function CompanyScreen() {
                 name="TeamMemberDetails"
                 component={UserBio}
                 options={{
-                    headerTitle: "Team Member Details",
+                    headerTitle: t("team.memberDetails"),
                 }}
             />
 
@@ -60,16 +69,13 @@ export default function CompanyScreen() {
                 name="PTOTeamScreen"
                 component={PTOTeamScreen}
                 options={{
-                    headerTitle: "Manage Team PTO",
+                    headerTitle: t("team.managePTOTitle"),
                 }}
             />
 
             <Stack.Screen
                 name="PTOEditScreen"
                 component={PTOEditScreen}
-                options={{
-                    headerTitle: "Edit PTO",
-                }}
             />
         </Stack.Navigator>
     );

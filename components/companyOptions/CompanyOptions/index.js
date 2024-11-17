@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 import { View, FlatList } from "react-native";
@@ -12,35 +13,36 @@ import CompanyOptionSelector from "./CompanyOptionSelector";
 
 import styles from "./styles";
 
-
-const options = [
-    {
-        caption: "My Team",
-        destination: "MyTeamScreen",
-        icon: <MaterialIcons name="people" size={30} color="black" />,
-    },
-];
-
-const adminOptions = [
-    {
-        caption: "Manage Team",
-        destination: "ManageTeamScreen",
-        icon: <MaterialIcons name="cases" size={30} color="black" />,
-    },
-    {
-        caption: "Manage Team PTO",
-        destination: "PTOTeamScreen",
-        icon: <MaterialIcons name="edit-calendar" size={30} color="black" />,
-    },
-    {
-        caption: "Add members",
-        destination: "AddMemberScreen",
-        icon: <MaterialIcons name="group-add" size={30} color="black" />,
-    },
-];
-
 export default function CompanyOptions() {
-    const userCredentials = useCredentials()
+    const userCredentials = useCredentials();
+    const { t } = useTranslation();
+
+    const options = [
+        {
+            caption: t("team.myTeam"),
+            destination: "MyTeamScreen",
+            icon: <MaterialIcons name="people" size={30} color="black" />,
+        },
+    ];
+
+    const adminOptions = [
+        {
+            caption: t("team.manageTeam"),
+            destination: "ManageTeamScreen",
+            icon: <MaterialIcons name="cases" size={30} color="black" />,
+        },
+        {
+            caption: t("team.managePTO"),
+            destination: "PTOTeamScreen",
+            icon: <MaterialIcons name="edit-calendar" size={30} color="black" />,
+        },
+        {
+            caption: t("team.addMemberTitle"),
+            destination: "AddMemberScreen",
+            icon: <MaterialIcons name="group-add" size={30} color="black" />,
+        },
+    ];
+    
     const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
 

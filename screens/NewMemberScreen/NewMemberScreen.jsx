@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { View, Text } from "react-native";
 import InputField from "../../components/common/InputField/InputField";
 import { useEffect, useState } from "react";
@@ -29,6 +30,8 @@ const NewMemberScreen = () => {
     const [errors, setErrors] = useState("")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
 
+    const { t } = useTranslation()
+    
     useEffect(() => {
         (async () => {
             const userInfo = await getUserBioInfoById(supervisorId);
@@ -42,27 +45,27 @@ const NewMemberScreen = () => {
     const fields = [
         {
             name: 'firstName',
-            label: 'First Name',
+            label: t("profile.firstName"),
         },
         {
             name: 'lastName',
-            label: "Last Name",
+            label: t("profile.lastName"),
         },
         {
             name: 'address',
-            label: 'Address',
+            label: t("profile.address"),
         },
         {
             name: 'email',
-            label: 'Email',
+            label: t("profile.companyEmail"),
         },
         {
             name: 'birthday',
-            label: 'Birth Date (YYYY-MM-DD)',
+            label: t("profile.birthDate"),
         },
         {
             name: 'role',
-            label: 'Role',
+            label: t("profile.role"),
         },
     ]
 
@@ -89,31 +92,31 @@ const NewMemberScreen = () => {
 
         // Checks first name and last name to have data
         if(!userInfo.firstName || !userInfo.lastName || userInfo.firstName.trim() == "" || userInfo.lastName.trim() == ""){
-            setErrors("Name can't be empty")
+            setErrors(t("errors.newMember.noName"))
             return
         }
 
         // Then checks the address
         if(!userInfo.address || userInfo.address.trim() == ""){
-            setErrors("Address can't be empty")
+            setErrors(t("errors.newMember.noAddress"))
             return
         }
 
         // Verifies that the email has a valid format
         if(isEmailInvalid(userInfo.email)){
-            setErrors("Please enter a valid email")
+            setErrors(t("errors.login.invalidEmail"))
             return
         }
 
         // As well as the birth date
         if(isBirthDateInvalid(userInfo.birthday)){
-            setErrors("Please enter a birth date in the valid format")
+            setErrors(t("errors.newMember.invalidBirthDate"))
             return
         }
 
         // At last, checks the role
         if(!userInfo.role || userInfo.role.trim() == ""){
-            setErrors("Role can't be empty")
+            setErrors(t("errors.newMember.noRole"))
             return
         }
 
@@ -133,7 +136,7 @@ const NewMemberScreen = () => {
         if(userCreationResult.errors.length > 0){
             const error = userCreationResult.errors[0]
             const formattedError = error.split("/")[1].split("-").join(" ")
-            setErrors(`An error occurred: ${formattedError}`)
+            setErrors(`${t("errors.unexpected")} ${formattedError}`)
             setIsBtnDisabled(false)
             return
         }
@@ -148,16 +151,16 @@ const NewMemberScreen = () => {
 
             const recoveryResult = await sendRecoveryPassword(userInfo.email.trim())
             if(recoveryResult){
-                setErrors("User created successfully!")
+                setErrors(t("team.addSuccess"))
                 clearAllFields()
             }
             else{
-                setErrors("An error occurred while sending the recovery email to the new user")
+                setErrors(t("errors.newMember.recoveryFailed"))
             }
             setIsBtnDisabled(false)
         }
         else{
-            setErrors("An error has occurred while writing the user info to the database")
+            setErrors(t("errors.newMeber.saveFailed"))
             setIsBtnDisabled(false)
         }
     }
@@ -166,14 +169,26 @@ const NewMemberScreen = () => {
 
     // UI to be rendered by this component
     return(
-        <View style={{flex: 1, height: '100%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center',}}>
+        <View style={{flex: 1, alignItems: 'center'}}>
             {
                 fields.map(field => <InputField key={field.name} label={field.label} value={userInfo[field.name]} setValue={(e)=>{setField(e, field.name)}} />)
             }
-            <Text>{errors}</Text>
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: '100%',}}>
-                <UiButton label={"Clear"} type={"warning"} disabled={isBtnDisabled} funcToCall={clearAllFields} />
-                <UiButton label={"Add member"} type={"primary"} disabled={isBtnDisabled} funcToCall={sendRequest} />
+            <Text style={{paddingHorizontal: "5%"}}>{errors}</Text>
+            <View style={{flexDirection: 'row', gap: 20, paddingHorizontal: "5%"}}>
+                <UiButton
+                    label={t("common.clear")}
+                    type={"warning"}
+                    disabled={isBtnDisabled}
+                    funcToCall={clearAllFields}
+                    customStyles={{wrapper: { flex: 1 }}}
+                />
+                <UiButton
+                    label={t("team.addMember")}
+                    type={"primary"}
+                    disabled={isBtnDisabled}
+                    funcToCall={sendRequest}
+                    customStyles={{wrapper: { flex: 1 }}}
+                />
             </View>
         </View>
     )

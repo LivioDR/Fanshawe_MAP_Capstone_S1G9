@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
@@ -23,8 +24,9 @@ const TeamScreen = ({ uid }) => {
     const authUserId = userCreds.user.uid
     if (!uid) {
         uid = authUserId
-
     }
+
+    const { t } = useTranslation()
 
     useEffect(()=>{
         (async()=>{
@@ -71,7 +73,7 @@ const TeamScreen = ({ uid }) => {
                     renderItem={user => (
                         <UserCard
                             id={user.item.uid}
-                            name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? " (me)" : ""}`}
+                            name={`${user.item.firstName} ${user.item.lastName}${authUserId === user.item.uid ? ` (${t("team.me")})` : ""}`}
                             role={user.item.role}
                             email={user.item.email}
                             imgUrl={user.item.uri}
@@ -98,8 +100,8 @@ const TeamScreen = ({ uid }) => {
                 style={styles.scroll.outer}
                 contentContainerStyle={styles.scroll.inner}
             >
-                {createUserCards("Supervisors", teamSupervisors)}
-                {createUserCards("Team Members", teamMembers)}
+                {createUserCards(t("team.supervisors"), teamSupervisors)}
+                {createUserCards(t("team.members"), teamMembers)}
             </ScrollView>
         </SafeAreaView>
     )

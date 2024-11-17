@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, View, Text, Modal } from "react-native";
 
 // UI imports
@@ -43,6 +44,8 @@ const PTOEditScreen = ({userId}) => {
     const [daysToChange, setDaysToChange] = useState(0);
     const [daysIsValid, setDaysIsValid] = useState(false)
     const [daysErrTxt, setDaysErrTxt] = useState(" ")
+
+    const { t } = useTranslation()
 
     const hidePto = () => {
         updatePTOAdmin({ showEditPtoModal: false })
@@ -137,22 +140,22 @@ const PTOEditScreen = ({userId}) => {
         if (value.length === 0) {
 
             setDaysIsValid(false)
-            setDaysErrTxt("Please enter a number");
+            setDaysErrTxt(t("errors.bio.pto.noNumber"));
 
         }else if(isNaN(value)){
 
             setDaysIsValid(false)
-            setDaysErrTxt("Please enter a number");
+            setDaysErrTxt(t("errors.bio.pto.noNumber"));
 
         }else if(daysToBeRemoved && category === "PTO" && value > pto){
 
             setDaysIsValid(false)
-            setDaysErrTxt("Cannot remove more PTO days than a user has");
+            setDaysErrTxt(t("errors.bio.pto.notEnoughRemove"));
 
         }else if(daysToBeRemoved && category === "Sick" && value > sick){
 
             setDaysIsValid(false)
-            setDaysErrTxt("Cannot remove more sick days than a user has");
+            setDaysErrTxt(t("errors.bio.pto.notEnoughRemove"));
     
         }else {
 
@@ -177,15 +180,18 @@ const PTOEditScreen = ({userId}) => {
     }
     // END OF STATE MANAGEMENT FUNCTIONS
 
-    const showConfirmAlert = () =>
-        Alert.alert('Confirm changes', `Do you want to ${daysToBeRemoved ? "remove" : "add"} ${Math.abs(daysToChange)}
-        ${requestInfo.category ? "Sick" : "PTO"} day(s) for ${userData.firstName} ${userData.lastName}?`, [
+    const showConfirmAlert = () => {
+        const action = daysToBeRemoved ? "remove" : "add";
+        const cat = requestInfo.category ? "Sick" : "PTO";
+        
+        Alert.alert(t("common.confirmChanges"), t(`team.ptoEdit.${action}${cat}Confirm`, { num: Math.abs(daysToChange), name: `${userData.firstName} ${userData.lastName}` }), [
           {
-            text: 'Cancel',
+            text: t("common.cancel"),
             style: 'cancel',
           },
-          {text: 'OK', onPress: () => confirmPTOChange()},
+          {text: t(`common.${action}`), onPress: () => confirmPTOChange()},
         ]);
+    }
 
     const confirmPTOChange = async() => {
         let category = requestInfo.category ? "Sick" : "PTO"
@@ -221,7 +227,7 @@ const PTOEditScreen = ({userId}) => {
         >
             <View style={styles.container}>
                 <Text style={styles.nameLabel}>
-                    Editing PTO for {userData.firstName} {userData.lastName}
+                    {t("team.ptoEdit.header", { name: `${userData.firstName} ${userData.lastName}` })}
                 </Text>
 
                 <AvailablePTO numPto={pto} numSick={sick}/>
@@ -229,7 +235,7 @@ const PTOEditScreen = ({userId}) => {
                 <View style={styles.switchContainer}>
 
                     <Text style={styles.subtitle}>
-                        Select category
+                        {t("profile.pto.selectCategory")}
                     </Text>
 
                     <PTOCategorySwitch initialValue={requestInfo.category} toggle={toggleSwitch} />
@@ -239,7 +245,7 @@ const PTOEditScreen = ({userId}) => {
                 <View style={styles.switchContainer}>
 
                     <Text style={styles.subtitle}>
-                        Select add or remove
+                        {t("team.ptoEdit.selectAction")}
                     </Text>
 
                     <PTOAddRemoveSwitch initialValue={daysToBeRemoved} toggle={toggleAddRemoveSwitch} />
@@ -247,7 +253,7 @@ const PTOEditScreen = ({userId}) => {
                 </View>
             
                 <InputField
-                label={ `${requestInfo.category ? "Sick" : "PTO"} day(s) ${daysToBeRemoved ? "to remove" : "to add"}`}
+                label={t(`team.ptoEdit.${daysToBeRemoved ? "remove" : "add"}${requestInfo.category ? "Sick" : "PTO"}`)}
                 value={daysToChange}
                 setValue={setDaysToChange}
                 onChangeText={handleDaysChange}
@@ -261,15 +267,17 @@ const PTOEditScreen = ({userId}) => {
 
                 <View style={styles.btnContainer}>
                     <UiButton
-                    label={"Cancel"}
+                    label={t("common.cancel")}
                     funcToCall={clearAndClose}
                     type="default"
+                    customStyles={{ wrapper: styles.button }}
                     />
                     <UiButton
-                    label={"Confirm"}
+                    label={t("common.confirm")}
                     funcToCall={showConfirmAlert}
                     type="primary"
                     disabled={!daysIsValid}
+                    customStyles={{ wrapper: styles.button }}
                     />
                 </View>
                 <Text>
