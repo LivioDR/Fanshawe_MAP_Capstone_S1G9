@@ -13,6 +13,7 @@ import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
+import { useFocusEffect } from "@react-navigation/native";
 
 /*
 This component just renders the user cards for editing the PTO
@@ -23,7 +24,24 @@ triggered when a UserCard is pressed
 const PTOTeamScreen = ({ uid }) => {
 
     //getting globals from state
-    const { showEditPtoModal, currentIdForPtoEdit } = usePTOAdmin()
+    const { inAdminMode, showEditPtoModal, currentIdForPtoEdit, updatePTOAdmin } = usePTOAdmin()
+
+    //Set inAdmin mode whenever screen is navigated to to give the cards
+    //the correct onpress functionality
+    //Without useCallback infinite renders
+    useFocusEffect(
+        React.useCallback(() => {
+
+            updatePTOAdmin({ inAdminMode: true })
+
+       
+            //Sets it back to false when screen unfocused
+            return () => {
+                updatePTOAdmin({ inAdminMode: false })
+            };
+        }, [])
+    );
+
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [teamSupervisors, setTeamSupervisors] = useState(undefined)
@@ -43,6 +61,7 @@ const PTOTeamScreen = ({ uid }) => {
     }
 
     useEffect(()=>{
+        
         (async()=>{
             const myInfo = await getUserBioInfoById(uid)
             const myTeamInfo = await getTeamInfoById(myInfo.teamId)
@@ -63,7 +82,7 @@ const PTOTeamScreen = ({ uid }) => {
             setTeamSupervisors(myTeamSupervisorDetails)
             setLoading(false)
         })()
-    },[])
+    },[showEditPtoModal]) //Updates with new value when modal closes (slight delay)
 
     /**
      * Generate a header and FlatList for the given users list.

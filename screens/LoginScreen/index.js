@@ -113,9 +113,9 @@ export default function LoginScreen({ loginSuccess }) {
 
           // Get info of logged in user to determine if they're an admin
           // for the Admin's PTO functionality
-          if(userInfo.isSupervisor){
-            updatePTOAdmin({ inAdminMode: true });
-          }
+          // if(userInfo.isSupervisor){
+          //   updatePTOAdmin({ inAdminMode: true });
+          // }
 
         }
         else{
