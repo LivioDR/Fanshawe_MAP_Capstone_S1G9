@@ -37,9 +37,6 @@ const PTOEditScreen = ({userId}) => {
     Returns: userId, userData.supervisorId, showPtoModal, hidePto, 
     */
     const [userData, setUserData] = useState({})
-    const [superData, setSuperData] = useState({})
-    const [canEditOthers, setCanEditOthers] = useState(false)
-    const [showPtoModal, setShowPtoModal] = useState(true)
     const [needsRefresh, setNeedsRefresh] = useState(true) 
 
     //States for the PTOAddRemoveSwitch and User input
