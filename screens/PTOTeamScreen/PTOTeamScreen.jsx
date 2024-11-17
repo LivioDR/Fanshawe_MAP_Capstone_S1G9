@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
@@ -54,7 +55,6 @@ const PTOTeamScreen = ({ uid }) => {
     );
 
     const [teamMembers, setTeamMembers] = useState(undefined)
-    const [teamSupervisors, setTeamSupervisors] = useState(undefined)
     const [loading, setLoading] = useState(true)
 
     const route = useRoute()
@@ -69,6 +69,8 @@ const PTOTeamScreen = ({ uid }) => {
 
     }
 
+    const { t } = useTranslation()
+
     useEffect(()=>{
         
         (async()=>{
@@ -76,19 +78,15 @@ const PTOTeamScreen = ({ uid }) => {
             const myTeamInfo = await getTeamInfoById(myInfo.teamId)
             const myTeam = myTeamInfo.employees
             const myTeamDetails = []
-            const myTeamSupervisorDetails = []
             for(let i=0; i<myTeam.length; i++){
                 const detail = await getUserBioInfoById(myTeam[i])
                 const imgPath = await getImageForUserId(myTeam[i])
                 const userDetail = {...detail, uri: imgPath, uid: myTeam[i]}
-                if (detail.isSupervisor) {
-                    myTeamSupervisorDetails.push(userDetail)
-                } else {
+                if (!detail.isSupervisor) {
                     myTeamDetails.push(userDetail)
                 }
             }
             setTeamMembers(myTeamDetails)
-            setTeamSupervisors(myTeamSupervisorDetails)
             setLoading(false)
         })()
     },[showEditPtoModal]) //Updates with new value when modal closes (slight delay)
@@ -151,7 +149,7 @@ const PTOTeamScreen = ({ uid }) => {
                 style={styles.scroll.outer}
                 contentContainerStyle={styles.scroll.inner}
             >
-                {createUserCards("Team Members", teamMembers)}
+                {createUserCards(t("team.members"), teamMembers)}
             </ScrollView>
         </SafeAreaView>
     )
