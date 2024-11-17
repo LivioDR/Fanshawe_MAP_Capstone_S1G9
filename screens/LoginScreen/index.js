@@ -11,6 +11,7 @@ import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
+
 export default function LoginScreen({ loginSuccess }) {
   /* States */
   const [email, setEmail] = useState("");
@@ -24,7 +25,6 @@ export default function LoginScreen({ loginSuccess }) {
   const [emailIsValid, setEmailIsValid] = useState(false);
   const [pwdIsValid, setPwdIsValid] = useState(false);
 
- 
     /* Hooks */
 
   /*
@@ -70,7 +70,7 @@ export default function LoginScreen({ loginSuccess }) {
 
     if (emailRegexTest == false) {
       setEmailIsValid(false);
-      setEmailErrTxt("Please enter a valid email");  
+      setEmailErrTxt("Please enter a valid email");
       setPasswordResetBtnDisabled(true);
     } else {
       setEmailIsValid(true);
