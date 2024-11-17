@@ -128,10 +128,6 @@ const PTOEditScreen = ({userId}) => {
 
         const valueAsInt = parseInt(value);
 
-        console.log("Val as int ", valueAsInt);
-        console.log("PTO ", pto);
-        console.log("Days to be removed ", daysToBeRemoved);
-
         //Value is a String, so convert to int
         setDaysToChange(parseInt(value));
 
@@ -210,7 +206,7 @@ const PTOEditScreen = ({userId}) => {
     // END OF STATE MANAGEMENT FUNCTIONS
 
     const showConfirmAlert = () =>
-        Alert.alert('Confirm changes', `Do you want to ${daysToBeRemoved ? "remove" : "add"} ${daysToChange}
+        Alert.alert('Confirm changes', `Do you want to ${daysToBeRemoved ? "remove" : "add"} ${Math.abs(daysToChange)}
         ${requestInfo.category ? "Sick" : "PTO"} day(s) for ${userData.firstName} ${userData.lastName}?`, [
           {
             text: 'Cancel',
