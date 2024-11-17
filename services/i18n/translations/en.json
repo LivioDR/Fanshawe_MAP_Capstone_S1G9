@@ -13,6 +13,7 @@
 
         "loading": "Loading...",
         "save": "Save",
+        "confirm": "Confirm",
         "cancel": "Cancel",
         "clear": "Clear",
         "close": "Close",
@@ -21,7 +22,8 @@
         "enabled": "Enabled",
         "disabled": "Disabled",
         "add": "Add",
-        "remove": "Remove"
+        "remove": "Remove",
+        "confirmChanges": "Confirm Changes"
     },
 
     "login": {
@@ -125,7 +127,23 @@
         "addMemberTitle": "Add Team Member",
         "addMember": "Add Member",
 
-        "addSuccess": "User created successfully!"
+        "addSuccess": "User created successfully!",
+
+        "ptoEdit": {
+            "header": "Editing PTO for {{name}}",
+
+            "selectAction": "Select action",
+
+            "removeSick": "Sick days to remove",
+            "removePTO": "PTO days to remove",
+            "addSick": "Sick days to add",
+            "addPTO": "PTO days to add",
+
+            "removeSickConfirm": "Do you want to remove {{num}} sick days for {{name}}?",
+            "removePTOConfirm": "Do you want to remove {{num}} PTO days for {{name}}?",
+            "addSickConfirm": "Do you want to add {{num}} sick days for {{name}}?",
+            "addPTOConfirm": "Do you want to add {{num}} PTO days for {{name}}?"
+        }
     },
 
     "errors": {
@@ -148,7 +166,9 @@
             "pto": {
                 "getAvailableFailed": "An error occurred while retrieving the available days data.",
                 "notEnoughDays": "Not enough available days. Available: {{availableDays}}. Requested: {{daysToAdd}}",
-                "requestNotFound": "Request with ID {{id}} not found."
+                "notEnoughRemove": "Cannot remove more days than currently available.",
+                "requestNotFound": "Request with ID {{id}} not found.",
+                "noNumber": "Number of days is required."
             }
         },
 

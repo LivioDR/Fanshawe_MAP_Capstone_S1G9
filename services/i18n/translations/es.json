@@ -13,6 +13,7 @@
 
         "loading": "Cargando...",
         "save": "Guardar",
+        "confirm": "Confirmar",
         "cancel": "Cancelar",
         "clear": "Borrar",
         "close": "Cerrar",
@@ -21,7 +22,8 @@
         "enabled": "Activado",
         "disabled": "Desactivado",
         "add": "Añadir",
-        "remove": "Eliminar"
+        "remove": "Eliminar",
+        "confirmChanges": "Confirmar cambios"
     },
 
     "login": {
@@ -125,7 +127,23 @@
         "addMemberTitle": "Añadir miembro al equipo",
         "addMember": "Añadir miembro",
 
-        "addSuccess": "¡Usuario creado correctamente!"
+        "addSuccess": "¡Usuario creado correctamente!",
+
+        "ptoEdit": {
+            "header": "Administrar licencia para {{name}}",
+
+            "selectAction": "Seleccionar acción",
+
+            "removeSick": "Días de enfermedad para eliminar",
+            "removePTO": "Días de licencia para eliminar",
+            "addSick": "Días de enfermedad para añadir",
+            "addPTO": "Días de licencia para añadir",
+
+            "removeSickConfirm": "¿Quieres eliminar {{num}} días de enfermedad para {{name}}?",
+            "removePTOConfirm": "¿Quieres eliminar {{num}} días de licencia para {{name}}?",
+            "addSickConfirm": "¿Quieres añadir {{num}} días de enfermedad para {{name}}?",
+            "addPTOConfirm": "¿Quieres añadir {{num}} días de licencia para {{name}}?"
+        }
     },
 
     "errors": {
@@ -148,7 +166,9 @@
             "pto": {
                 "getAvailableFailed": "Ha ocurrido un error al intentar recuperar los datos de días disponibles.",
                 "notEnoughDays": "No posee suficientes días disponibles. Disponible: {{availableDays}}. Solicitado: {{daysToAdd}}",
-                "requestNotFound": "Solicitud con ID {{id}} no encontrada."
+                "notEnoughRemove": "No se pueden eliminar más días de los que están disponibles actualmente.",
+                "requestNotFound": "Solicitud con ID {{id}} no encontrada.",
+                "noNumber": "Se requiere el número de días."
             }
         },
 

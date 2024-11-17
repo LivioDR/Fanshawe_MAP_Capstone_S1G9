@@ -15,17 +15,21 @@ export default PTORequestScreenStyles = StyleSheet.create({
     },
     nameLabel: {
         fontSize: 24,
+        paddingHorizontal: "5%",
     },
     subtitle: {
         fontSize: 18,
         padding: 12,
     },
     btnContainer: {
-        display: 'flex',
         flexDirection: 'row',
         width: '100%',
         padding: '5%',
+        gap: 20,
         justifyContent: 'space-between'
+    },
+    button: {
+        flex: 1,
     },
     errorTextContainer:{
         height: '3%',
