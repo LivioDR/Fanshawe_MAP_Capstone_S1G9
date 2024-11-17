@@ -3,9 +3,9 @@ import { currentLngKey, supportedLanguages } from "../../services/i18n/i18n";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { View, Text, Button } from "react-native";
+import { View, Text } from "react-native";
 
 import { Dropdown } from "react-native-element-dropdown";
 
