@@ -37,7 +37,15 @@ export default function SettingsScreen({ themeSetter }) {
             <View style={[styles.settingContainer, theme == darkMode ? darkFont : {}]}>
                 <Text style={[styles.heading, theme == darkMode ? darkFont : {}]}>{t("settings.language")}</Text>
                 <Dropdown
-                    style={[styles.dropdown, theme == darkMode ? darkFont : {}]}
+                    style={styles.dropdown}
+                    
+                    // conditional color schemes
+                    itemTextStyle={theme == darkMode ? darkFont : {}}
+                    itemContainerStyle={theme == darkMode ? darkBg : {}}
+                    searchPlaceholderTextColor={theme == darkMode ? darkFont : {}}
+                    activeColor={theme == darkMode ? darkBg : {}}
+                    containerStyle={theme == darkMode ? darkBg : {}}
+                    selectedTextStyle={theme == darkMode ? darkFont : {}}
 
                     data={languages}
                     labelField="label"
@@ -53,10 +61,19 @@ export default function SettingsScreen({ themeSetter }) {
             </View>
 
             {/* Theme configuration */}
-            <View style={styles.settingContainer}>
-                <Text style={styles.heading}>{t("settings.theme")}</Text>
+            <View style={[styles.settingContainer, theme == darkMode ? darkFont : {}]}>
+                <Text style={[styles.heading, theme == darkMode ? darkFont : {}]}>{t("settings.theme")}</Text>
                 <Dropdown
                     style={styles.dropdown}
+
+                    // conditional color schemes
+                    itemTextStyle={theme == darkMode ? darkFont : {}}
+                    itemContainerStyle={theme == darkMode ? darkBg : {}}
+                    searchPlaceholderTextColor={theme == darkMode ? darkFont : {}}
+                    activeColor={theme == darkMode ? darkBg : {}}
+                    containerStyle={theme == darkMode ? darkBg : {}}
+                    selectedTextStyle={theme == darkMode ? darkFont : {}}
+
 
                     data={themes}
                     labelField="label"
