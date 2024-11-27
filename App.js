@@ -72,7 +72,7 @@ export default function App() {
         <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
 
-            <StatusBar style="auto" />
+            <StatusBar style={theme === darkMode ? "light" : "dark"} />
             {shownScreen}
 
         </CredentialProvider>
