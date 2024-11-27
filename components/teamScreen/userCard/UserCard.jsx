@@ -10,10 +10,16 @@ import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
 import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 import { useTranslation } from "react-i18next";
 
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode, darkFont, darkBg } from "../../../services/themes/themes";
+
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
     const userCreds = useCredentials()
     const authUserId = userCreds.user.uid
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const [enabled, setEnabled] = useState(isEnabled)
     const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
@@ -74,16 +80,16 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
     }
     else{
         return(
-            <View style={styles.container}>
+            <View style={[styles.container, isDarkMode ? darkBg : {}]}>
                 <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
                 <View style={styles.textWithSwitchWrapper}>
-                    <Text style={styles.name}>
+                    <Text style={[styles.name, isDarkMode ? darkFont : {}]}>
                         {name}
                     </Text>
-                    <Text style={styles.role}>
+                    <Text style={[styles.role, isDarkMode ? darkFont : {}]}>
                         {role}
                     </Text>
-                    <Text style={styles.email}>
+                    <Text style={[styles.email, isDarkMode ? darkFont : {}]}>
                         {email}
                     </Text>
                 </View>

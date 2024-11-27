@@ -9,10 +9,17 @@ import { getTeamInfoById, getUserBioInfoById } from "../../services/database/use
 import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./ManageTeamScreenStyles";
 
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont, darkBgFont } from "../../services/themes/themes";
+
 const ManageTeamScreen = ({ uid }) => {
 
     const [teamMembers, setTeamMembers] = useState(undefined)
     const [loading, setLoading] = useState(true)
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const route = useRoute()
     if (route && route.params?.id) {
@@ -60,8 +67,8 @@ const ManageTeamScreen = ({ uid }) => {
         }
 
         return (
-            <View style={styles.list}>
-                <Text style={styles.title}>
+            <View style={[styles.list, isDarkMode ? darkBg : {}]}>
+                <Text style={[styles.title, isDarkMode ? darkFont : {}]}>
                     {title}
                 </Text>
                 <FlatList
@@ -86,7 +93,7 @@ const ManageTeamScreen = ({ uid }) => {
 
     if(loading){
         return (
-            <View style={styles.loading}>
+            <View style={[styles.loading, isDarkMode ? darkBgFont : {}]}>
                 <LoadingIndicator />
             </View>
         )
@@ -95,7 +102,7 @@ const ManageTeamScreen = ({ uid }) => {
     return(
         <SafeAreaView>
             <ScrollView
-                style={styles.scroll.outer}
+                style={[styles.scroll.outer, isDarkMode ? darkBg : {}]}
                 contentContainerStyle={styles.scroll.inner}
             >
                 {createUserCards(t("team.members"), teamMembers)}
