@@ -5,11 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import { initI18next } from "./services/i18n/i18n";
 
 // React Native components
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
+
+// auth
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './config/firebase';
 
 // hooks and providers
 import { useEffect, useState } from 'react';
-import { CredentialProvider } from './services/state/userCredentials';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
 
 // custom components
@@ -19,30 +22,46 @@ import AppScreen from './screens/AppScreen';
 
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
-    const [loginCredential, setLoginCredential] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
         initI18next().then(() => {
             setLoadingTranslations(false);
         });
-    }, []);
 
-    /**
-     * Save credentials returned from logging in.
-     * @param {AuthCredential} credential auth credentials from login
-     */
-    const onLogin = (credential) => {
-        setLoginCredential(credential);
-    };
+        // set up listener for reauth and login
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            // if we have a user, show app screen
+            if (user) {
+                setLoggedIn(true);
+            } else {
+                setLoggedIn(false);
+            }
+        });
+
+        return unsubscribe;
+    }, []);
 
     /**
      * Log the user out and return to the login screen.
      */
     const onLogout = () => {
-        setLoginCredential(null);
+        Alert.alert("Log Out", "Are you sure you wish to log out?", [
+            {
+                text: "Cancel",
+                style: "cancel",
+                // no onPress, since cancel does nothing
+            },
+            {
+                text: "Log Out",
+                onPress: () => {
+                    auth.signOut();
+                },
+            },
+        ]);
     };
 
-    let shownScreen = loginCredential ? <AppScreen logOut={onLogout} /> : <LoginScreen loginSuccess={onLogin} />;
+    let shownScreen = loggedIn ? <AppScreen logOut={onLogout} /> : <LoginScreen />;
     if (loadingTranslations) {
         shownScreen = (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -53,12 +72,10 @@ export default function App() {
 
     return (
         <PTOAdminProvider>
-        <CredentialProvider userCreds={loginCredential}>
 
             <StatusBar style="auto" />
             {shownScreen}
 
-        </CredentialProvider>
         </PTOAdminProvider>
     );
 }

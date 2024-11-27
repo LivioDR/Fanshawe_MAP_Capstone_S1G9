@@ -9,7 +9,7 @@ import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
@@ -62,8 +62,7 @@ const PTOTeamScreen = ({ uid }) => {
         uid = route.params.id
     }
     
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
     if (!uid) {
         uid = authUserId
 

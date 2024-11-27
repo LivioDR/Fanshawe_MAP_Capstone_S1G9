@@ -4,7 +4,7 @@ import { View, Text, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import styles from "./ManageTeamScreenStyles";
@@ -19,8 +19,7 @@ const ManageTeamScreen = ({ uid }) => {
         uid = route.params.id
     }
     
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
     if (!uid) {
         uid = authUserId
 

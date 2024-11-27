@@ -3,7 +3,7 @@ import { View, Text, TouchableHighlight } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import { highlight } from "../../../utilities/variables";
-import { useCredentials } from "../../../services/state/userCredentials";
+import { auth } from "../../../config/firebase";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
@@ -12,8 +12,7 @@ import { useTranslation } from "react-i18next";
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
 
     const [enabled, setEnabled] = useState(isEnabled)
     const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
