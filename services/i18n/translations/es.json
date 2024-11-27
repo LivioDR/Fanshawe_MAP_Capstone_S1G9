@@ -75,7 +75,12 @@
     "settings": {
         "search": "Buscar...",
 
-        "language": "Idioma"
+        "language": "Idioma",
+        "theme": "Tema",
+        "themes": {
+            "light": "Claro",
+            "dark": "Oscuro"
+        }
     },
 
     "profile": {

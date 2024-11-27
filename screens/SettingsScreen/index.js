@@ -24,7 +24,7 @@ export default function SettingsScreen({ themeSetter }) {
     };
 
     // Themes setting
-    const themes = getThemesList()
+    const themes = getThemesList(t)
     const theme = useTheme()
 
     const onThemeChange = async({ value }) => {
@@ -84,14 +84,14 @@ function getLanguagesList() {
 }
 
 
-function getThemesList() {
+function getThemesList(t) {
     return [
         {
-            label: 'Light',
+            label: t("settings.themes.light"),
             value: lightMode,
         },
         {
-            label: 'Dark',
+            label: t("settings.themes.dark"),
             value: darkMode,
         }
     ]
