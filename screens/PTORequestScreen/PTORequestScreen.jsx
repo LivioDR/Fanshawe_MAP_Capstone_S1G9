@@ -9,6 +9,10 @@ import InputField from "../../components/common/InputField/InputField";
 import FromToDatePicker from "../../components/userBio/FromToDatePicker/FromToDatePicker";
 import { requestDays } from "../../services/database/ptoManagement";
 
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
+
 const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) => {
 
     const [requestInfo, setRequestInfo] = useState({
@@ -20,6 +24,9 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
     })
 
     const { t } = useTranslation()
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     // STATE MANAGEMENT FUNCTIONS START HERE
     const toggleSwitch = () => {
@@ -96,8 +103,8 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
         transparent={false}
         animationType="bottom"
         >
-            <View style={styles.container}>
-                <Text style={styles.nameLabel}>
+            <View style={[styles.container, isDarkMode ? darkBg : {}]}>
+                <Text style={[styles.nameLabel, isDarkMode ? darkFont : {}]}>
                     {t("profile.pto.daysRemaining")}
                 </Text>
 
@@ -108,7 +115,7 @@ const PTORequestScreen = ({userId, supervisorId, isShown, dismiss, pto, sick}) =
                     <FromToDatePicker label={t("profile.pto.to")} initialValue={requestInfo.until} setDate={setUntilDate}/>
                 </View>
 
-                <Text style={styles.subtitle}>
+                <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>
                     {t("profile.pto.selectCategory")}
                 </Text>
 

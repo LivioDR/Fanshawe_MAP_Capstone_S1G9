@@ -3,9 +3,16 @@ import { View, Text, Pressable, Platform } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import styles from "./FromToDatePickerStyles";
 
+// Theme imports
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode, darkFont } from "../../../services/themes/themes";
+
 const FromToDatePicker = ({initialValue, setDate, label}) => {
 
     const [show, setShow] = useState(false)
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const dateChanged = (e,date) => {
         if(e.type == "set"){
@@ -16,7 +23,7 @@ const FromToDatePicker = ({initialValue, setDate, label}) => {
 
     return(
         <View style={styles.container}>
-            <Text style={styles.label}>
+            <Text style={[styles.label, isDarkMode ? darkFont : {}]}>
                 {label}
             </Text>
             {
