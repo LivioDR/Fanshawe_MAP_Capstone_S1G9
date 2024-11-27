@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/trees_720.gif",
+      "image": "./assets/trees.gif",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
