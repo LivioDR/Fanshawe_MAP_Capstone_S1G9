@@ -16,3 +16,14 @@ export const setMode = async(mode) => {
 export const getMode = async() => {
     return await AsyncStorage.getItem(themeKey) || Appearance.getColorScheme()
 }
+
+export const darkBg = {
+    backgroundColor: "#101010",
+}
+export const darkFont = {
+    color: "#F0F0F0",
+}
+export const darkBgFont = {
+    ...darkBg,
+    ...darkFont,
+}
