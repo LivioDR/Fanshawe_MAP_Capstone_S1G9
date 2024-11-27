@@ -11,7 +11,7 @@ import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 import { useTranslation } from "react-i18next";
 
 import { useTheme } from "../../../services/state/useTheme";
-import { darkMode, darkFont, darkBg } from "../../../services/themes/themes";
+import { darkMode, darkFont, darkBg, darkHighlight } from "../../../services/themes/themes";
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
@@ -57,20 +57,20 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
     if(interactive){
         return(
             <TouchableHighlight
-                style={styles.container}
-                underlayColor={highlight}
+                style={[styles.container, isDarkMode ? darkBg : {}]}
+                underlayColor={isDarkMode ? darkHighlight : highlight}
                 onPress={inAdminMode ? navToEditPTO : navToDetails}
             >
                 <>
                     <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
-                    <View style={styles.textWrapper}>
-                        <Text style={styles.name}>
+                    <View style={[styles.textWrapper]}>
+                        <Text style={[styles.name, isDarkMode ? darkFont : {}]}>
                             {name}
                         </Text>
-                        <Text style={styles.role}>
+                        <Text style={[styles.role, isDarkMode ? darkFont : {}]}>
                             {inAdminMode ? `${t("profile.pto.ptoRemaining")}: ${remainingPTODays}` : role}
                         </Text>
-                        <Text style={styles.email}>
+                        <Text style={[styles.email, isDarkMode ? darkFont : {}]}>
                             {inAdminMode ? `${t("profile.pto.sickRemaining")}: ${remainingSickDays}` : email}
                         </Text>
                     </View>
