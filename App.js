@@ -1,5 +1,6 @@
-// Expo status bar
+// Expo native support
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
 
 // localization
 import { initI18next } from "./services/i18n/i18n";
@@ -20,6 +21,8 @@ import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
 
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -36,6 +39,7 @@ export default function App() {
                 setLoggedIn(true);
             } else {
                 setLoggedIn(false);
+                SplashScreen.hideAsync();
             }
         });
 

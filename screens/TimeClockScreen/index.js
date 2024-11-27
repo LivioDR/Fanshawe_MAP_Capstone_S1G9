@@ -1,3 +1,6 @@
+// Expo native support
+import * as SplashScreen from 'expo-splash-screen';
+
 // localization
 import { useTranslation } from "react-i18next";
 
@@ -75,6 +78,7 @@ export default function TimeClockScreen() {
             }
 
             setLoading(false);
+            SplashScreen.hideAsync();
         })();
     }, []);
 
