@@ -4,6 +4,9 @@ import { StatusBar } from 'expo-status-bar';
 // localization
 import { initI18next } from "./services/i18n/i18n";
 
+// color scheme
+import { themeKey } from './services/themes/themes';
+
 // React Native components
 import { View, Appearance } from 'react-native';
 
@@ -11,14 +14,13 @@ import { View, Appearance } from 'react-native';
 import { useEffect, useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
+import { ThemeProvider } from './services/state/useTheme';
 
 // custom components
 import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { themeKey } from './services/themes/themes';
-import { ThemeProvider } from './services/state/useTheme';
 
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
