@@ -49,7 +49,7 @@ export default function AppScreen({ logOut, themeSetter }) {
                     headerShown: false,
                     tabBarActiveTintColor: accent,
                     tabBarStyle: {
-                        backgroundColor: highlight,
+                        backgroundColor: isDarkMode ? darkBg.backgroundColor : highlight,
                     },
                 }}
             >
