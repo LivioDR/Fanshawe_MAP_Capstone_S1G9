@@ -26,6 +26,7 @@ export default function SettingsScreen({ themeSetter }) {
     // Themes setting
     const themes = getThemesList(t)
     const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const onThemeChange = async({ value }) => {
         await AsyncStorage.setItem(themeKey, value)
@@ -33,19 +34,21 @@ export default function SettingsScreen({ themeSetter }) {
     }
 
     return (
-        <View style={[styles.container, theme == darkMode ? darkBg : {}]}>
-            <View style={[styles.settingContainer, theme == darkMode ? darkFont : {}]}>
-                <Text style={[styles.heading, theme == darkMode ? darkFont : {}]}>{t("settings.language")}</Text>
+        <View style={[styles.container, isDarkMode ? darkBg : {}]}>
+            <View style={[styles.settingContainer, isDarkMode ? darkFont : {}]}>
+                <Text style={[styles.heading, isDarkMode ? darkFont : {}]}>{t("settings.language")}</Text>
                 <Dropdown
                     style={styles.dropdown}
                     
                     // conditional color schemes
-                    itemTextStyle={theme == darkMode ? darkFont : {}}
-                    itemContainerStyle={theme == darkMode ? darkBg : {}}
-                    searchPlaceholderTextColor={theme == darkMode ? darkFont : {}}
-                    activeColor={theme == darkMode ? darkBg : {}}
-                    containerStyle={theme == darkMode ? darkBg : {}}
-                    selectedTextStyle={theme == darkMode ? darkFont : {}}
+                    // text styling
+                    itemTextStyle={isDarkMode ? darkFont : {}}
+                    searchPlaceholderTextColor={isDarkMode ? darkFont : {}}
+                    selectedTextStyle={isDarkMode ? darkFont : {}}
+                    // background styling
+                    itemContainerStyle={isDarkMode ? darkBg : {}}
+                    activeColor={isDarkMode ? darkBg : {}}
+                    containerStyle={isDarkMode ? darkBg : {}}
 
                     data={languages}
                     labelField="label"
@@ -67,12 +70,14 @@ export default function SettingsScreen({ themeSetter }) {
                     style={styles.dropdown}
 
                     // conditional color schemes
-                    itemTextStyle={theme == darkMode ? darkFont : {}}
-                    itemContainerStyle={theme == darkMode ? darkBg : {}}
-                    searchPlaceholderTextColor={theme == darkMode ? darkFont : {}}
-                    activeColor={theme == darkMode ? darkBg : {}}
-                    containerStyle={theme == darkMode ? darkBg : {}}
-                    selectedTextStyle={theme == darkMode ? darkFont : {}}
+                    // text styling
+                    itemTextStyle={isDarkMode ? darkFont : {}}
+                    searchPlaceholderTextColor={isDarkMode ? darkFont : {}}
+                    selectedTextStyle={isDarkMode ? darkFont : {}}
+                    // background styling
+                    itemContainerStyle={isDarkMode ? darkBg : {}}
+                    activeColor={isDarkMode ? darkBg : {}}
+                    containerStyle={isDarkMode ? darkBg : {}}
 
 
                     data={themes}
