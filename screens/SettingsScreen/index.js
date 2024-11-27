@@ -11,7 +11,7 @@ import { Dropdown } from "react-native-element-dropdown";
 
 import styles from "./styles";
 import { useTheme } from "../../services/state/useTheme";
-import { darkMode, lightMode, themeKey } from "../../services/themes/themes";
+import { darkMode, lightMode, themeKey, darkBg, darkFont } from "../../services/themes/themes";
 
 export default function SettingsScreen({ themeSetter }) {
     // Language settings
@@ -33,11 +33,11 @@ export default function SettingsScreen({ themeSetter }) {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.settingContainer}>
-                <Text style={styles.heading}>{t("settings.language")}</Text>
+        <View style={[styles.container, theme == darkMode ? darkBg : {}]}>
+            <View style={[styles.settingContainer, theme == darkMode ? darkFont : {}]}>
+                <Text style={[styles.heading, theme == darkMode ? darkFont : {}]}>{t("settings.language")}</Text>
                 <Dropdown
-                    style={styles.dropdown}
+                    style={[styles.dropdown, theme == darkMode ? darkFont : {}]}
 
                     data={languages}
                     labelField="label"
