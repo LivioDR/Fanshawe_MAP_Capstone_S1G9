@@ -27,3 +27,4 @@ export const darkBgFont = {
     ...darkBg,
     ...darkFont,
 }
+export const darkHighlight = "#202020"
