@@ -12,6 +12,8 @@ import TimePicker from "../../common/TimePicker";
 import LoadingIndicator from "../../common/LoadingIndicator";
 
 import styles from "./styles";
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../../services/themes/themes";
 
 export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const [startTime, setStartTime] = useState(new Date(2024, 9, 4, 9));
@@ -19,6 +21,9 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
     const [loading, setLoading] = useState(true);
 
     const { t } = useTranslation();
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     // async effect to load user working hours data
     useEffect(() => {
@@ -88,16 +93,16 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
         <LoadingIndicator /> :
         <>
             <View>
-                <Text style={styles.title}>{t("timeClock.workingHours.title")}</Text>
-                <Text style={styles.subtitle}>{t("timeClock.workingHours.description")}</Text>
+                <Text style={[styles.title, isDarkMode ? darkFont : {}]}>{t("timeClock.workingHours.title")}</Text>
+                <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>{t("timeClock.workingHours.description")}</Text>
             </View>
 
             <View style={styles.picker.container}>
-                <Text style={styles.picker.label}>{t("timeClock.workingHours.start")}</Text>
+                <Text style={[styles.picker.label, isDarkMode ? darkFont : {}]}>{t("timeClock.workingHours.start")}</Text>
                 <TimePicker initialValue={startTime} onChange={updateStartTime} />
             </View>
             <View style={styles.picker.container}>
-                <Text style={styles.picker.label}>{t("timeClock.workingHours.end")}</Text>
+                <Text style={[styles.picker.label, isDarkMode ? darkFont : {}]}>{t("timeClock.workingHours.end")}</Text>
                 <TimePicker  initialValue={endTime} onChange={updateEndTime} />
             </View>
 
@@ -108,7 +113,7 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
             >
                 <FontAwesome name="close" size={14} color="white" />
             </TouchableHighlight>
-        </>;
+        </>
 
     return (
         <Modal
@@ -122,7 +127,7 @@ export default function WorkingHoursModal({ userId, shown, closeModal }) {
                 onPress={closeModal}
             >
                 <Pressable
-                    style={styles.container}
+                    style={[styles.container, isDarkMode ? darkBg : {}]}
                     // but prevent closing when pressing on the container or anything inside
                     onPress={() => {}}
                 >

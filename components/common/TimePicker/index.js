@@ -5,9 +5,14 @@ import { Platform, Text, TouchableOpacity } from "react-native";
 import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 import styles from "./styles";
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode } from "../../../services/themes/themes";
 
 export default function TimePicker({ initialValue, onChange }) {
     const [time, setTime] = useState(initialValue);
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const onChangeTime = (pickerEvent) => {
         if (pickerEvent.type === "set") {
@@ -33,7 +38,7 @@ export default function TimePicker({ initialValue, onChange }) {
                     })
                 }}
             >
-                <Text style={styles.timeText}>
+                <Text style={[styles.timeText, isDarkMode]}>
                     {time.toLocaleTimeString([], { hour12: true, hour: "numeric", minute: "2-digit" })}
                 </Text>
             </TouchableOpacity>
@@ -45,6 +50,7 @@ export default function TimePicker({ initialValue, onChange }) {
                 display="compact"
                 value={time}
                 onChange={onChangeTime}
+                themeVariant={isDarkMode ? "dark" : "light"}
             />
         );
     }
