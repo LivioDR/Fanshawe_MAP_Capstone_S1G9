@@ -2,7 +2,7 @@
 import { useTranslation } from "react-i18next";
 
 // navigation
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { DefaultTheme, DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // icons
@@ -16,21 +16,31 @@ import UserBio from "../UserBioScreen/UserBio";
 
 // theme variables
 import { accent, highlight } from "../../utilities/variables";
+import { useTheme } from "../../services/state/useTheme";
+import { darkBg, darkFont, darkMode } from "../../services/themes/themes";
 
 // create bottom tab navigator elements
 const Tab = createBottomTabNavigator();
 
-const NavTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        background: "#FFF",
-    }
-};
 
 export default function AppScreen({ logOut, themeSetter }) {
     const { t } = useTranslation();
-
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
+    const NavTheme = {
+        ...DefaultTheme,
+        colors: isDarkMode ?
+        {
+            ...DarkTheme.colors,
+            background: darkBg.backgroundColor,
+            text: darkFont.color,
+        } :
+        {
+            ...DefaultTheme.colors,
+            background: "#FFF",
+        }
+    };
+    
     return (
         <NavigationContainer theme={NavTheme}>
             <Tab.Navigator

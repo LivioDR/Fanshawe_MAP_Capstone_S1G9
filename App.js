@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { CredentialProvider } from './services/state/userCredentials';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
 import { ThemeProvider } from './services/state/useTheme';
+import { darkMode, darkBg } from './services/themes/themes';
 
 // custom components
 import LoadingIndicator from './components/common/LoadingIndicator';
@@ -60,7 +61,7 @@ export default function App() {
     let shownScreen = loginCredential ? <AppScreen logOut={onLogout} themeSetter={setTheme} /> : <LoginScreen loginSuccess={onLogin} />;
     if (loadingTranslations) {
         shownScreen = (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View style={[{ flex: 1, justifyContent: "center", alignItems: "center" }, theme === darkMode ? darkBg : {}]}>
                 <LoadingIndicator textOverride={"Loading..."} />
             </View>
         );

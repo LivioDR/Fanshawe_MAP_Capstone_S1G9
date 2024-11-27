@@ -16,6 +16,10 @@ import { getTeamInfoById, getUserBioInfoById } from "../../services/database/use
 import { getImageForUserId } from "../../services/database/profileImage";
 import { useFocusEffect } from "@react-navigation/native";
 
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
+
 /*
 The PTOTeamScreen
 
@@ -71,6 +75,9 @@ const PTOTeamScreen = ({ uid }) => {
 
     const { t } = useTranslation()
 
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
+
     useEffect(()=>{
         
         (async()=>{
@@ -104,8 +111,8 @@ const PTOTeamScreen = ({ uid }) => {
         }
 
         return (
-            <View style={styles.list}>
-                <Text style={styles.title}>
+            <View style={[styles.list, isDarkMode ? darkBg : {}]}>
+                <Text style={[styles.title, isDarkMode ? darkFont : {}]}>
                     {title}
                 </Text>
                 <FlatList
