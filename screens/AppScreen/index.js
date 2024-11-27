@@ -28,7 +28,7 @@ const NavTheme = {
     }
 };
 
-export default function AppScreen({ logOut }) {
+export default function AppScreen({ logOut, themeSetter }) {
     const { t } = useTranslation();
 
     return (
@@ -71,7 +71,7 @@ export default function AppScreen({ logOut }) {
                         tabBarLabel: t("common.nav.home"),
                     }}
                 >
-                    {() => <HomeScreen logOut={logOut} />}
+                    {() => <HomeScreen logOut={logOut} themeSetter={themeSetter} />}
                 </Tab.Screen>
 
                 <Tab.Screen

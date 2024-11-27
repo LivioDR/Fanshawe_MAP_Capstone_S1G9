@@ -10,8 +10,11 @@ import { View, Text } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
 import styles from "./styles";
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, lightMode, themeKey } from "../../services/themes/themes";
 
-export default function SettingsScreen() {
+export default function SettingsScreen({ themeSetter }) {
+    // Language settings
     const [languages] = useState(getLanguagesList());
     const { t, i18n } = useTranslation();
 
@@ -19,6 +22,15 @@ export default function SettingsScreen() {
         i18n.changeLanguage(value);
         await AsyncStorage.setItem(currentLngKey, value);
     };
+
+    // Themes setting
+    const themes = getThemesList()
+    const theme = useTheme()
+
+    const onThemeChange = async({ value }) => {
+        await AsyncStorage.setItem(themeKey, value)
+        themeSetter(value)
+    }
 
     return (
         <View style={styles.container}>
@@ -39,6 +51,21 @@ export default function SettingsScreen() {
                     onChange={onLanguageChange}
                 />
             </View>
+
+            {/* Theme configuration */}
+            <View style={styles.settingContainer}>
+                <Text style={styles.heading}>{t("settings.theme")}</Text>
+                <Dropdown
+                    style={styles.dropdown}
+
+                    data={themes}
+                    labelField="label"
+                    valueField="value"
+
+                    value={theme}
+                    onChange={onThemeChange}
+                />
+            </View>
         </View>
     );
 }
@@ -54,4 +81,18 @@ function getLanguagesList() {
     }
 
     return data;
+}
+
+
+function getThemesList() {
+    return [
+        {
+            label: 'Light',
+            value: lightMode,
+        },
+        {
+            label: 'Dark',
+            value: darkMode,
+        }
+    ]
 }
