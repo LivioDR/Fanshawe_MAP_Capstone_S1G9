@@ -84,19 +84,8 @@ export default function LoginScreen() {
   */
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, pwd)
-      .then(async (userCredential) => {
-        // Signed in correctly
-        const user = userCredential.user;
-        // But we check is the user is enabled before continuing
-        const userInfo = await getUserBioInfoById(user.uid)
-        if(!userInfo.isEnabled){
-          showErrorToast(t("errors.login.userDisabled"))
-          await auth.signOut()
-        }
-      })
       .catch(() => {
         showErrorToast(t("errors.login.invalidCredentials"));
-        handlePwdChange("");
       });
   };
 

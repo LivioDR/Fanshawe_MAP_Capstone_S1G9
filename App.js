@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 // localization
 import { initI18next } from "./services/i18n/i18n";
+import i18next from 'i18next';
 
 // React Native components
 import { Alert, View } from 'react-native';
@@ -16,7 +17,11 @@ import { auth } from './config/firebase';
 import { useEffect, useState } from 'react';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
 
+// database
+import { getUserBioInfoById } from './services/database/userBioInfo';
+
 // custom components
+import Toast from "react-native-toast-message";
 import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
@@ -33,10 +38,27 @@ export default function App() {
         });
 
         // set up listener for reauth and login
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            // if we have a user, show app screen
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            // if we have a user, check if they're disabled first
             if (user) {
-                setLoggedIn(true);
+                const userInfo = await getUserBioInfoById(user.uid);
+                if (!userInfo.isEnabled) {
+                    // not enabled, sign the user out
+                    auth.signOut();
+                    setLoggedIn(false);
+                    SplashScreen.hideAsync();   // hide splash in case it's up
+
+                    // show a toast
+                    Toast.show({
+                        type: "error",
+                        text1: i18next.t("login.error", { icon: "🛑" }),
+                        text2: i18next.t("errors.login.userDisabled"),
+                        visibilityTime: 2200,
+                        position: "bottom",
+                    });
+                } else {
+                    setLoggedIn(true);
+                }
             } else {
                 setLoggedIn(false);
                 SplashScreen.hideAsync();
@@ -79,6 +101,8 @@ export default function App() {
 
             <StatusBar style="auto" />
             {shownScreen}
+
+            <Toast />
 
         </PTOAdminProvider>
     );
