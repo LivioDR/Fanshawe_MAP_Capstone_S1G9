@@ -3,8 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 
 // localization
+import i18next from 'i18next';
 import { initI18next } from "./services/i18n/i18n";
-import { useTranslation } from 'react-i18next';
 
 // React Native components
 import { Alert, View } from 'react-native';
@@ -32,11 +32,6 @@ export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
 
-    // we can use the hook for translation instead of i18next.t because we wait to render anything
-    // in the useEffect hook
-    // so the user will not be able to do anything that requires translated strings
-    const { t } = useTranslation();
-
     useEffect(() => {
         initI18next().then(() => {
             setLoadingTranslations(false);
@@ -56,8 +51,8 @@ export default function App() {
                     // show a toast
                     Toast.show({
                         type: "error",
-                        text1: t("login.error", { icon: "🛑" }),
-                        text2: t("errors.login.userDisabled"),
+                        text1: i18next.t("login.error", { icon: "🛑" }),
+                        text2: i18next.t("errors.login.userDisabled"),
                         visibilityTime: 2200,
                         position: "bottom",
                     });
@@ -77,14 +72,14 @@ export default function App() {
      * Log the user out and return to the login screen.
      */
     const onLogout = () => {
-        Alert.alert(t("login.logOut"), t("login.logOutConfirm"), [
+        Alert.alert(i18next.t("login.logOut"), i18next.t("login.logOutConfirm"), [
             {
-                text: t("common.cancel"),
+                text: i18next.t("common.cancel"),
                 style: "cancel",
                 // no onPress, since cancel does nothing
             },
             {
-                text: t("common.accept"),
+                text: i18next.t("common.accept"),
                 onPress: () => {
                     auth.signOut();
                 },
