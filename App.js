@@ -53,7 +53,7 @@ export default function App() {
                         type: "error",
                         text1: i18next.t("login.error", { icon: "🛑" }),
                         text2: i18next.t("errors.login.userDisabled"),
-                        visibilityTime: 2200,
+                        visibilityTime: 3000,
                         position: "bottom",
                     });
                 } else {
