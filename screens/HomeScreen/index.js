@@ -37,7 +37,7 @@ export default function HomeScreen({ logOut }) {
                             style={[styles.barButton, styles.btnLeft]}
                             underlayColor={highlight}
                         >
-                            <Text style={styles.btnText}>{t("common.logOut")}</Text>
+                            <Text style={styles.btnText}>{t("login.logOut")}</Text>
                         </TouchableHighlight>
                     ),
                     headerRight: () => (
