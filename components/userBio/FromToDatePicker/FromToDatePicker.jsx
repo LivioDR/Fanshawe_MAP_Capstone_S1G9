@@ -5,7 +5,7 @@ import styles from "./FromToDatePickerStyles";
 
 // Theme imports
 import { useTheme } from "../../../services/state/useTheme";
-import { darkMode, darkFont } from "../../../services/themes/themes";
+import { darkMode, darkFont, darkBg } from "../../../services/themes/themes";
 
 const FromToDatePicker = ({initialValue, setDate, label}) => {
 
@@ -22,7 +22,7 @@ const FromToDatePicker = ({initialValue, setDate, label}) => {
     }
 
     return(
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode ? darkBg : {}]}>
             <Text style={[styles.label, isDarkMode ? darkFont : {}]}>
                 {label}
             </Text>
@@ -30,7 +30,7 @@ const FromToDatePicker = ({initialValue, setDate, label}) => {
                 Platform.OS == "android" && !show &&
                     <Pressable
                     onPress={()=>{setShow(true)}}>
-                        <Text style={styles.androidDate}>
+                        <Text style={[styles.androidDate, isDarkMode ? darkFont : {}]}>
                             {new Date(initialValue).toISOString().split("T")[0]}
                         </Text>
                     </Pressable>
@@ -50,6 +50,7 @@ const FromToDatePicker = ({initialValue, setDate, label}) => {
                 Platform.OS == "ios" &&
                 <RNDateTimePicker
                     style={styles.picker}
+                    themeVariant={isDarkMode ? "dark" : "light"}
                     mode="date"
                     minimumDate={new Date()}
                     display="calendar"
