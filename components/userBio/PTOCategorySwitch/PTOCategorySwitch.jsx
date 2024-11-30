@@ -5,7 +5,7 @@ import styles from "./PTOCategorySwitchStyles";
 
 // Theme imports
 import { useTheme } from "../../../services/state/useTheme";
-import { darkMode, darkFont } from "../../../services/themes/themes";
+import { darkMode, darkFont, darkBg } from "../../../services/themes/themes";
 
 const PTOCategorySwitch = ({initialValue, toggle}) => {
     
@@ -20,8 +20,11 @@ const PTOCategorySwitch = ({initialValue, toggle}) => {
             </Text>
             <Switch
             value={initialValue}
+            ios_backgroundColor={isDarkMode ? "green" : "red"}
+            thumbColor={isDarkMode ? "white" : ""}
+            trackColor={isDarkMode ? {true: 'red', false: 'green',} : {}}
             onValueChange={toggle}
-            style={styles.switch}
+            style={[styles.switch, isDarkMode ? {} : {}]}
             />
             <Text style={[styles.label, isDarkMode ? darkFont : {}]}>
                 {t("profile.pto.sick")}
