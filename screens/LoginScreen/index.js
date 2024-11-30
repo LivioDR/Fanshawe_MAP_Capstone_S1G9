@@ -6,14 +6,13 @@ import Toast from "react-native-toast-message";
 import { 
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
-    signOut,
 } from "firebase/auth";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
 
-export default function LoginScreen({ loginSuccess }) {
+export default function LoginScreen() {
   /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -28,20 +27,6 @@ export default function LoginScreen({ loginSuccess }) {
 
   /* Hooks */
   const { t } = useTranslation();
-
-  /*
-  Ensures that there are no active users signed in when the login page is entered
-  */
-  useEffect(() => {
-    (async () => {
-        await signOut(auth).catch(() => showErrorToast(t("errors.login.signOut")));
-        if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
-            const [debugEmail, debugPassword] = process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
-            const debugCredential = await signInWithEmailAndPassword(auth, debugEmail, debugPassword);
-            loginSuccess(debugCredential);
-        }
-    })();
-  }, []);
 
   /*
   Tracks whenever the username or pwd changes and conducts the sanity check
@@ -99,22 +84,8 @@ export default function LoginScreen({ loginSuccess }) {
   */
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, pwd)
-      .then(async (userCredential) => {
-        // Signed in correctly
-        const user = userCredential.user;
-        // But we check is the user is enabled before continuing
-        const userInfo = await getUserBioInfoById(user.uid)
-        if(userInfo.isEnabled){
-          loginSuccess(userCredential);
-        }
-        else{
-          showErrorToast(t("errors.login.userDisabled"))
-          await signOut(auth)
-        }
-      })
       .catch(() => {
         showErrorToast(t("errors.login.invalidCredentials"));
-        handlePwdChange("");
       });
   };
 

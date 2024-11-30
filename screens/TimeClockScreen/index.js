@@ -1,9 +1,11 @@
+// Expo native support
+import * as SplashScreen from 'expo-splash-screen';
+
 // localization
 import { useTranslation } from "react-i18next";
 
 // hooks
 import { useEffect, useState } from "react";
-import { useCredentials } from "../../services/state/userCredentials";
 
 // RN components
 import { Text, TouchableOpacity, View } from "react-native";
@@ -15,7 +17,8 @@ import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
-// database and state
+// database, state, and auth
+import { auth } from "../../config/firebase";
 import { Timestamp } from "firebase/firestore";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
@@ -35,8 +38,7 @@ export default function TimeClockScreen() {
     const [userName, setUserName] = useState("Jonathan Handfeld Miller-Smith III");
     const [userProfileImage, setUserProfileImage] = useState("");
 
-    const userCreds = useCredentials();
-    const userId = userCreds.user.uid;
+    const userId = auth.currentUser.uid;
     
     // localization
     const { t } = useTranslation();
@@ -76,6 +78,7 @@ export default function TimeClockScreen() {
             }
 
             setLoading(false);
+            SplashScreen.hideAsync();
         })();
     }, []);
 
