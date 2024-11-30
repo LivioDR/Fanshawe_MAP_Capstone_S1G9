@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { View, Text } from "react-native";
 import InputField from "../../components/common/InputField/InputField";
 import { useEffect, useState } from "react";
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
@@ -14,7 +14,7 @@ import { darkMode, darkFont, darkBg } from "../../services/themes/themes";
 const NewMemberScreen = () => {
     
     // getting the userId and teamId for the supervisor who's creating the new team member
-    const supervisorId = useCredentials().user.uid
+    const supervisorId = auth.currentUser.uid;
     const [loading, setLoading] = useState(true);
     const [teamId, setTeamId] = useState("");
 

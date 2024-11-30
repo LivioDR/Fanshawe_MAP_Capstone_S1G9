@@ -3,7 +3,7 @@ import { View, Text, TouchableHighlight } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import { highlight } from "../../../utilities/variables";
-import { useCredentials } from "../../../services/state/userCredentials";
+import { auth } from "../../../config/firebase";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
@@ -15,8 +15,7 @@ import { darkMode, darkFont, darkBg, darkHighlight } from "../../../services/the
 
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
 
     const theme = useTheme()
     const isDarkMode = theme === darkMode

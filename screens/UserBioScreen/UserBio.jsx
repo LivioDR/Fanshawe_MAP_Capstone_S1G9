@@ -12,7 +12,7 @@ import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import { getOpenTimeLog } from "../../services/database/timeClock";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
@@ -52,8 +52,7 @@ const UserBio = ({ userId, canEdit = true }) => {
         userId = route.params.id
     }
 
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
     if (!userId) {
         userId = authUserId
     }

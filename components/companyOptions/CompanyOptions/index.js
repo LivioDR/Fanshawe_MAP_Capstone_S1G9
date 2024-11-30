@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 import { View, FlatList } from "react-native";
 
+import { auth } from "../../../config/firebase";
+
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { useCredentials } from "../../../services/state/userCredentials";
 import { getUserBioInfoById } from "../../../services/database/userBioInfo";
 
 import LoadingIndicator from "../../common/LoadingIndicator";
@@ -17,7 +18,7 @@ import { darkMode, darkBg } from "../../../services/themes/themes"
 
 
 export default function CompanyOptions() {
-    const userCredentials = useCredentials();
+    const userId = auth.currentUser.uid;
     const { t } = useTranslation();
 
     const theme = useTheme()
@@ -54,7 +55,7 @@ export default function CompanyOptions() {
 
     useEffect(() => {
         (async () => {
-            const userBio = await getUserBioInfoById(userCredentials.user.uid);
+            const userBio = await getUserBioInfoById(userId);
             if (userBio) {
                 setIsAdmin(userBio.isSupervisor);
             }

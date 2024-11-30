@@ -2,7 +2,6 @@
     "common": {
         "copy": "Powered by IndusTree 🌳 © Copyright 2024",
 
-        "logOut": "Log Out",
         "nav": {
             "back": "Back",
             "company": "Company",
@@ -15,6 +14,7 @@
         "save": "Save",
         "confirm": "Confirm",
         "cancel": "Cancel",
+        "accept": "Accept",
         "clear": "Clear",
         "close": "Close",
         "saveSuccess": "Changes saved successfully!",
@@ -37,7 +37,10 @@
         "error": "Error {{icon}}",
 
         "sendPasswordReset": "Reset Password",
-        "passwordResetSuccess": "Password reset email sent!"
+        "passwordResetSuccess": "Password reset email sent!",
+
+        "logOut": "Log Out",
+        "logOutConfirm": "Are you sure you wish to log out?"
     },
     
     "timeClock": {
