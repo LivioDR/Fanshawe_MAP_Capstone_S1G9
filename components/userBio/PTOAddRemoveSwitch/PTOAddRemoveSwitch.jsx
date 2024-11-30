@@ -22,6 +22,9 @@ const PTOAddRemoveSwitch = ({initialValue, toggle}) => {
             </View>
             <Switch
             value={initialValue}
+            ios_backgroundColor={isDarkMode ? "green" : "red"}
+            thumbColor={isDarkMode ? "white" : ""}
+            trackColor={isDarkMode ? {true: 'red', false: 'green',} : {}}
             onValueChange={toggle}
             style={styles.switch}
             />
