@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import styles from "./styles";
 import { useEffect, useState } from "react";
-import { Button, Modal, Text, TextInput, View } from "react-native";
+import { Alert, Button, Modal, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
-import { 
-    sendPasswordResetEmail,
-    signInWithEmailAndPassword,
-    signOut,
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
@@ -34,12 +34,19 @@ export default function LoginScreen({ loginSuccess }) {
   */
   useEffect(() => {
     (async () => {
-        await signOut(auth).catch(() => showErrorToast(t("errors.login.signOut")));
-        if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
-            const [debugEmail, debugPassword] = process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
-            const debugCredential = await signInWithEmailAndPassword(auth, debugEmail, debugPassword);
-            loginSuccess(debugCredential);
-        }
+      await signOut(auth).catch(() =>
+        showErrorToast(t("errors.login.signOut"))
+      );
+      if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
+        const [debugEmail, debugPassword] =
+          process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
+        const debugCredential = await signInWithEmailAndPassword(
+          auth,
+          debugEmail,
+          debugPassword
+        );
+        loginSuccess(debugCredential);
+      }
     })();
   }, []);
 
@@ -103,13 +110,16 @@ export default function LoginScreen({ loginSuccess }) {
         // Signed in correctly
         const user = userCredential.user;
         // But we check is the user is enabled before continuing
-        const userInfo = await getUserBioInfoById(user.uid)
-        if(userInfo.isEnabled){
+        const userInfo = await getUserBioInfoById(user.uid);
+
+        if (userInfo.isEnabled) {
+          console.log(userInfo);
+          // Secondary check on whether an enabled user is in trial mode and whether it is valid
+          validateTrialUser(userInfo);
           loginSuccess(userCredential);
-        }
-        else{
-          showErrorToast(t("errors.login.userDisabled"))
-          await signOut(auth)
+        } else {
+          showErrorToast(t("errors.login.userDisabled"));
+          await signOut(auth);
         }
       })
       .catch(() => {
@@ -143,6 +153,54 @@ export default function LoginScreen({ loginSuccess }) {
     } else {
       setLoginBtnDisabled(true);
     }
+  };
+
+  /*
+    Function to validate whether a user is in trial mode:
+
+    - Takes in a user as a parameter
+    - Checks whether user is a trial user
+    - Checks if a user still has time on thier trial
+    - Returns a boolean 
+
+    - Calls the helper method
+    - Getting current Date and time and converting it to an ISOString
+  */
+  const validateTrialUser = (user) => {
+    let trialExpiryISOString = user.trialExpiryTime;
+    let validTrial;
+
+    if (user.isTrialUser) {
+      validTrial = trialExpired(trialExpiryISOString);
+    }
+
+    if (!validTrial) {
+      //Process to display expired date and time in user friendly format
+      const expiredTrialDate = new Date(trialExpiryISOString);
+      const expiredTrialString = expiredTrialDate.toLocaleString();
+
+      Alert.alert(
+        "Trial Expired",
+        `Your trial expired on ${expiredTrialString} `,
+        [{ text: "OK" }]
+      );
+    }
+  };
+
+  /*
+   Helper function for validateTrialUser which simply
+   determines whether a given ISO Date String is chronologically
+   before the current ISO Date String 
+  
+   - The passed ISO String from the DB is converted back to a Date object
+   for evaluation
+   - Returns a boolean false
+   */
+  const trialExpired = (trialExpiryISOString) => {
+    const trialEndDate = new Date(trialExpiryISOString);
+    const currDateTime = new Date();
+
+    return currDateTime < trialEndDate;
   };
 
   /* Toast logic */
@@ -211,7 +269,7 @@ export default function LoginScreen({ loginSuccess }) {
               style={styles.textInputContainer}
               placeholder={t("login.email")}
               onChangeText={handleEmailChange}
-              value={email} 
+              value={email}
               keyboardType={"email"}
               autoCapitalize="none"
             />
