@@ -12,6 +12,7 @@ import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
+import { useTrialCountdown } from "../../services/state/trialCountdown";
 
 export default function LoginScreen({ loginSuccess }) {
   /* States */
@@ -28,6 +29,7 @@ export default function LoginScreen({ loginSuccess }) {
 
   /* Hooks */
   const { t } = useTranslation();
+  const { updateTrialCountdown } = useTrialCountdown();
 
   /*
   Ensures that there are no active users signed in when the login page is entered
@@ -115,10 +117,15 @@ export default function LoginScreen({ loginSuccess }) {
         if (userInfo.isEnabled) {
           // Secondary check on whether an enabled user is in trial mode and whether it is valid
           const validTrial = await validateTrialUser(userInfo);
-          if(!validTrial){
-            await signOut(auth); 
+          if (!validTrial) {
+            await signOut(auth);
             return;
           }
+
+          // At this point, user has a valid trial
+          updateTrialCountdown({
+            trialExpiryTimeString: userInfo.trialExpiryTime,
+          });
 
           loginSuccess(userCredential);
         } else {
@@ -189,7 +196,7 @@ export default function LoginScreen({ loginSuccess }) {
         [{ text: "OK" }]
       );
       return false;
-    }else{
+    } else {
       return true;
     }
   };

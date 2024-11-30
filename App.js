@@ -16,6 +16,7 @@ import { PTOAdminProvider } from './services/state/ptoAdmin';
 import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
+import { TrialCountdownProvider } from './services/state/trialCountdown';
 
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
@@ -52,6 +53,7 @@ export default function App() {
     }
 
     return (
+        <TrialCountdownProvider>
         <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
 
@@ -60,5 +62,6 @@ export default function App() {
 
         </CredentialProvider>
         </PTOAdminProvider>
+        </TrialCountdownProvider>
     );
 }

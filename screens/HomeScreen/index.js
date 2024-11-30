@@ -15,10 +15,25 @@ import styles from "./styles";
 
 const Stack = createStackNavigator();
 
+import { useEffect } from "react";
+import { useTrialCountdown } from "../../services/state/trialCountdown";
+
 export default function HomeScreen({ logOut }) {
     const nav = useNavigation();
     const { t } = useTranslation();
-
+    const { state, timeUntilExpiry, trialExpiryTimeString } = useTrialCountdown();  
+  
+    /*
+    TODO: For testing, remove after
+    */
+    useEffect(() => {
+      if (timeUntilExpiry !== null) {
+          console.log(`timeUntilExpiry: ${timeUntilExpiry} seconds`);
+      } else {
+          console.log("timeUntilExpiry is null");
+      }
+  }, [timeUntilExpiry]);
+  
     return (
         <Stack.Navigator
             initialRouteName="TimeClock"
