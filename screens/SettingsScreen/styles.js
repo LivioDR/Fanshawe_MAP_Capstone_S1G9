@@ -4,6 +4,7 @@ export default StyleSheet.create({
     container: {
         padding: 20,
         gap: 25,
+        height: '100%',
     },
 
     settingContainer: {

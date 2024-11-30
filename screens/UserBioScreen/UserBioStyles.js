@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export default UserBioStyles = StyleSheet.create({
     wrapper: {
         paddingVertical: 12,
+        height: '100%',
     },
     body: {
         width: '100%',

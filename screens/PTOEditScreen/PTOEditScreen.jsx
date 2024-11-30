@@ -15,6 +15,10 @@ import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import { updateAvailableDays } from "../../services/database/ptoManagement";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
+
 /*
 The PTOEditScreen (Presented as a modal)
 
@@ -46,6 +50,9 @@ const PTOEditScreen = ({userId}) => {
     const [daysErrTxt, setDaysErrTxt] = useState(" ")
 
     const { t } = useTranslation()
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const hidePto = () => {
         updatePTOAdmin({ showEditPtoModal: false })
@@ -225,8 +232,8 @@ const PTOEditScreen = ({userId}) => {
         transparent={false}
         animationType="bottom"
         >
-            <View style={styles.container}>
-                <Text style={styles.nameLabel}>
+            <View style={[styles.container, isDarkMode ? darkBg : {}]}>
+                <Text style={[styles.nameLabel, isDarkMode ? darkFont : {}]}>
                     {t("team.ptoEdit.header", { name: `${userData.firstName} ${userData.lastName}` })}
                 </Text>
 
@@ -234,7 +241,7 @@ const PTOEditScreen = ({userId}) => {
 
                 <View style={styles.switchContainer}>
 
-                    <Text style={styles.subtitle}>
+                    <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>
                         {t("profile.pto.selectCategory")}
                     </Text>
 
@@ -244,7 +251,7 @@ const PTOEditScreen = ({userId}) => {
 
                 <View style={styles.switchContainer}>
 
-                    <Text style={styles.subtitle}>
+                    <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>
                         {t("team.ptoEdit.selectAction")}
                     </Text>
 

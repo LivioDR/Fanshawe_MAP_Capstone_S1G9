@@ -16,6 +16,10 @@ import { auth } from "../../config/firebase";
 import { getOpenTimeLog } from "../../services/database/timeClock";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
+// Styling imports
+import { useTheme } from "../../services/state/useTheme"
+import { darkMode, darkBg, darkFont, darkBgFont } from "../../services/themes/themes";
+
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -71,6 +75,9 @@ const UserBio = ({ userId, canEdit = true }) => {
     }, [needsRefresh])
     
     const { t } = useTranslation()
+
+    const theme = useTheme()
+    const isDarkMode = theme == darkMode
     
     useEffect(()=>{
         const getData = async(id) => {
@@ -134,7 +141,7 @@ const UserBio = ({ userId, canEdit = true }) => {
         <>
         {userId !== authUserId &&
         <ClockStatusBanner clockStatus={clockStatus} name={userData.firstName} />}
-        <SafeAreaView style={bioStyles.wrapper}>
+        <SafeAreaView style={[bioStyles.wrapper, isDarkMode ? darkBgFont : {}]}>
             <UserBioEditScreen 
                 uid={userId} 
                 imgUrl={imgUrl} 

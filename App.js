@@ -6,8 +6,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import i18next from 'i18next';
 import { initI18next } from "./services/i18n/i18n";
 
+// color scheme
+import { themeKey } from './services/themes/themes';
+
 // React Native components
-import { Alert, View } from 'react-native';
+import { View, Appearance, Alert } from 'react-native';
 
 // auth
 import { onAuthStateChanged } from 'firebase/auth';
@@ -16,6 +19,8 @@ import { auth } from './config/firebase';
 // hooks and providers
 import { useEffect, useState } from 'react';
 import { PTOAdminProvider } from './services/state/ptoAdmin';
+import { ThemeProvider } from './services/state/useTheme';
+import { darkMode, darkBg } from './services/themes/themes';
 
 // database
 import { getUserBioInfoById } from './services/database/userBioInfo';
@@ -25,14 +30,25 @@ import Toast from "react-native-toast-message";
 import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
+    const [theme, setTheme] = useState(Appearance.getColorScheme())
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
+
+        // Asynchronously getting the stored theme and updating the Theme context provider
+        (async()=>{
+            const colorScheme = await AsyncStorage.getItem(themeKey)
+            if(colorScheme){
+                setTheme(colorScheme)
+            }
+        })()
+
         initI18next().then(() => {
             setLoadingTranslations(false);
         });
@@ -87,23 +103,25 @@ export default function App() {
         ]);
     };
 
-    let shownScreen = loggedIn ? <AppScreen logOut={onLogout} /> : <LoginScreen />;
+    let shownScreen = loggedIn ? <AppScreen logOut={onLogout} themeSetter={setTheme} /> : <LoginScreen />;
     if (loadingTranslations) {
         shownScreen = (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View style={[{ flex: 1, justifyContent: "center", alignItems: "center" }, theme === darkMode ? darkBg : {}]}>
                 <LoadingIndicator textOverride={"Loading..."} />
             </View>
         );
     }
 
     return (
+        <ThemeProvider userTheme={theme}>
         <PTOAdminProvider>
 
-            <StatusBar style="auto" />
+            <StatusBar style={theme === darkMode ? "light" : "dark"} />
             {shownScreen}
 
             <Toast />
 
         </PTOAdminProvider>
+        </ThemeProvider>
     );
 }

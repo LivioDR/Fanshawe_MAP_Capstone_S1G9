@@ -78,7 +78,12 @@
     "settings": {
         "search": "Search...",
 
-        "language": "Language"
+        "language": "Language",
+        "theme": "Theme",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark"
+        }
     },
 
     "profile": {

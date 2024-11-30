@@ -7,12 +7,18 @@ import ImageUploadField from "../../components/userBioEdit/ImageUploadField/Imag
 import InputField from "../../components/common/InputField/InputField";
 import { updateUserBioInfoById } from "../../services/database/userBioInfo";
 
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
+
 const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismiss, isShown}) => {
 
     const [address, setAddress] = useState(userData.address)
     const [alert, setAlert] = useState(null)
 
     const { t } = useTranslation()
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     useEffect(()=>{
         setAddress(userData.address)
@@ -58,9 +64,9 @@ const UserBioEditScreen = ({userData, setUserData, uid, imgUrl, setImgUrl, dismi
             transparent={false}
             visible={isShown}
         >
-            <View style={styles.container}>
+            <View style={[styles.container, isDarkMode ? darkBg : {}]}>
 
-                <Text style={styles.nameLabel}>
+                <Text style={[styles.nameLabel, isDarkMode ? darkFont : {}]}>
                 {`${userData.firstName} ${userData.lastName}`}
                 </Text>
 

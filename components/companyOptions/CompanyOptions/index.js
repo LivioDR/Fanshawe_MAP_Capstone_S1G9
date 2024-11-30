@@ -12,11 +12,17 @@ import { getUserBioInfoById } from "../../../services/database/userBioInfo";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import CompanyOptionSelector from "./CompanyOptionSelector";
 
+import { useTheme } from "../../../services/state/useTheme"
 import styles from "./styles";
+import { darkMode, darkBg } from "../../../services/themes/themes"
+
 
 export default function CompanyOptions() {
     const userId = auth.currentUser.uid;
     const { t } = useTranslation();
+
+    const theme = useTheme()
+    const isDarkMode = theme == darkMode
 
     const options = [
         {
@@ -58,13 +64,13 @@ export default function CompanyOptions() {
     }, []);
 
     if (loading) return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode ? darkBg : {}]}>
             <LoadingIndicator />
         </View>
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode ? darkBg : {}]}>
             <FlatList
                 data={isAdmin ? [...options, ...adminOptions] : options}
                 renderItem={(item) => <CompanyOptionSelector {...item.item} />}

@@ -8,12 +8,18 @@ import LoadingIndicator from "../../components/common/LoadingIndicator";
 import { addUserToTeam, createNewUser, isBirthDateInvalid, isEmailInvalid, sendRecoveryPassword } from "../../services/database/newUserCreation";
 import { getUserBioInfoById, setUserBioInfoById } from "../../services/database/userBioInfo";
 
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkFont, darkBg } from "../../services/themes/themes";
+
 const NewMemberScreen = () => {
     
     // getting the userId and teamId for the supervisor who's creating the new team member
     const supervisorId = auth.currentUser.uid;
     const [loading, setLoading] = useState(true);
     const [teamId, setTeamId] = useState("");
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
     
     const defaultUserInfo = {
         onPTO: false,
@@ -165,15 +171,19 @@ const NewMemberScreen = () => {
         }
     }
 
-    if (loading) return <LoadingIndicator />
+    if (loading) return(
+        <View style={[{flex: 1, alignItems: 'center', justifyContent: 'center'}, isDarkMode ? darkBg : {}]}>
+            <LoadingIndicator />
+        </View>
+    ) 
 
     // UI to be rendered by this component
     return(
-        <View style={{flex: 1, alignItems: 'center'}}>
+        <View style={[{flex: 1, alignItems: 'center'}, isDarkMode ? darkBg : {}]}>
             {
                 fields.map(field => <InputField key={field.name} label={field.label} value={userInfo[field.name]} setValue={(e)=>{setField(e, field.name)}} />)
             }
-            <Text style={{paddingHorizontal: "5%"}}>{errors}</Text>
+            <Text style={[{paddingHorizontal: "5%"}, isDarkMode ? darkFont : {}]}>{errors}</Text>
             <View style={{flexDirection: 'row', gap: 20, paddingHorizontal: "5%"}}>
                 <UiButton
                     label={t("common.clear")}
