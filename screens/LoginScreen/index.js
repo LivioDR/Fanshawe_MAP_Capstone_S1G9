@@ -113,9 +113,13 @@ export default function LoginScreen({ loginSuccess }) {
         const userInfo = await getUserBioInfoById(user.uid);
 
         if (userInfo.isEnabled) {
-          console.log(userInfo);
           // Secondary check on whether an enabled user is in trial mode and whether it is valid
-          validateTrialUser(userInfo);
+          const validTrial = await validateTrialUser(userInfo);
+          if(!validTrial){
+            await signOut(auth); 
+            return;
+          }
+
           loginSuccess(userCredential);
         } else {
           showErrorToast(t("errors.login.userDisabled"));
@@ -166,7 +170,7 @@ export default function LoginScreen({ loginSuccess }) {
     - Calls the helper method
     - Getting current Date and time and converting it to an ISOString
   */
-  const validateTrialUser = (user) => {
+  const validateTrialUser = async (user) => {
     let trialExpiryISOString = user.trialExpiryTime;
     let validTrial;
 
@@ -184,6 +188,9 @@ export default function LoginScreen({ loginSuccess }) {
         `Your trial expired on ${expiredTrialString} `,
         [{ text: "OK" }]
       );
+      return false;
+    }else{
+      return true;
     }
   };
 
