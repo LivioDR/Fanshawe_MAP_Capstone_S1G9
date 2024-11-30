@@ -241,7 +241,7 @@ const PTOEditScreen = ({userId}) => {
 
                 <View style={styles.switchContainer}>
 
-                    <Text style={styles.subtitle}>
+                    <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>
                         {t("profile.pto.selectCategory")}
                     </Text>
 
@@ -251,7 +251,7 @@ const PTOEditScreen = ({userId}) => {
 
                 <View style={styles.switchContainer}>
 
-                    <Text style={styles.subtitle}>
+                    <Text style={[styles.subtitle, isDarkMode ? darkFont : {}]}>
                         {t("team.ptoEdit.selectAction")}
                     </Text>
 
