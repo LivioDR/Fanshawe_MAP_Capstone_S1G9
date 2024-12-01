@@ -26,8 +26,8 @@
     "react-i18next": "^15.1.1",
     "react-native": "0.74.5",
     "react-native-element-dropdown": "^2.12.2",
-    "react-native-restart": "^0.0.27",
-    "react-native-toast-message": "^2.2.1"
+    "react-native-toast-message": "^2.2.1",
+    "expo-splash-screen": "~0.27.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -3,6 +3,7 @@ import styles from "./styles";
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
+
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -14,7 +15,11 @@ import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
 import { useTrialCountdown } from "../../services/state/trialCountdown";
 
-export default function LoginScreen({ loginSuccess }) {
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
+
+export default function LoginScreen() {
   /* States */
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -55,6 +60,9 @@ export default function LoginScreen({ loginSuccess }) {
     })();
   }, []);
 
+  const theme = useTheme()
+  const isDarkMode = theme === darkMode
+  
   /*
   Tracks whenever the username or pwd changes and conducts the sanity check
   */
@@ -157,7 +165,6 @@ export default function LoginScreen({ loginSuccess }) {
       })
       .catch(() => {
         showErrorToast(t("errors.login.invalidCredentials"));
-        handlePwdChange("");
       });
   };
 
@@ -210,7 +217,7 @@ export default function LoginScreen({ loginSuccess }) {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={[styles.container, isDarkMode ? darkBg : {}]}>
         <Toast />
         <TextInput
           style={styles.textInputContainer}
@@ -244,33 +251,43 @@ export default function LoginScreen({ loginSuccess }) {
           onPress={handleForgotPasswordPress}
         />
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{t("common.copy")}</Text>
+        <View style={[styles.footer, isDarkMode ? darkBg : {}]}>
+          <Text style={[styles.footerText, isDarkMode ? darkFont : {}]}>{t("common.copy")}</Text>
         </View>
 
-        <Modal animationType="slide" visible={showModal}>
-          <View style={styles.modalView}>
-            <TextInput
-              style={styles.textInputContainer}
-              placeholder={t("login.email")}
-              onChangeText={handleEmailChange}
-              value={email}
-              keyboardType={"email"}
-              autoCapitalize="none"
-            />
+        <Modal 
+        animationType="slide" 
+        visible={showModal}
+        style={isDarkMode ? darkBg : {}}
+        >
+          <View style={{
+            flex: 1,
+            width: '100%',
+            backgroundColor : isDarkMode ? darkBg.backgroundColor : "",
+          }}>
+            <View style={[styles.modalView, isDarkMode ? darkBg : {}]}>
+              <TextInput
+                style={styles.textInputContainer}
+                placeholder={t("login.email")}
+                onChangeText={handleEmailChange}
+                value={email} 
+                keyboardType={"email"}
+                autoCapitalize="none"
+                />
 
-            <InputMsgBox text={emailErrTxt} />
+              <InputMsgBox text={emailErrTxt} />
 
-            <UiButton
-              label={t("login.sendPasswordReset")}
-              funcToCall={handleSendPasswordResetLink}
-              disabled={passwordResetBtnDisabled}
-              type="CTA"
-            />
+              <UiButton
+                label={t("login.sendPasswordReset")}
+                funcToCall={handleSendPasswordResetLink}
+                disabled={passwordResetBtnDisabled}
+                type="CTA"
+                />
 
-            <Button title={t("common.close")} onPress={handleModalToggle} />
+              <Button title={t("common.close")} onPress={handleModalToggle} />
+            </View>
+            <Toast />
           </View>
-          <Toast />
         </Modal>
       </View>
     </>

@@ -9,12 +9,16 @@ import UserCard from "../../components/teamScreen/userCard/UserCard";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 // Business logic imports
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import { usePTOAdmin } from "../../services/state/ptoAdmin";
 import PTOEditScreen from "../PTOEditScreen/PTOEditScreen";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
 import { useFocusEffect } from "@react-navigation/native";
+
+// Theme imports
+import { useTheme } from "../../services/state/useTheme";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes";
 
 /*
 The PTOTeamScreen
@@ -62,14 +66,16 @@ const PTOTeamScreen = ({ uid }) => {
         uid = route.params.id
     }
     
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
     if (!uid) {
         uid = authUserId
 
     }
 
     const { t } = useTranslation()
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     useEffect(()=>{
         
@@ -104,8 +110,8 @@ const PTOTeamScreen = ({ uid }) => {
         }
 
         return (
-            <View style={styles.list}>
-                <Text style={styles.title}>
+            <View style={[styles.list, isDarkMode ? darkBg : {}]}>
+                <Text style={[styles.title, isDarkMode ? darkFont : {}]}>
                     {title}
                 </Text>
                 <FlatList

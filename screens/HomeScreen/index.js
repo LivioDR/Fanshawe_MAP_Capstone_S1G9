@@ -17,7 +17,7 @@ import styles from "./styles";
 
 const Stack = createStackNavigator();
 
-export default function HomeScreen({ logOut }) {
+export default function HomeScreen({ logOut, themeSetter }) {
     const nav = useNavigation();
     const { t } = useTranslation();
  
@@ -39,7 +39,7 @@ export default function HomeScreen({ logOut }) {
                             style={[styles.barButton, styles.btnLeft]}
                             underlayColor={highlight}
                         >
-                            <Text style={styles.btnText}>{t("common.logOut")}</Text>
+                            <Text style={styles.btnText}>{t("login.logOut")}</Text>
                         </TouchableHighlight>
                     ),
                     headerRight: () => (
@@ -60,7 +60,7 @@ export default function HomeScreen({ logOut }) {
 
             <Stack.Screen
                 name="Settings"
-                component={SettingsScreen}
+                children={() => <SettingsScreen themeSetter={themeSetter}/>}
                 options={{
                     headerTitle: t("common.nav.settings"),
                 }}

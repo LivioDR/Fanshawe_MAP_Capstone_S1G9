@@ -1,9 +1,12 @@
+// Expo native support
+import * as SplashScreen from 'expo-splash-screen';
+
 // localization
 import { useTranslation } from "react-i18next";
 
 // hooks
 import { useEffect, useState } from "react";
-import { useCredentials } from "../../services/state/userCredentials";
+import { useTheme } from "../../services/state/useTheme";
 
 // RN components
 import { Text, TouchableOpacity, View } from "react-native";
@@ -15,7 +18,8 @@ import WorkingHoursModal from "../../components/timeClock/WorkingHoursModal";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
 import ProfileImage from "../../components/userBio/ProfileImage/ProfileImage";
 
-// database and state
+// database, state, and auth
+import { auth } from "../../config/firebase";
 import { Timestamp } from "firebase/firestore";
 import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
@@ -23,6 +27,8 @@ import { createTimeLog, getOpenTimeLog, updateTimeLog } from "../../services/dat
 
 // styles
 import styles from "./styles";
+import { darkMode, darkBg, darkFont } from "../../services/themes/themes"
+
 
 export default function TimeClockScreen() {
     const [clockedIn, setClockedIn] = useState(false);
@@ -35,9 +41,12 @@ export default function TimeClockScreen() {
     const [userName, setUserName] = useState("Jonathan Handfeld Miller-Smith III");
     const [userProfileImage, setUserProfileImage] = useState("");
 
-    const userCreds = useCredentials();
-    const userId = userCreds.user.uid;
+    const userId = auth.currentUser.uid;
     
+    // color scheme
+    const theme = useTheme()
+    const isDarkMode = theme == darkMode
+
     // localization
     const { t } = useTranslation();
     
@@ -76,6 +85,7 @@ export default function TimeClockScreen() {
             }
 
             setLoading(false);
+            SplashScreen.hideAsync();
         })();
     }, []);
 
@@ -199,7 +209,7 @@ export default function TimeClockScreen() {
         <>
             <ClockStatusBanner clockStatus={clockStatus} />
 
-            <View style={styles.container.inner}>
+            <View style={[styles.container.inner, isDarkMode ? darkBg : {}]}>
                 <View style={styles.container.intro}>
                     <View style={styles.container.image}>
                         <ProfileImage
@@ -210,7 +220,7 @@ export default function TimeClockScreen() {
                         />
                     </View>
 
-                    <Text style={styles.welcomeText}>
+                    <Text style={[styles.welcomeText, isDarkMode ? darkFont : {}]}>
                         {t("timeClock.welcome", { name: userName })}
                     </Text>
 

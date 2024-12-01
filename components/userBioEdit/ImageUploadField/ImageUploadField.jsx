@@ -7,11 +7,17 @@ import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import styles from "./ImageUploadFieldStyle";
 import { setImageForUserId } from "../../../services/database/profileImage";
 
+// Theme imports
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode, darkFont, darkBg } from "../../../services/themes/themes";
+
 const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
 
     const [loading, setLoading] = useState(false)
 
     const { t } = useTranslation()
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     // Tutorial from https://medium.com/@sanchit0496/how-to-upload-files-from-device-in-react-native-6206b8cd7aff
     useEffect(() => {
@@ -44,23 +50,23 @@ const ImageUploadField = ({uid, imgUrl, setImgUrl}) => {
 
     if(loading){
         return(
-            <View style={styles.wrapper}>
-                <Text>{t("common.loading")}</Text>
+            <View style={[styles.wrapper, isDarkMode ? darkBg : {}]}>
+                <Text style={[isDarkMode ? darkFont : {}]}>{t("common.loading")}</Text>
             </View>
         )
     }
     else {
         return(
-            <View style={styles.wrapper}>
+            <View style={[styles.wrapper, isDarkMode ? darkBg : {}]}>
                 <ProfileImage url={imgUrl} />
                 <Pressable
                     style={styles.pressStyle}
                     onPress={pickImage}
                 >
-                    <Text style={styles.label}>
+                    <Text style={[styles.label, isDarkMode ? darkFont : {}]}>
                         {t("profile.uploadPicture")}
                     </Text>
-                    <Ionicons name="cloud-upload-outline" size={24} />
+                    <Ionicons name="cloud-upload-outline" size={24} color={isDarkMode ? darkFont.color : ""} />
                 </Pressable>
             </View>
         )

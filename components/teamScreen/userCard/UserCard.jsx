@@ -3,17 +3,22 @@ import { View, Text, TouchableHighlight } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../../userBio/ProfileImage/ProfileImage";
 import { highlight } from "../../../utilities/variables";
-import { useCredentials } from "../../../services/state/userCredentials";
+import { auth } from "../../../config/firebase";
 import styles from "./UserCardStyles";
 import DisableUserSwitch from "./disableUserSwitch/DisableUserSwitch";
 import { updateUserBioInfoById } from "../../../services/database/userBioInfo";
 import { usePTOAdmin } from "../../../services/state/ptoAdmin";
 import { useTranslation } from "react-i18next";
 
+import { useTheme } from "../../../services/state/useTheme";
+import { darkMode, darkFont, darkBg, darkHighlight } from "../../../services/themes/themes";
+
 const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSickDays, isEnabled = true, toggleUser = ()=>{}, interactive = true}) => {
     const navigation = useNavigation()
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
+
+    const theme = useTheme()
+    const isDarkMode = theme === darkMode
 
     const [enabled, setEnabled] = useState(isEnabled)
     const { inAdminMode, updatePTOAdmin } = usePTOAdmin()
@@ -51,20 +56,20 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
     if(interactive){
         return(
             <TouchableHighlight
-                style={styles.container}
-                underlayColor={highlight}
+                style={[styles.container, isDarkMode ? darkBg : {}]}
+                underlayColor={isDarkMode ? darkHighlight : highlight}
                 onPress={inAdminMode ? navToEditPTO : navToDetails}
             >
                 <>
                     <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
-                    <View style={styles.textWrapper}>
-                        <Text style={styles.name}>
+                    <View style={[styles.textWrapper]}>
+                        <Text style={[styles.name, isDarkMode ? darkFont : {}]}>
                             {name}
                         </Text>
-                        <Text style={styles.role}>
+                        <Text style={[styles.role, isDarkMode ? darkFont : {}]}>
                             {inAdminMode ? `${t("profile.pto.ptoRemaining")}: ${remainingPTODays}` : role}
                         </Text>
-                        <Text style={styles.email}>
+                        <Text style={[styles.email, isDarkMode ? darkFont : {}]}>
                             {inAdminMode ? `${t("profile.pto.sickRemaining")}: ${remainingSickDays}` : email}
                         </Text>
                     </View>
@@ -74,16 +79,16 @@ const UserCard = ({id, name, role, email, imgUrl, remainingPTODays, remainingSic
     }
     else{
         return(
-            <View style={styles.container}>
+            <View style={[styles.container, isDarkMode ? darkBg : {}]}>
                 <ProfileImage url={imgUrl} imgSize={48} placeholderSize={24} />
                 <View style={styles.textWithSwitchWrapper}>
-                    <Text style={styles.name}>
+                    <Text style={[styles.name, isDarkMode ? darkFont : {}]}>
                         {name}
                     </Text>
-                    <Text style={styles.role}>
+                    <Text style={[styles.role, isDarkMode ? darkFont : {}]}>
                         {role}
                     </Text>
-                    <Text style={styles.email}>
+                    <Text style={[styles.email, isDarkMode ? darkFont : {}]}>
                         {email}
                     </Text>
                 </View>

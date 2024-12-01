@@ -12,10 +12,14 @@ import UserBioEditScreen from "../UserBioEditScreen/UserBioEditScreen";
 import ClockStatusBanner from "../../components/timeClock/ClockStatusBanner";
 import PTORequestScreen from "../PTORequestScreen/PTORequestScreen";
 // Functions import
-import { useCredentials } from "../../services/state/userCredentials";
+import { auth } from "../../config/firebase";
 import { getOpenTimeLog } from "../../services/database/timeClock";
 import { getTeamInfoById, getUserBioInfoById } from "../../services/database/userBioInfo";
 import { getImageForUserId } from "../../services/database/profileImage";
+// Styling imports
+import { useTheme } from "../../services/state/useTheme"
+import { darkMode, darkBg, darkFont, darkBgFont } from "../../services/themes/themes";
+
 
 // TODO: rework canEdit to base off of admin role and if we're viewing current logged in user
 const UserBio = ({ userId, canEdit = true }) => {
@@ -48,8 +52,7 @@ const UserBio = ({ userId, canEdit = true }) => {
         userId = route.params.id
     }
 
-    const userCreds = useCredentials()
-    const authUserId = userCreds.user.uid
+    const authUserId = auth.currentUser.uid
     if (!userId) {
         userId = authUserId
     }
@@ -72,6 +75,9 @@ const UserBio = ({ userId, canEdit = true }) => {
     }, [needsRefresh])
     
     const { t } = useTranslation()
+
+    const theme = useTheme()
+    const isDarkMode = theme == darkMode
     
     useEffect(()=>{
         const getData = async(id) => {
@@ -135,7 +141,7 @@ const UserBio = ({ userId, canEdit = true }) => {
         <>
         {userId !== authUserId &&
         <ClockStatusBanner clockStatus={clockStatus} name={userData.firstName} />}
-        <SafeAreaView style={bioStyles.wrapper}>
+        <SafeAreaView style={[bioStyles.wrapper, isDarkMode ? darkBgFont : {}]}>
             <UserBioEditScreen 
                 uid={userId} 
                 imgUrl={imgUrl} 

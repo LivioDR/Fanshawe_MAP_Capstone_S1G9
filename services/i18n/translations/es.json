@@ -2,7 +2,6 @@
     "common": {
         "copy": "Desarrollado por IndusTree 🌳 © Derechos de autor 2024",
 
-        "logOut": "Cerrar sesión",
         "nav": {
             "back": "Atrás",
             "company": "Empresa",
@@ -15,6 +14,7 @@
         "save": "Guardar",
         "confirm": "Confirmar",
         "cancel": "Cancelar",
+        "accept": "Aceptar",
         "clear": "Borrar",
         "close": "Cerrar",
         "saveSuccess": "¡Cambios guardados correctamente!",
@@ -37,7 +37,10 @@
         "error": "Error {{icon}}",
 
         "sendPasswordReset": "Restablecer la contraseña",
-        "passwordResetSuccess": "¡Email de recuperación enviado!"
+        "passwordResetSuccess": "¡Email de recuperación enviado!",
+
+        "logOut": "Cerrar sesión",
+        "logOutConfirm": "¿Está seguro de que desea cerrar la sesión?"
     },
     
     "timeClock": {
@@ -75,7 +78,12 @@
     "settings": {
         "search": "Buscar...",
 
-        "language": "Idioma"
+        "language": "Idioma",
+        "theme": "Tema",
+        "themes": {
+            "light": "Claro",
+            "dark": "Oscuro"
+        }
     },
 
     "profile": {
