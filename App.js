@@ -126,7 +126,7 @@ export default function App() {
   return (
     <TrialCountdownProvider>
       <PTOAdminProvider>
-        <TrialExpiredAlert logOut={onLogout} />
+        <TrialExpiredAlert logOut={() => auth.signOut()} />
         <ThemeProvider userTheme={theme}>
           <StatusBar style={theme === darkMode ? "light" : "dark"} />
           {shownScreen}

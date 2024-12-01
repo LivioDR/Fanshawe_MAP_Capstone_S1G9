@@ -12,6 +12,8 @@ It will then display the alert with the time when the trial is expired.
 When OK is pressed the app will navigate to the login screen using the same logic
 as the HomeScreen Log Out button, hence accepting the logOut prop from App.js
 
+When a user with an expired trial attempts to login, this alert is shown the first time they choose to do so
+
 No UI other than the alert is rendered (hence return null)
 */
 
@@ -42,7 +44,7 @@ export default function TrialExpiredAlert({ logOut }) {
                  console.log("Error signing out the user after trial expired")
                 );
               })();
-          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}.\nYou will now be signed out.`, [{ text: "OK", onPress: () => {
+          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}.`, [{ text: "OK", onPress: () => {
             logOut();
           }}]);
         }
