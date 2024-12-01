@@ -88,10 +88,9 @@ export default function App() {
                 // Non trialed users log in normally
                 if (!userInfo.isTrialUser) {
                     setLoggedIn(true);
-                    SplashScreen.hideAsync();
                     return;
                 }
-                
+
                 // Updating trial state via ref
                 trialMethodsRef.current.updateTrialCountdown(
                     userInfo.trialExpiryTime
@@ -104,7 +103,6 @@ export default function App() {
                     );
 
                 if (isExpired) {
-
                     //Signs out and resets trial states ready for next login
                     auth.signOut();
                     trialMethodsRef.current.resetTrialState();
@@ -112,7 +110,6 @@ export default function App() {
                     return;
                 }
                 setLoggedIn(true);
-                SplashScreen.hideAsync();
             } else {
                 setLoggedIn(false);
                 SplashScreen.hideAsync();

@@ -24,8 +24,7 @@ import { useTrialCountdown } from "../../services/state/trialCountdown";
 
 export default function SettingsScreen({ themeSetter }) {
     // Trial settings
-    const { updateTrialCountdown, calculateTimeUntilExpiry, isTrialUser } =
-        useTrialCountdown();
+    const { isTrialUser } = useTrialCountdown();
 
     // Language settings
     const [languages] = useState(getLanguagesList());
