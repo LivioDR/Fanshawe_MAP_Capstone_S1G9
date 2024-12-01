@@ -34,36 +34,14 @@ export default function LoginScreen() {
 
     /* Hooks */
     const { t } = useTranslation();
+    const theme = useTheme();
+    const isDarkMode = theme === darkMode;
     const { updateTrialCountdown, calculateTimeUntilExpiry } =
         useTrialCountdown();
 
     /*
-  Ensures that there are no active users signed in when the login page is entered
-  */
-    useEffect(() => {
-        (async () => {
-            await signOut(auth).catch(() =>
-                showErrorToast(t("errors.login.signOut"))
-            );
-            if (process.env.EXPO_PUBLIC_DEBUG_LOGIN) {
-                const [debugEmail, debugPassword] =
-                    process.env.EXPO_PUBLIC_DEBUG_LOGIN.split("|");
-                const debugCredential = await signInWithEmailAndPassword(
-                    auth,
-                    debugEmail,
-                    debugPassword
-                );
-                loginSuccess(debugCredential);
-            }
-        })();
-    }, []);
-
-    const theme = useTheme();
-    const isDarkMode = theme === darkMode;
-
-    /*
-  Tracks whenever the username or pwd changes and conducts the sanity check
-  */
+    Tracks whenever the username or pwd changes and conducts the sanity check
+    */
     useEffect(() => {
         updateLoginButtonState();
     }, [emailIsValid, pwdIsValid]);
@@ -79,9 +57,9 @@ export default function LoginScreen() {
     };
 
     /*
-  Sanity check for email
-  Regex pattern obtained via https://regexr.com/
-  */
+    Sanity check for email
+    Regex pattern obtained via https://regexr.com/
+    */
     const handleEmailChange = (value) => {
         setEmail(value);
 
@@ -113,18 +91,18 @@ export default function LoginScreen() {
     };
 
     /*
-  Function to attempt to log a user in
+    Function to attempt to log a user in
 
-  Several checks take place here:
+    Several checks take place here:
 
-  - Check the users credentials
-  - Check the user is enabled
-  - Check if an enabled user is in trial mode, if not sign in
+    - Check the users credentials
+    - Check the user is enabled
+    - Check if an enabled user is in trial mode, if not sign in
 
-  - If in trial mode, set state variables and calculate whether 
-  their trial is currently valid
-  - If their trial has expired, they do not proceed past the login screen
-  - If their trial is valid, log the user in and trigger the stateful countdown
+    - If in trial mode, set state variables and calculate whether 
+    their trial is currently valid
+    - If their trial has expired, they do not proceed past the login screen
+    - If their trial is valid, log the user in and trigger the stateful countdown
   */
     const handleLoginPress = async () => {
         try {
@@ -179,10 +157,10 @@ export default function LoginScreen() {
     };
 
     /*
-  Sends a password reset email if the email is registered in the DB
-  Due to security, theres no way in Firebase to sanity check whether an email is in the DB 
-  before the request is made
-  */
+    Sends a password reset email if the email is registered in the DB
+    Due to security, theres no way in Firebase to sanity check whether an email is in the DB 
+    before the request is made
+    */
     const handleSendPasswordResetLink = () => {
         sendPasswordResetEmail(auth, email)
             .then(() => {
@@ -196,7 +174,7 @@ export default function LoginScreen() {
     /*
     Helper function for changing the login button state depending
     on whether the user input is valid
-  */
+    */
     const updateLoginButtonState = () => {
         if (emailIsValid && pwdIsValid) {
             setLoginBtnDisabled(false);

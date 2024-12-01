@@ -118,6 +118,7 @@ function getLanguagesList() {
     return data;
 }
 
+
 function getThemesList(t) {
     return [
         {
