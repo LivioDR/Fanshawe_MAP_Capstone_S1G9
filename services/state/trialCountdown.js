@@ -13,39 +13,61 @@ of this context
 /*
 trialExpiryTime - ISO String for expiry from the db
 timeUntilExpiry - Computed variable from this context (Date object) for remaining time
+
+isTrialUser - gets this from the db, this is updated 
 */
 const defaultState = {
-    trialExpiryTimeString: null, 
-    timeUntilExpiry: null,
-    trialIsExpired: null,
+  trialExpiryTimeString: null,
+  timeUntilExpiry: null,
+  trialIsExpired: null,
+  isTrialUser: null,
 };
 
 const TrialCountdownContext = createContext(defaultState);
 
 export function TrialCountdownProvider({ children }) {
-    const [state, setState] = useState(defaultState);
+  const [state, setState] = useState(defaultState);
 
-    const updateTrialCountdown = (newState) => {
-        setState((prevState) => {
-            const updatedState = { ...prevState, ...newState };
-            console.log("Updated state: ", updatedState);
-            return updatedState;
-        });
-    };
+  const setTrialUserStatus = (status) => {
+    setState((prevState) => ({
+      ...prevState,
+      isTrialUser: status,
+    }));
+  };
 
-    /*
+  const updateTrialCountdown = (newState) => {
+    setState((prevState) => {
+      const updatedState = { ...prevState, ...newState };
+      console.log("Updated state: ", updatedState);
+      return updatedState;
+    });
+  };
+
+  /*
     If time left hits 0, the state for trialIsExpired updates to true
     This method is called every 0.5s so there is constant checking of their status
     */
-    const calculateTimeUntilExpiry = () => {
+  const calculateTimeUntilExpiry = (trialExp) => {
+    //const trialExpiryTimeDate = new Date(state.trialExpiryTimeString);
+    const trialExpiryTimeDate = new Date(trialExp);
+    const currTime = new Date();
+    const timeLeftInSeconds = Math.max(
+      Math.floor((trialExpiryTimeDate - currTime) / 1000),
+      0
+    );
 
-        const trialExpiryTimeDate = new Date(state.trialExpiryTimeString);
-        const currTime = new Date();
-        const timeLeftInSeconds = Math.max(Math.floor((trialExpiryTimeDate - currTime) / 1000), 0);
-        updateTrialCountdown({ timeUntilExpiry: timeLeftInSeconds, trialIsExpired: timeLeftInSeconds === 0 });
-    };
+    const isExpired = timeLeftInSeconds === 0;
 
-    /*
+    updateTrialCountdown({
+      trialExpiryTimeString: trialExp,
+      timeUntilExpiry: timeLeftInSeconds,
+      trialIsExpired: isExpired,
+    });
+
+    return isExpired;
+  };
+
+  /*
     Updates are made every second to account for delays in processing, i.e.
     if called every second, no time is given for the method to actually execute and update
     the state to a representative time.
@@ -56,26 +78,31 @@ export function TrialCountdownProvider({ children }) {
 
     clearInterval() used to avoid memeory leaks 
     */
-    useEffect(() => {
+  useEffect(() => {
+    if (!state.trialExpiryTimeString) return;
+    if (state.trialIsExpired) return;
 
-        if (!state.trialExpiryTimeString) return;
-    
-        const interval = setInterval(() => {
-            calculateTimeUntilExpiry();
-        }, 500);
-    
-        return () => clearInterval(interval); 
-    }, [state.trialExpiryTimeString, state.timeUntilExpiry]);
+    const interval = setInterval(() => {
+      calculateTimeUntilExpiry(state.trialExpiryTimeString);
+    }, 500);
 
-    return (
-        <TrialCountdownContext.Provider value={{ ...state, updateTrialCountdown }}>
-            {children}
-        </TrialCountdownContext.Provider>
-    );
+    return () => clearInterval(interval);
+  }, [state.trialExpiryTimeString, state.timeUntilExpiry]);
+
+  return (
+    <TrialCountdownContext.Provider
+      value={{
+        ...state,
+        updateTrialCountdown,
+        setTrialUserStatus,
+        calculateTimeUntilExpiry,
+      }}
+    >
+      {children}
+    </TrialCountdownContext.Provider>
+  );
 }
 
 export function useTrialCountdown() {
-    return useContext(TrialCountdownContext);
+  return useContext(TrialCountdownContext);
 }
-
-

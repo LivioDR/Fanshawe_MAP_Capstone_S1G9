@@ -29,7 +29,10 @@ export default function LoginScreen({ loginSuccess }) {
 
   /* Hooks */
   const { t } = useTranslation();
-  const { updateTrialCountdown } = useTrialCountdown();
+  const {
+    updateTrialCountdown,
+    calculateTimeUntilExpiry,
+  } = useTrialCountdown();
 
   /*
   Ensures that there are no active users signed in when the login page is entered
@@ -115,17 +118,36 @@ export default function LoginScreen({ loginSuccess }) {
         const userInfo = await getUserBioInfoById(user.uid);
 
         if (userInfo.isEnabled) {
-          // Secondary check on whether an enabled user is in trial mode and whether it is valid
-          const validTrial = await validateTrialUser(userInfo);
-          if (!validTrial) {
+          // Checking whether an enabled user is in trial mode from the db info
+          const trialUser = userInfo.isTrialUser;
+
+          // If not, sign them out and exit method
+          if (!trialUser) {
             await signOut(auth);
             return;
           }
 
-          // At this point, user has a valid trial
           updateTrialCountdown({
             trialExpiryTimeString: userInfo.trialExpiryTime,
           });
+
+          // Checking if the current trial mode user has a valid trial
+          const isExpired = calculateTimeUntilExpiry(userInfo.trialExpiryTime);
+
+          calculateTimeUntilExpiry(userInfo.trialExpiryTime);
+
+          if (isExpired) {
+            const expiredTrialDate = new Date(userInfo.trialExpiryTime);
+            const expiredTrialString = expiredTrialDate.toLocaleString();
+
+            Alert.alert(
+              "Trial Expired",
+              `Your trial expired on ${expiredTrialString} `,
+              [{ text: "OK" }]
+            );
+            await signOut(auth);
+            return;
+          }
 
           loginSuccess(userCredential);
         } else {
@@ -164,57 +186,6 @@ export default function LoginScreen({ loginSuccess }) {
     } else {
       setLoginBtnDisabled(true);
     }
-  };
-
-  /*
-    Function to validate whether a user is in trial mode:
-
-    - Takes in a user as a parameter
-    - Checks whether user is a trial user
-    - Checks if a user still has time on thier trial
-    - Returns a boolean 
-
-    - Calls the helper method
-    - Getting current Date and time and converting it to an ISOString
-  */
-  const validateTrialUser = async (user) => {
-    let trialExpiryISOString = user.trialExpiryTime;
-    let validTrial;
-
-    if (user.isTrialUser) {
-      validTrial = trialExpired(trialExpiryISOString);
-    }
-
-    if (!validTrial) {
-      //Process to display expired date and time in user friendly format
-      const expiredTrialDate = new Date(trialExpiryISOString);
-      const expiredTrialString = expiredTrialDate.toLocaleString();
-
-      Alert.alert(
-        "Trial Expired",
-        `Your trial expired on ${expiredTrialString} `,
-        [{ text: "OK" }]
-      );
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  /*
-   Helper function for validateTrialUser which simply
-   determines whether a given ISO Date String is chronologically
-   before the current ISO Date String 
-  
-   - The passed ISO String from the DB is converted back to a Date object
-   for evaluation
-   - Returns a boolean false
-   */
-  const trialExpired = (trialExpiryISOString) => {
-    const trialEndDate = new Date(trialExpiryISOString);
-    const currDateTime = new Date();
-
-    return currDateTime < trialEndDate;
   };
 
   /* Toast logic */
