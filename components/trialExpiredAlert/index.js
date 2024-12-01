@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { Alert } from "react-native";
 import { useTrialCountdown } from "../../services/state/trialCountdown";
@@ -19,6 +20,7 @@ No UI other than the alert is rendered (hence return null)
 
 export default function TrialExpiredAlert({ logOut }) {
     const { trialExpiryTimeString, trialIsExpired } = useTrialCountdown();
+    const { t } = useTranslation();
   
     /*
     Making the date (ISO String) more readable
@@ -41,7 +43,8 @@ export default function TrialExpiredAlert({ logOut }) {
         if (trialIsExpired) {
             (async () => {
                 await signOut(auth).catch(() =>
-                 console.log("Error signing out the user after trial expired")
+                  Alert.alert("Error", "There was an error, please restart your app.", [{ text: "OK" }]
+                  )
                 );
               })();
           Alert.alert("Trial Expired", `Your trial expired on ${readableDate}.`, [{ text: "OK", onPress: () => {
