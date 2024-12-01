@@ -11,6 +11,8 @@ import { Dropdown } from "react-native-element-dropdown";
 
 import styles from "./styles";
 
+import TrialCountdownDisplay from "../../components/trialCountdownDisplay";
+
 export default function SettingsScreen() {
     const [languages] = useState(getLanguagesList());
     const { t, i18n } = useTranslation();
@@ -39,6 +41,7 @@ export default function SettingsScreen() {
                     onChange={onLanguageChange}
                 />
             </View>
+            <TrialCountdownDisplay/>
         </View>
     );
 }
