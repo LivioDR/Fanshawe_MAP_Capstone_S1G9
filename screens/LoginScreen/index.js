@@ -115,57 +115,64 @@ export default function LoginScreen() {
   };
 
   /*
-  Attempts to sign user in to db
+  Function to attempt to log a user in
+
+  Several checks take place here:
+
+  - Check the users credentials
+  - Check the user is enabled
+  - Check if an enabled user is in trial mode, if not sign in
+
+  - If in trial mode, set state variables and calculate whether 
+  their trial is currently valid
+  - If their trial has expired, they do not proceed past the login screen
+  - If their trial is valid, log the user in and trigger the stateful countdown
   */
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, pwd)
-      .then(async (userCredential) => {
-        // Signed in correctly
-        const user = userCredential.user;
-        // But we check is the user is enabled before continuing
+      .catch(() => {
+        showErrorToast(t("errors.login.invalidCredentials"));
+      })
+      .then(async () => {
+        const user = auth.currentUser;
         const userInfo = await getUserBioInfoById(user.uid);
-
+  
         if (userInfo.isEnabled) {
-          // Checking whether an enabled user is in trial mode from the db info
           const trialUser = userInfo.isTrialUser;
-
-          // If not, sign them in, as no need for further trial logic
+  
           if (!trialUser) {
             loginSuccess(userCredential);
             return;
           }
 
+          //Setting variable in global state
           updateTrialCountdown({
             trialExpiryTimeString: userInfo.trialExpiryTime,
           });
-
-          // Checking if the current trial mode user has a valid trial
+  
           const isExpired = calculateTimeUntilExpiry(userInfo.trialExpiryTime);
 
-          calculateTimeUntilExpiry(userInfo.trialExpiryTime);
-
           if (isExpired) {
+
+            //To display the expiry time in a readable format
             const expiredTrialDate = new Date(userInfo.trialExpiryTime);
             const expiredTrialString = expiredTrialDate.toLocaleString();
-
+  
             Alert.alert(
               "Trial Expired",
               `Your trial expired on ${expiredTrialString}.`,
               [{ text: "OK" }]
             );
+  
             await signOut(auth);
             return;
           }
-
-          loginSuccess(userCredential);
+  
         } else {
           showErrorToast(t("errors.login.userDisabled"));
           await signOut(auth);
         }
       })
-      .catch(() => {
-        showErrorToast(t("errors.login.invalidCredentials"));
-      });
   };
 
   /*
