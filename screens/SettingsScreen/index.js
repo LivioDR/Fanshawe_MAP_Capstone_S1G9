@@ -17,7 +17,6 @@ import TrialCountdownDisplay from "../../components/trialCountdownDisplay";
 
 export default function SettingsScreen({ themeSetter }) {
     // Language settings
-
     const [languages] = useState(getLanguagesList());
     const { t, i18n } = useTranslation();
 

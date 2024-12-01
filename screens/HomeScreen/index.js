@@ -10,8 +10,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import TimeClockScreen from "../TimeClockScreen";
 import SettingsScreen from "../SettingsScreen";
 
-import { useTrialCountdown } from "../../services/state/trialCountdown";
-
 import { highlight, accent } from "../../utilities/variables";
 import styles from "./styles";
 

@@ -150,7 +150,7 @@ export default function LoginScreen() {
 
             Alert.alert(
               "Trial Expired",
-              `Your trial expired on ${expiredTrialString} `,
+              `Your trial expired on ${expiredTrialString}.`,
               [{ text: "OK" }]
             );
             await signOut(auth);
