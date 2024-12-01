@@ -34,10 +34,8 @@ export default function LoginScreen() {
 
   /* Hooks */
   const { t } = useTranslation();
-  const {
-    updateTrialCountdown,
-    calculateTimeUntilExpiry,
-  } = useTrialCountdown();
+  const { updateTrialCountdown, calculateTimeUntilExpiry } =
+    useTrialCountdown();
 
   /*
   Ensures that there are no active users signed in when the login page is entered
@@ -60,9 +58,9 @@ export default function LoginScreen() {
     })();
   }, []);
 
-  const theme = useTheme()
-  const isDarkMode = theme === darkMode
-  
+  const theme = useTheme();
+  const isDarkMode = theme === darkMode;
+
   /*
   Tracks whenever the username or pwd changes and conducts the sanity check
   */
@@ -128,51 +126,54 @@ export default function LoginScreen() {
   - If their trial has expired, they do not proceed past the login screen
   - If their trial is valid, log the user in and trigger the stateful countdown
   */
-  const handleLoginPress = () => {
-    signInWithEmailAndPassword(auth, email, pwd)
-      .catch(() => {
-        showErrorToast(t("errors.login.invalidCredentials"));
-      })
-      .then(async () => {
-        const user = auth.currentUser;
-        const userInfo = await getUserBioInfoById(user.uid);
-  
-        if (userInfo.isEnabled) {
-          const trialUser = userInfo.isTrialUser;
-  
-          if (!trialUser) {
-            loginSuccess(userCredential);
-            return;
-          }
+  const handleLoginPress = async () => {
+    try {
 
-          //Setting variable in global state
-          updateTrialCountdown({
-            trialExpiryTimeString: userInfo.trialExpiryTime,
-          });
-  
-          const isExpired = calculateTimeUntilExpiry(userInfo.trialExpiryTime);
+      const userCredential = await signInWithEmailAndPassword(auth, email, pwd);
+      const user = userCredential.user;
+      const userInfo = await getUserBioInfoById(user.uid);
 
-          if (isExpired) {
+      if (userInfo.isEnabled) {
+        const trialUser = userInfo.isTrialUser;
 
-            //To display the expiry time in a readable format
-            const expiredTrialDate = new Date(userInfo.trialExpiryTime);
-            const expiredTrialString = expiredTrialDate.toLocaleString();
-  
-            Alert.alert(
-              "Trial Expired",
-              `Your trial expired on ${expiredTrialString}.`,
-              [{ text: "OK" }]
-            );
-  
-            await signOut(auth);
-            return;
-          }
-  
-        } else {
-          showErrorToast(t("errors.login.userDisabled"));
-          await signOut(auth);
+        if (!trialUser) {
+          loginSuccess(userCredential);
+          return;
         }
-      })
+
+        // Updating the global state
+        updateTrialCountdown({
+          trialExpiryTimeString: userInfo.trialExpiryTime,
+        });
+
+        //Triggers stateful countdown
+        const isExpired = calculateTimeUntilExpiry(userInfo.trialExpiryTime);
+
+        if (isExpired) {
+
+          // Generating readable String for Alert
+          const expiredTrialDate = new Date(userInfo.trialExpiryTime);
+          const expiredTrialString = expiredTrialDate.toLocaleString();
+
+          //Sign out user as soon as an expired trial is detected
+          await signOut(auth);
+
+          Alert.alert(
+            "Trial Expired",
+            `Your trial expired on ${expiredTrialString}.`,
+            [{ text: "OK" }]
+          );
+          
+          return;
+        }
+
+      } else {
+        showErrorToast(t("errors.login.userDisabled"));
+        await signOut(auth);
+      }
+    } catch (error) {
+      showErrorToast(t("errors.login.invalidCredentials"));
+    }
   };
 
   /*
@@ -259,28 +260,32 @@ export default function LoginScreen() {
         />
 
         <View style={[styles.footer, isDarkMode ? darkBg : {}]}>
-          <Text style={[styles.footerText, isDarkMode ? darkFont : {}]}>{t("common.copy")}</Text>
+          <Text style={[styles.footerText, isDarkMode ? darkFont : {}]}>
+            {t("common.copy")}
+          </Text>
         </View>
 
-        <Modal 
-        animationType="slide" 
-        visible={showModal}
-        style={isDarkMode ? darkBg : {}}
+        <Modal
+          animationType="slide"
+          visible={showModal}
+          style={isDarkMode ? darkBg : {}}
         >
-          <View style={{
-            flex: 1,
-            width: '100%',
-            backgroundColor : isDarkMode ? darkBg.backgroundColor : "",
-          }}>
+          <View
+            style={{
+              flex: 1,
+              width: "100%",
+              backgroundColor: isDarkMode ? darkBg.backgroundColor : "",
+            }}
+          >
             <View style={[styles.modalView, isDarkMode ? darkBg : {}]}>
               <TextInput
                 style={styles.textInputContainer}
                 placeholder={t("login.email")}
                 onChangeText={handleEmailChange}
-                value={email} 
+                value={email}
                 keyboardType={"email"}
                 autoCapitalize="none"
-                />
+              />
 
               <InputMsgBox text={emailErrTxt} />
 
@@ -289,7 +294,7 @@ export default function LoginScreen() {
                 funcToCall={handleSendPasswordResetLink}
                 disabled={passwordResetBtnDisabled}
                 type="CTA"
-                />
+              />
 
               <Button title={t("common.close")} onPress={handleModalToggle} />
             </View>
