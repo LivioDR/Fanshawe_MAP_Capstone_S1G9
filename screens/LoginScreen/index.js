@@ -121,9 +121,9 @@ export default function LoginScreen({ loginSuccess }) {
           // Checking whether an enabled user is in trial mode from the db info
           const trialUser = userInfo.isTrialUser;
 
-          // If not, sign them out and exit method
+          // If not, sign them in, as no need for further trial logic
           if (!trialUser) {
-            await signOut(auth);
+            loginSuccess(userCredential);
             return;
           }
 

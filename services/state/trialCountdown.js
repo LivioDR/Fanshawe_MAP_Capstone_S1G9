@@ -46,6 +46,8 @@ export function TrialCountdownProvider({ children }) {
   /*
     If time left hits 0, the state for trialIsExpired updates to true
     This method is called every 0.5s so there is constant checking of their status
+
+    Setting isTrialUser to true here as this method is only called when a user is a trial user
     */
   const calculateTimeUntilExpiry = (trialExp) => {
     //const trialExpiryTimeDate = new Date(state.trialExpiryTimeString);
@@ -62,6 +64,7 @@ export function TrialCountdownProvider({ children }) {
       trialExpiryTimeString: trialExp,
       timeUntilExpiry: timeLeftInSeconds,
       trialIsExpired: isExpired,
+      isTrialUser: true,
     });
 
     return isExpired;
