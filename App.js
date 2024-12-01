@@ -57,7 +57,7 @@ export default function App() {
         <TrialCountdownProvider>
         <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
-        <TrialExpiredAlert/>
+        <TrialExpiredAlert logOut={onLogout}/>
 
             <StatusBar style="auto" />
             {shownScreen}

@@ -3,16 +3,20 @@ import { Alert } from "react-native";
 import { useTrialCountdown } from "../../services/state/trialCountdown";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import RNRestart from 'react-native-restart';
 
 /*
 This Alert component will listen for the change when isExpired is true.
 It will then sign the user out from firebase.
 It will then display the alert with the time when the trial is expired.
 
-No UI is returned (return null)
+When OK is pressed the app will navigate to the login screen using the same logic
+as the HomeScreen Log Out button, hence accepting the logOut prop from App.js
+
+No UI other than the alert is rendered (hence return null)
 */
 
-export default function TrialExpiredAlert() {
+export default function TrialExpiredAlert({ logOut }) {
     const { trialExpiryTimeString, trialIsExpired } = useTrialCountdown();
   
     /*
@@ -30,8 +34,7 @@ export default function TrialExpiredAlert() {
       minute: "2-digit",
       second: "2-digit",
       hour12: true,
-    }).format(new Date(trialExpiryTimeString))
-  : "No date available";
+    }).format(new Date(trialExpiryTimeString))  : "No date available";
 
     useEffect(() => {
         if (trialIsExpired) {
@@ -40,7 +43,9 @@ export default function TrialExpiredAlert() {
                  console.log("Error signing out the user after trial expired")
                 );
               })();
-          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}`, [{ text: "OK" }]);
+          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}, the app will now restart.`, [{ text: "OK", onPress: () => {
+            logOut();
+          }}]);
         }
     }, [trialIsExpired]);
 
