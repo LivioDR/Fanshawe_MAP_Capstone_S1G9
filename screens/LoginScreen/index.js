@@ -151,19 +151,15 @@ export default function LoginScreen() {
 
         if (isExpired) {
 
-          // Generating readable String for Alert
+          // Generating readable String for Toast
           const expiredTrialDate = new Date(userInfo.trialExpiryTime);
           const expiredTrialString = expiredTrialDate.toLocaleString();
 
           //Sign out user as soon as an expired trial is detected
           await signOut(auth);
 
-          Alert.alert(
-            "Trial Expired",
-            `Your trial expired on ${expiredTrialString}.`,
-            [{ text: "OK" }]
-          );
-          
+          showErrorToast((`Your trial expired on ${expiredTrialString}.`));
+
           return;
         }
 
