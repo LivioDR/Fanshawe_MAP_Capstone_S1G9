@@ -20,8 +20,13 @@ import {
 } from "../../services/themes/themes";
 
 import TrialCountdownDisplay from "../../components/trialCountdownDisplay";
+import { useTrialCountdown } from "../../services/state/trialCountdown";
 
 export default function SettingsScreen({ themeSetter }) {
+    // Trial settings
+    const { updateTrialCountdown, calculateTimeUntilExpiry, isTrialUser } =
+        useTrialCountdown();
+
     // Language settings
     const [languages] = useState(getLanguagesList());
     const { t, i18n } = useTranslation();
@@ -31,7 +36,7 @@ export default function SettingsScreen({ themeSetter }) {
         await AsyncStorage.setItem(currentLngKey, value);
     };
 
-    // Themes setting
+    // Themes settings
     const themes = getThemesList(t);
     const theme = useTheme();
     const isDarkMode = theme === darkMode;
@@ -43,6 +48,7 @@ export default function SettingsScreen({ themeSetter }) {
 
     return (
         <View style={[styles.container, isDarkMode ? darkBg : {}]}>
+            {isTrialUser && <TrialCountdownDisplay />}
             <View style={[styles.settingContainer, isDarkMode ? darkFont : {}]}>
                 <Text style={[styles.heading, isDarkMode ? darkFont : {}]}>
                     {t("settings.language")}
@@ -68,8 +74,6 @@ export default function SettingsScreen({ themeSetter }) {
                     onChange={onLanguageChange}
                 />
             </View>
-
-            <TrialCountdownDisplay />
 
             {/* Theme configuration */}
             <View
@@ -117,7 +121,6 @@ function getLanguagesList() {
 
     return data;
 }
-
 
 function getThemesList(t) {
     return [

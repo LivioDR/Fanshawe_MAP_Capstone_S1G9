@@ -7,9 +7,7 @@ import Toast from "react-native-toast-message";
 import {
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
-    signOut,
 } from "firebase/auth";
-import { getUserBioInfoById } from "../../services/database/userBioInfo";
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
@@ -91,69 +89,12 @@ export default function LoginScreen() {
     };
 
     /*
-    Function to attempt to log a user in
-
-    Several checks take place here:
-
-    - Check the users credentials
-    - Check the user is enabled
-    - Check if an enabled user is in trial mode, if not sign in
-
-    - If in trial mode, set state variables and calculate whether 
-    their trial is currently valid
-    - If their trial has expired, they do not proceed past the login screen
-    - If their trial is valid, log the user in and trigger the stateful countdown
-  */
-    const handleLoginPress = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(
-                auth,
-                email,
-                pwd
-            );
-            const user = userCredential.user;
-            const userInfo = await getUserBioInfoById(user.uid);
-
-            if (userInfo.isEnabled) {
-                const trialUser = userInfo.isTrialUser;
-
-                if (!trialUser) {
-                    loginSuccess(userCredential);
-                    return;
-                }
-
-                // Updating the global state
-                updateTrialCountdown({
-                    trialExpiryTimeString: userInfo.trialExpiryTime,
-                });
-
-                //Triggers stateful countdown
-                const isExpired = calculateTimeUntilExpiry(
-                    userInfo.trialExpiryTime
-                );
-
-                if (isExpired) {
-                    // Generating readable String for Toast
-                    const expiredTrialDate = new Date(userInfo.trialExpiryTime);
-                    const expiredTrialString =
-                        expiredTrialDate.toLocaleString();
-
-                    //Sign out user as soon as an expired trial is detected
-                    await signOut(auth);
-
-                    showErrorToast(
-                        `Your trial expired on ${expiredTrialString}.`
-                    );
-
-                    return;
-                }
-            } else {
-                showErrorToast(t("errors.login.userDisabled"));
-                await signOut(auth);
-            }
-        } catch (error) {
+    Attempts to sign user in to db
+    */
+    const handleLoginPress = () => {
+        signInWithEmailAndPassword(auth, email, pwd).catch(() => {
             showErrorToast(t("errors.login.invalidCredentials"));
-        }
+        });
     };
 
     /*

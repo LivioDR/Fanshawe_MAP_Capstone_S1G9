@@ -13,6 +13,7 @@ It will then display the alert with the time when the trial is expired.
 
 When OK is pressed the app will navigate to the login screen using the same logic
 as the HomeScreen Log Out button, hence accepting the logOut prop from App.js
+Note that no trialStateReset is needed here as this is passed included in the passed logOut prop.
 
 When a user with an expired trial attempts to login, this alert is shown the first time they choose to do so
 

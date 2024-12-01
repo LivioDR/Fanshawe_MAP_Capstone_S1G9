@@ -17,7 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
 
 // hooks and providers
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PTOAdminProvider } from "./services/state/ptoAdmin";
 import { ThemeProvider } from "./services/state/useTheme";
 import { darkMode, darkBg } from "./services/themes/themes";
@@ -32,6 +32,7 @@ import LoginScreen from "./screens/LoginScreen";
 import AppScreen from "./screens/AppScreen";
 
 import { TrialCountdownProvider } from "./services/state/trialCountdown";
+import TrialMethods from "./services/state/trialmethods";
 import TrialExpiredAlert from "./components/trialExpiredAlert";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -41,6 +42,9 @@ export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
     const [theme, setTheme] = useState(Appearance.getColorScheme());
     const [loggedIn, setLoggedIn] = useState(false);
+
+    // Create a ref for TrialMethods (wraps TrialContextMethods)
+    const trialMethodsRef = useRef();
 
     useEffect(() => {
         // Asynchronously getting the stored theme and updating the Theme context provider
@@ -63,6 +67,8 @@ export default function App() {
                 if (!userInfo.isEnabled) {
                     // not enabled, sign the user out
                     auth.signOut();
+
+                    trialMethodsRef.current.resetTrialState(); // Resetting the trial state
                     setLoggedIn(false);
                     SplashScreen.hideAsync(); // hide splash in case it's up
 
@@ -74,9 +80,39 @@ export default function App() {
                         visibilityTime: 3000,
                         position: "bottom",
                     });
-                } else {
-                    setLoggedIn(true);
+                    return;
                 }
+
+                // User account is enabled here
+
+                // Non trialed users log in normally
+                if (!userInfo.isTrialUser) {
+                    setLoggedIn(true);
+                    SplashScreen.hideAsync();
+                    return;
+                }
+                
+                // Updating trial state via ref
+                trialMethodsRef.current.updateTrialCountdown(
+                    userInfo.trialExpiryTime
+                );
+
+                //Checks if the trial is expired and triggers countdown
+                const isExpired =
+                    trialMethodsRef.current.calculateTimeUntilExpiry(
+                        userInfo.trialExpiryTime
+                    );
+
+                if (isExpired) {
+
+                    //Signs out and resets trial states ready for next login
+                    auth.signOut();
+                    trialMethodsRef.current.resetTrialState();
+
+                    return;
+                }
+                setLoggedIn(true);
+                SplashScreen.hideAsync();
             } else {
                 setLoggedIn(false);
                 SplashScreen.hideAsync();
@@ -103,10 +139,22 @@ export default function App() {
                     text: i18next.t("common.accept"),
                     onPress: () => {
                         auth.signOut();
+
+                        //Resetting the trial state
+                        trialMethodsRef.current.resetTrialState();
                     },
                 },
             ]
         );
+    };
+
+    /*
+     Log the user out and return to the login screen.
+     This method, unlike the above does not trigger an Alert to be displayed
+     */
+    const onAutoLogout = () => {
+        auth.signOut();
+        trialMethodsRef.current.resetTrialState();
     };
 
     let shownScreen = loggedIn ? (
@@ -130,7 +178,8 @@ export default function App() {
     return (
         <TrialCountdownProvider>
             <PTOAdminProvider>
-                <TrialExpiredAlert logOut={() => auth.signOut()} />
+                <TrialMethods ref={trialMethodsRef} />
+                <TrialExpiredAlert logOut={onAutoLogout} />
                 <ThemeProvider userTheme={theme}>
                     <StatusBar style={theme === darkMode ? "light" : "dark"} />
                     {shownScreen}
