@@ -43,7 +43,7 @@ export default function TrialExpiredAlert({ logOut }) {
                  console.log("Error signing out the user after trial expired")
                 );
               })();
-          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}, the app will now restart.`, [{ text: "OK", onPress: () => {
+          Alert.alert("Trial Expired", `Your trial expired on ${readableDate}.\nYou will now be signed out.`, [{ text: "OK", onPress: () => {
             logOut();
           }}]);
         }
