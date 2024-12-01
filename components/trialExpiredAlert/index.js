@@ -3,7 +3,6 @@ import { Alert } from "react-native";
 import { useTrialCountdown } from "../../services/state/trialCountdown";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebase";
-import RNRestart from 'react-native-restart';
 
 /*
 This Alert component will listen for the change when isExpired is true.
