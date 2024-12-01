@@ -17,6 +17,7 @@ import LoadingIndicator from './components/common/LoadingIndicator';
 import LoginScreen from './screens/LoginScreen';
 import AppScreen from './screens/AppScreen';
 import { TrialCountdownProvider } from './services/state/trialCountdown';
+import TrialExpiredAlert from './components/trialExpiredAlert';
 
 export default function App() {
     const [loadingTranslations, setLoadingTranslations] = useState(true);
@@ -56,6 +57,7 @@ export default function App() {
         <TrialCountdownProvider>
         <PTOAdminProvider>
         <CredentialProvider userCreds={loginCredential}>
+        <TrialExpiredAlert/>
 
             <StatusBar style="auto" />
             {shownScreen}
