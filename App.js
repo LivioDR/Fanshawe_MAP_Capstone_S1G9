@@ -38,102 +38,106 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [loadingTranslations, setLoadingTranslations] = useState(true);
-  const [theme, setTheme] = useState(Appearance.getColorScheme());
-  const [loggedIn, setLoggedIn] = useState(false);
+    const [loadingTranslations, setLoadingTranslations] = useState(true);
+    const [theme, setTheme] = useState(Appearance.getColorScheme());
+    const [loggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Asynchronously getting the stored theme and updating the Theme context provider
-    (async () => {
-      const colorScheme = await AsyncStorage.getItem(themeKey);
-      if (colorScheme) {
-        setTheme(colorScheme);
-      }
-    })();
+    useEffect(() => {
+        // Asynchronously getting the stored theme and updating the Theme context provider
+        (async () => {
+            const colorScheme = await AsyncStorage.getItem(themeKey);
+            if (colorScheme) {
+                setTheme(colorScheme);
+            }
+        })();
 
-    initI18next().then(() => {
-      setLoadingTranslations(false);
-    });
+        initI18next().then(() => {
+            setLoadingTranslations(false);
+        });
 
-    // set up listener for reauth and login
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // if we have a user, check if they're disabled first
-      if (user) {
-        const userInfo = await getUserBioInfoById(user.uid);
-        if (!userInfo.isEnabled) {
-          // not enabled, sign the user out
-          auth.signOut();
-          setLoggedIn(false);
-          SplashScreen.hideAsync(); // hide splash in case it's up
+        // set up listener for reauth and login
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            // if we have a user, check if they're disabled first
+            if (user) {
+                const userInfo = await getUserBioInfoById(user.uid);
+                if (!userInfo.isEnabled) {
+                    // not enabled, sign the user out
+                    auth.signOut();
+                    setLoggedIn(false);
+                    SplashScreen.hideAsync(); // hide splash in case it's up
 
-          // show a toast
-          Toast.show({
-            type: "error",
-            text1: i18next.t("login.error", { icon: "🛑" }),
-            text2: i18next.t("errors.login.userDisabled"),
-            visibilityTime: 3000,
-            position: "bottom",
-          });
-        } else {
-          setLoggedIn(true);
-        }
-      } else {
-        setLoggedIn(false);
-        SplashScreen.hideAsync();
-      }
-    });
+                    // show a toast
+                    Toast.show({
+                        type: "error",
+                        text1: i18next.t("login.error", { icon: "🛑" }),
+                        text2: i18next.t("errors.login.userDisabled"),
+                        visibilityTime: 3000,
+                        position: "bottom",
+                    });
+                } else {
+                    setLoggedIn(true);
+                }
+            } else {
+                setLoggedIn(false);
+                SplashScreen.hideAsync();
+            }
+        });
 
-    return unsubscribe;
-  }, []);
+        return unsubscribe;
+    }, []);
 
-  /**
-   * Log the user out and return to the login screen.
-   */
-  const onLogout = () => {
-    Alert.alert(i18next.t("login.logOut"), i18next.t("login.logOutConfirm"), [
-      {
-        text: i18next.t("common.cancel"),
-        style: "cancel",
-        // no onPress, since cancel does nothing
-      },
-      {
-        text: i18next.t("common.accept"),
-        onPress: () => {
-          auth.signOut();
-        },
-      },
-    ]);
-  };
+    /**
+     * Log the user out and return to the login screen.
+     */
+    const onLogout = () => {
+        Alert.alert(
+            i18next.t("login.logOut"),
+            i18next.t("login.logOutConfirm"),
+            [
+                {
+                    text: i18next.t("common.cancel"),
+                    style: "cancel",
+                    // no onPress, since cancel does nothing
+                },
+                {
+                    text: i18next.t("common.accept"),
+                    onPress: () => {
+                        auth.signOut();
+                    },
+                },
+            ]
+        );
+    };
 
-  let shownScreen = loggedIn ? (
-    <AppScreen logOut={onLogout} themeSetter={setTheme} />
-  ) : (
-    <LoginScreen />
-  );
-  if (loadingTranslations) {
-    shownScreen = (
-      <View
-        style={[
-          { flex: 1, justifyContent: "center", alignItems: "center" },
-          theme === darkMode ? darkBg : {},
-        ]}
-      >
-        <LoadingIndicator textOverride={"Loading..."} />
-      </View>
+    let shownScreen = loggedIn ? (
+        <AppScreen logOut={onLogout} themeSetter={setTheme} />
+    ) : (
+        <LoginScreen />
     );
-  }
+    if (loadingTranslations) {
+        shownScreen = (
+            <View
+                style={[
+                    { flex: 1, justifyContent: "center", alignItems: "center" },
+                    theme === darkMode ? darkBg : {},
+                ]}
+            >
+                <LoadingIndicator textOverride={"Loading..."} />
+            </View>
+        );
+    }
 
-  return (
-    <TrialCountdownProvider>
-      <PTOAdminProvider>
-        <TrialExpiredAlert logOut={() => auth.signOut()} />
-        <ThemeProvider userTheme={theme}>
-          <StatusBar style={theme === darkMode ? "light" : "dark"} />
-          {shownScreen}
+    return (
+        <TrialCountdownProvider>
+            <PTOAdminProvider>
+                <TrialExpiredAlert logOut={() => auth.signOut()} />
+                <ThemeProvider userTheme={theme}>
+                    <StatusBar style={theme === darkMode ? "light" : "dark"} />
+                    {shownScreen}
 
-          <Toast />
-        </ThemeProvider>
-      </PTOAdminProvider>
-    </TrialCountdownProvider>
-  );
+                    <Toast />
+                </ThemeProvider>
+            </PTOAdminProvider>
+        </TrialCountdownProvider>
+    );
 }
