@@ -158,6 +158,7 @@
         "generic": "Something went wrong, try again later.",
         "requestFailed": "Network request failed.",
         "unexpected": "Unexpected error encountered.",
+        "error": "Error",
 
         "login": {
             "signOut": "Error signing out.",
@@ -187,6 +188,31 @@
             "noRole": "Role is required.",
             "recoveryFailed": "An error occurred while sending the recovery email to the new user.",
             "saveFailed": "An error occurred while saving the new user."
+        },
+
+        "trial": {
+            "restartApp": "Please restart the app.",
+            "noExpiryDateAvailable": "No date available."
+        }
+    },
+
+    "trial": {
+        "trialMode": "Trial Mode",
+
+        "expiry": {
+            "expired": "Trial Expired",
+            "expiredOn": "Your trial expired on",
+            "expiresOn": "Your trial expires on"
+        },
+
+        "date": {
+            "locale": "en-CA",
+            "days": "days",
+            "hours": "hours",
+            "minutes": "minutes",
+            "seconds": "seconds",
+            "and": "and",
+            "timeRemaining": "Time remaining"
         }
     }
 }

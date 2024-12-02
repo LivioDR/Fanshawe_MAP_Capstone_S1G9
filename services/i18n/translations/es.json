@@ -42,7 +42,7 @@
         "logOut": "Cerrar sesión",
         "logOutConfirm": "¿Está seguro de que desea cerrar la sesión?"
     },
-    
+
     "timeClock": {
         "welcome": "Bienvenido/a, {{name}}.",
         "setOfficeHours": "Setear un horario de oficina regular",
@@ -158,6 +158,7 @@
         "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
         "requestFailed": "Error en la solicitud de red.",
         "unexpected": "Se encontró un error inesperado.",
+        "error": "Error",
 
         "login": {
             "signOut": "Error al cerrar sesión.",
@@ -187,6 +188,31 @@
             "noRole": "Se requiere rol.",
             "recoveryFailed": "Se produjo un error al enviar el correo electrónico de recuperación al nuevo usuario.",
             "saveFailed": "Se produjo un error al guardar el nuevo usuario."
+        },
+
+        "trial": {
+            "restartApp": "Por favor reinicie la aplicación.",
+            "noExpiryDateAvailable": "No hay fecha disponible."
+        }
+    },
+
+    "trial": {
+        "trialMode": "Modo De Prueba",
+
+        "expiry": {
+            "expired": "Prueba Vencida",
+            "expiredOn": "Su prueba expiró el",
+            "expiresOn": "Su prueba expira el"
+        },
+
+        "date": {
+            "locale": "es-MX",
+            "days": "días",
+            "hours": "horas",
+            "minutes": "minutos",
+            "seconds": "segundos",
+            "and": "y",
+            "timeRemaining": "Tiempo restante"
         }
     }
 }

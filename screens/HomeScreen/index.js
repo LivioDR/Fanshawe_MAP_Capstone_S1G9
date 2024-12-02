@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 export default function HomeScreen({ logOut, themeSetter }) {
     const nav = useNavigation();
     const { t } = useTranslation();
-
+ 
     return (
         <Stack.Navigator
             initialRouteName="TimeClock"
