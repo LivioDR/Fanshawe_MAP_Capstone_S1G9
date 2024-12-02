@@ -55,7 +55,6 @@ export function TrialCountdownProvider({ children }) {
     Setting isTrialUser to true here as this method is only called when a user is a trial user
     */
     const calculateTimeUntilExpiry = (trialExp) => {
-        console.log("called.")
         const trialExpiryTimeDate = new Date(trialExp);
         const currTime = new Date();
         const timeLeftInSeconds = Math.max(
