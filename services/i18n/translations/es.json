@@ -158,6 +158,7 @@
         "generic": "Algo salió mal, inténtalo de nuevo más tarde.",
         "requestFailed": "Error en la solicitud de red.",
         "unexpected": "Se encontró un error inesperado.",
+        "error": "Error",
 
         "login": {
             "signOut": "Error al cerrar sesión.",
