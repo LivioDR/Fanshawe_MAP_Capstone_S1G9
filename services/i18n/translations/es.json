@@ -188,5 +188,21 @@
             "recoveryFailed": "Se produjo un error al enviar el correo electrónico de recuperación al nuevo usuario.",
             "saveFailed": "Se produjo un error al guardar el nuevo usuario."
         }
+    },
+
+    "trial": {
+
+        "expiry": {
+
+            "expired": "Trial Expired",
+            "expiredOn": "Your trial expired on"
+
+        },
+
+        "date": {
+
+            "locale": "es-MX"
+
+        }
     }
 }

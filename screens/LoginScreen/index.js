@@ -11,7 +11,6 @@ import {
 import InputMsgBox from "../../components/InputMsgBox";
 import { auth } from "../../config/firebase";
 import UiButton from "../../components/common/UiButton/UiButton";
-import { useTrialCountdown } from "../../services/state/trialCountdown";
 
 // Theme imports
 import { useTheme } from "../../services/state/useTheme";
@@ -34,8 +33,6 @@ export default function LoginScreen() {
     const { t } = useTranslation();
     const theme = useTheme();
     const isDarkMode = theme === darkMode;
-    const { updateTrialCountdown, calculateTimeUntilExpiry } =
-        useTrialCountdown();
 
     /*
     Tracks whenever the username or pwd changes and conducts the sanity check

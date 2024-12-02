@@ -1,5 +1,4 @@
-//import { useTranslation } from "react-i18next";
-//import i18next from "i18next";
+import i18next from "i18next";
 import { useEffect } from "react";
 import { Alert } from "react-native";
 import { useTrialCountdown } from "../../services/state/trialCountdown";
@@ -30,7 +29,7 @@ export default function TrialExpiredAlert({ logOut }) {
     A placeholder String is here just in case trialExpiryTimeString is undefined
     */
     const readableDate = trialExpiryTimeString
-        ? new Intl.DateTimeFormat("en-CA", {
+        ? new Intl.DateTimeFormat(i18next.t("trial.date.locale"), {
               year: "numeric",
               month: "long",
               day: "numeric",
@@ -39,25 +38,25 @@ export default function TrialExpiredAlert({ logOut }) {
               second: "2-digit",
               hour12: true,
           }).format(new Date(trialExpiryTimeString))
-        : "No date available";
+        : i18next.t("errors.trial.noExpiryDateAvailable");
 
     useEffect(() => {
         if (trialIsExpired) {
             (async () => {
                 await signOut(auth).catch(() =>
                     Alert.alert(
-                        "Error",
-                        "There was an error, please restart your app.",
-                        [{ text: "OK" }]
+                        i18next.t("errors.error"),
+                        i18next.t("errors.trial.restartApp"),
+                        [{ text: i18next.t("common.close") }]
                     )
                 );
             })();
             Alert.alert(
-                "Trial Expired",
-                `Your trial expired on ${readableDate}.`,
+                i18next.t("trial.expiry.expired"),
+                `${i18next.t("trial.expiry.expiredOn")} ${readableDate}.`,
                 [
                     {
-                        text: "OK",
+                        text: i18next.t("common.close"),
                         onPress: () => {
                             logOut();
                         },
