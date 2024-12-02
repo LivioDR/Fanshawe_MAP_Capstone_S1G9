@@ -197,19 +197,15 @@
     },
 
     "trial": {
-
         "trialMode": "Trial Mode",
 
         "expiry": {
-
             "expired": "Trial Expired",
             "expiredOn": "Your trial expired on",
             "expiresOn": "Your trial expires on"
-
         },
 
         "date": {
-
             "locale": "en-CA",
             "days": "days",
             "hours": "hours",
@@ -217,7 +213,6 @@
             "seconds": "seconds",
             "and": "and",
             "timeRemaining": "Time remaining"
-
         }
     }
 }
